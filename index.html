@@ -7,7 +7,7 @@
 <title>REC. — Videomaker & Estrategista</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Courier+Prime:wght@400;700&family=Instrument+Sans:ital,wght@0,400..700;1,400&family=Caveat:wght@400..700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Courier+Prime:wght@700&family=Caveat:wght@400..700&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
@@ -41,7 +41,7 @@
   .brk.tr { top: 0; right: 0; border-left: 0; border-bottom: 0; }
   .brk.bl { bottom: 0; left: 0; border-right: 0; border-top: 0; }
   .brk.br { bottom: 0; right: 0; border-left: 0; border-top: 0; }
-  #flashLayer { position: fixed; inset: 0; z-index: 900; background: #fff; opacity: 0; pointer-events: none; }
+  #flashLayer { position: fixed; inset: 0; z-index: 900; background: oklch(0.62 0.25 27); opacity: 0; pointer-events: none; }
   @keyframes recFlashPop { 0%{opacity:0} 5%{opacity:1} 16%{opacity:.6} 42%{opacity:.14} 100%{opacity:0} }
   #flashLayer.fire { animation: recFlashPop .62s cubic-bezier(.2,.75,.25,1); }
 
@@ -289,6 +289,44 @@
     .fcorner path, .hand-note svg path { stroke-dashoffset: 0; transition: none; animation: none; }
     .foto .bg { transform: none !important; }
   }
+
+  /* ===== manuscrito em tudo que não é Anton ===== */
+  body { font-family: 'Caveat', cursive; font-size: 20px; }
+  .mono, .slate, .cell-slate, .spec-k, .serv-n, .work-tag, .seq-meta, .reel-hud, .cam-read, .foot, .soundBtn, .eyebrow, nav a
+    { font-family: 'Caveat', cursive !important; letter-spacing: .01em !important; text-transform: none !important; font-weight: 600 !important; }
+  .slate, .cell-slate, .seq-meta, .reel-hud, .cam-read, .foot, .spec-k { font-size: 20px !important; }
+  .work-tag { font-size: 19px; padding: 4px 11px; }
+  .serv-n { font-size: 22px; }
+  .spec-v { font-size: 20px; line-height: 1.2; }
+  .soundBtn { font-size: 19px; padding: 9px 18px; }
+  .stamp text { font-family: 'Courier Prime', monospace; }   /* o carimbo é o único que segue datilografado */
+  .h1-cue { font-size: 19px !important; }
+
+  /* ===== fotos empilhadas, uma abaixo da outra, de ponta a ponta ===== */
+  .stack { position: relative; z-index: 60; background: oklch(0.1 0.008 60); }
+  .stack .foto { height: 88vh; min-height: 520px; }
+  .stack .foto + .foto { border-top: 3px solid oklch(0.1 0.008 60); }
+  .stack .say { font-size: clamp(30px, 4vw, 58px); }
+
+  /* ===== "criar com intenção" no escuro ===== */
+  .seq-bgs { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .seq-bg { position: absolute; overflow: hidden; opacity: .34; will-change: transform; }
+  .seq-bg img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .seq-glow { position: absolute; z-index: 1; left: 50%; bottom: -6vh; width: 70vw; height: 90vh; transform: translateX(-50%); pointer-events: none;
+    background: radial-gradient(50% 55% at 50% 60%, oklch(0.55 0.24 27 / .55) 0%, transparent 70%);
+    transition: opacity .6s ease, transform .6s ease; opacity: .75; }
+  #seqSection.clique .seq-glow { opacity: 1; transform: translateX(-50%) scale(1.25); }
+  @media (min-width: 900px) { .seq-glow { left: 74%; } }
+  /* luz vermelha vinda da direita sobre o personagem — fica dentro da máscara do recorte */
+  .seqFrame::after { content: ''; position: absolute; inset: 0; mix-blend-mode: multiply;
+    background: linear-gradient(100deg, transparent 38%, oklch(0.6 0.24 27 / .85) 100%); }
+  .seqFrame::before { content: ''; position: absolute; inset: 0; mix-blend-mode: screen;
+    background: linear-gradient(100deg, transparent 55%, oklch(0.45 0.2 27 / .55) 100%); }
+  #seqSection .brk { border-color: oklch(0.62 0.24 27); }
+  #seqSection .scribble svg path { stroke: oklch(0.62 0.24 27); }
+
+  @media (max-width: 759px) { .seq-bg { opacity: .22; } .stack .foto { height: 70vh; min-height: 420px; } }
+  @media (prefers-reduced-motion: reduce) { .seq-bg { transform: none !important; } }
 </style>
 <script type="importmap">
 { "imports": {
@@ -310,7 +348,7 @@
   <div style="display: flex; align-items: baseline; gap: 3px; font-family: 'Anton', sans-serif; font-size: 28px; letter-spacing: 0.02em; color: inherit;">
     REC<span style="color: oklch(0.55 0.22 27); font-size: 34px; line-height: 0; animation: recBlink 1.4s steps(1) infinite;">.</span>
   </div>
-  <nav style="display: flex; align-items: center; gap: 26px; font-family: 'Courier Prime', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: inherit;">
+  <nav style="display: flex; align-items: center; gap: 26px; font-family: 'Caveat', cursive; font-size: 20px; font-weight: 600; letter-spacing: 0.01em; text-transform: none; color: inherit;">
     <span class="nav-links">
     <a href="#sobre" class="nav-link" style="color: inherit;">Sobre</a>
     <a href="#servicos" class="nav-link" style="color: inherit;">Serviços</a>
@@ -323,11 +361,11 @@
 <!-- ===== HERO 1 : PORTFÓLIO ===== -->
 <section style="position: relative; height: 100vh; min-height: 640px; width: 100%; overflow: hidden; display: flex; align-items: center; justify-content: center;">
   <div class="h1-copy" style="position: absolute; left: var(--gx); top: 100px; z-index: 5; max-width: 320px;">
-    <div style="display: flex; align-items: center; gap: 10px; font-family: 'Courier Prime', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: oklch(0.55 0.22 27);">
+    <div style="display: flex; align-items: center; gap: 10px; font-family: 'Caveat', cursive; font-size: 20px; font-weight: 600; letter-spacing: 0.01em; text-transform: none; color: oklch(0.55 0.22 27);">
       <span class="line" style="width: 30px; height: 1px; background: oklch(0.55 0.22 27); display: inline-block;"></span>
       Videomaker · Estrategista
     </div>
-    <p style="margin: 16px 0 0; font-size: 15px; line-height: 1.5; color: oklch(0.4 0.012 60); max-width: 270px;">Roteiro, câmera e corte pra quem já é bom no que faz — e cansou de postar no escuro.</p>
+    <p style="margin: 16px 0 0; font-size: 21px; line-height: 1.2; color: oklch(0.4 0.012 60); max-width: 270px;">Roteiro, câmera e corte pra quem já é bom no que faz — e cansou de postar no escuro.</p>
   </div>
   <h1 class="h1-word" style="position: absolute; z-index: 1; margin: 0; font-family: 'Anton', sans-serif; font-weight: 400; font-size: 24.5vw; line-height: 0.8; letter-spacing: -0.015em; color: oklch(0.55 0.22 27); white-space: nowrap; user-select: none; text-align: center; width: 100%;">PORTFÓLIO</h1>
   <div class="stamp h1-stamp" aria-hidden="true" style="left: var(--gx); bottom: 11vh;"><svg viewBox="0 0 120 120"><defs><path id="stampA" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs><circle cx="60" cy="60" r="56"/><circle cx="60" cy="60" r="32"/><text><textPath href="#stampA">CRIAR COM INTENÇÃO · REC. · </textPath></text><circle class="dot" cx="60" cy="60" r="6"/></svg></div>
@@ -352,18 +390,45 @@
   <div class="hand-note rv" aria-hidden="true" style="right: var(--gx); bottom: 14vh; color: oklch(0.97 0.008 85); transform: rotate(4deg);">luz, direção, corte:<br>tudo na mesma mão<svg viewBox="0 0 70 40"><path d="M4,32 C26,40 46,30 62,8 M52,8 L63,7 L61,18"/></svg></div>
 </section>
 
+<!-- ===== RESULTADO · 3 fotos empilhadas (luz, direção, corte) ===== -->
+<div id="stack1" class="stack">
+  <section id="res1" class="foto duo stack-item">
+    <img class="bg" src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&amp;fit=crop&amp;w=1800&amp;h=1125&amp;q=74" alt="" loading="lazy" decoding="async" width="1800" height="1125">
+    <div class="veil"></div>
+    <svg class="fcorner rv" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path vector-effect="non-scaling-stroke" d="M3,4 C30,2 70,5 97,3 C99,30 96,70 97,97 C70,99 30,96 3,97 C1,70 4,30 3,4 Z"/></svg>
+    <p class="slate">RESULTADO 01 · LUZ</p>
+    <p class="say hand rv">a <span class="scribble under light">luz<svg viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M4,22 C40,10 120,30 196,16 M14,32 C70,26 130,36 190,28"/></svg></span> que a gente montou. não a que apareceu.</p>
+  </section>
+  <section id="res2" class="foto duo stack-item">
+    <img class="bg" src="https://images.unsplash.com/photo-1533488765986-dfa2a9939acd?auto=format&amp;fit=crop&amp;w=1800&amp;h=1125&amp;q=74" alt="" loading="lazy" decoding="async" width="1800" height="1125">
+    <div class="veil"></div>
+    <svg class="fcorner rv" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path vector-effect="non-scaling-stroke" d="M3,4 C30,2 70,5 97,3 C99,30 96,70 97,97 C70,99 30,96 3,97 C1,70 4,30 3,4 Z"/></svg>
+    <p class="slate">RESULTADO 02 · DIREÇÃO</p>
+    <p class="say hand rv">direção: cada gesto com um <span class="scribble under light">porquê<svg viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M4,22 C40,10 120,30 196,16 M14,32 C70,26 130,36 190,28"/></svg></span>.</p>
+  </section>
+  <section id="res3" class="foto duo stack-item">
+    <img class="bg" src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&amp;fit=crop&amp;w=1800&amp;h=1125&amp;q=74" alt="" loading="lazy" decoding="async" width="1800" height="1125">
+    <div class="veil"></div>
+    <svg class="fcorner rv" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path vector-effect="non-scaling-stroke" d="M3,4 C30,2 70,5 97,3 C99,30 96,70 97,97 C70,99 30,96 3,97 C1,70 4,30 3,4 Z"/></svg>
+    <p class="slate">RESULTADO 03 · CORTE</p>
+    <p class="say hand rv">o <span class="scribble under light">corte<svg viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M4,22 C40,10 120,30 196,16 M14,32 C70,26 130,36 190,28"/></svg></span>, onde tudo vira uma coisa só.</p>
+  </section>
+</div>
+
 <!-- ===== HERO 2 : SEQUÊNCIA DE FRAMES (scroll) ===== -->
-<section id="seqSection" style="position: relative; height: 340vh; background: oklch(0.97 0.008 85);">
-  <div style="position: sticky; top: 0; height: 100vh; overflow: hidden; background: oklch(0.97 0.008 85);">
+<section id="seqSection" style="position: relative; height: 340vh; background: oklch(0.13 0.01 60);">
+  <div style="position: sticky; top: 0; height: 100vh; overflow: hidden; background: oklch(0.13 0.01 60);">
+    <div class="seq-bgs" aria-hidden="true"><div class="seq-bg duo" data-v="18" style="left:-4%; top:-6%; width:46%; height:58%;"><img src="https://images.unsplash.com/photo-1512790182412-b19e6d62bc39?auto=format&amp;fit=crop&amp;w=900&amp;h=1100&amp;q=74" alt="" loading="lazy" decoding="async"></div><div class="seq-bg duo" data-v="34" style="right:-6%; top:8%; width:42%; height:64%;"><img src="https://images.unsplash.com/photo-1500051638674-ff996a0ec29e?auto=format&amp;fit=crop&amp;w=900&amp;h=1100&amp;q=74" alt="" loading="lazy" decoding="async"></div><div class="seq-bg duo" data-v="26" style="left:22%; bottom:-14%; width:38%; height:50%;"><img src="https://images.unsplash.com/photo-1493804714600-6edb1cd93080?auto=format&amp;fit=crop&amp;w=900&amp;h=1100&amp;q=74" alt="" loading="lazy" decoding="async"></div></div>
+    <div class="seq-glow" aria-hidden="true"></div>
 
     <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 0; pointer-events: none;">
-      <span id="seqWord" style="font-family: 'Anton', sans-serif; font-size: 34vh; line-height: 0.8; color: transparent; -webkit-text-stroke: 1px oklch(0.55 0.22 27 / 0.11); letter-spacing: 0.02em; user-select: none; white-space: nowrap;">INTENÇÃO</span>
+      <span id="seqWord" style="font-family: 'Anton', sans-serif; font-size: 34vh; line-height: 0.8; color: transparent; -webkit-text-stroke: 1px oklch(0.6 0.22 27 / 0.42); letter-spacing: 0.02em; user-select: none; white-space: nowrap;">INTENÇÃO</span>
     </div>
 
     <div class="seq-copy" style="position: absolute; left: var(--gx); top: 50%; transform: translateY(-50%); z-index: 5; max-width: 30vw;">
-      <div style="font-family: 'Courier Prime', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: oklch(0.55 0.22 27); margin-bottom: 18px;">O jeito REC.</div>
-      <p style="margin: 0 0 24px; font-family: 'Anton', sans-serif; font-weight: 400; font-size: clamp(28px, 3.4vw, 58px); line-height: 0.98; letter-spacing: -0.005em; color: oklch(0.18 0.012 60);">CRIAR COM <span class="scribble" style="color: oklch(0.55 0.22 27);">INTENÇÃO<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span> GERA MAIS RESULTADO QUE CRIAR POR CRIAR.</p>
-      <p id="seqCaption" class="hand" style="margin: 0; font-size: clamp(22px, 1.9vw, 28px); line-height: 1.15; color: oklch(0.3 0.012 60); max-width: 330px; min-height: 3.5em;">Primeiro eu escuto. Ninguém liga a câmera antes de saber o porquê.</p>
+      <div style="font-family: 'Caveat', cursive; font-size: 20px; font-weight: 600; letter-spacing: 0.01em; text-transform: none; color: oklch(0.55 0.22 27); margin-bottom: 18px;">O jeito REC.</div>
+      <p style="margin: 0 0 24px; font-family: 'Anton', sans-serif; font-weight: 400; font-size: clamp(28px, 3.4vw, 58px); line-height: 0.98; letter-spacing: -0.005em; color: oklch(0.97 0.008 85);">CRIAR COM <span class="scribble" style="color: oklch(0.55 0.22 27);">INTENÇÃO<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span> GERA MAIS RESULTADO QUE CRIAR POR CRIAR.</p>
+      <p id="seqCaption" class="hand" style="margin: 0; font-size: clamp(22px, 1.9vw, 28px); line-height: 1.15; color: oklch(0.9 0.01 85); max-width: 330px; min-height: 3.5em;">Primeiro eu escuto. Ninguém liga a câmera antes de saber o porquê.</p>
     </div>
 
     <!-- frames: JPEG (cor) + PNG (recorte) — a troca é só de opacidade, sem deslocamento -->
@@ -379,28 +444,40 @@
     </div>
 
     <div class="seq-meta" style="position: absolute; right: var(--gx); top: 50%; transform: translateY(-50%); z-index: 5; text-align: right;">
-      <div id="seqNum" class="readout" style="font-family: 'Anton', sans-serif; font-size: 11vh; line-height: 0.8; color: oklch(0.18 0.012 60 / 0.16);">01</div>
-      <div style="font-family: 'Courier Prime', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: oklch(0.4 0.012 60); margin-top: 10px;">de 04 · role a página</div>
+      <div id="seqNum" class="readout" style="font-family: 'Anton', sans-serif; font-size: 11vh; line-height: 0.8; color: oklch(0.97 0.008 85 / 0.22);">01</div>
+      <div style="font-family: 'Caveat', cursive; font-size: 20px; font-weight: 600; letter-spacing: 0.01em; text-transform: none; color: oklch(0.8 0.01 85); margin-top: 10px;">de 04 · role a página</div>
     </div>
 
-    <div style="position: absolute; left: var(--gx); right: var(--gx); bottom: 30px; z-index: 5; height: 2px; background: oklch(0.18 0.012 60 / 0.12);">
+    <div style="position: absolute; left: var(--gx); right: var(--gx); bottom: 30px; z-index: 5; height: 2px; background: oklch(0.97 0.008 85 / 0.16);">
       <div id="seqProgress" style="height: 100%; width: 0%; background: oklch(0.55 0.22 27);"></div>
     </div>
   </div>
 </section>
 
-<!-- ===== FOTOS · TIRA DE FORA A FORA ===== -->
-<section id="tira" class="strip">
-  <div class="strip-head">
-    <div style="display: flex; align-items: center; gap: 10px; font-family: 'Courier Prime', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: oklch(0.55 0.22 27);"><span class="line" style="width: 30px; height: 1px; background: oklch(0.55 0.22 27); display: inline-block;"></span>Do set pra timeline</div>
-    <p class="hand rv" style="margin: 14px 0 0; font-size: clamp(26px, 2.6vw, 38px); line-height: 1.05; color: oklch(0.3 0.012 60); max-width: 26ch;">três coisas que eu não delego: a <span class="scribble " style="color: oklch(0.55 0.22 27);">luz<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span>, o <span class="scribble " style="color: oklch(0.55 0.22 27);">corte<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span> e a cara de quem assiste.</p>
-  </div>
-  <div class="row" id="tiraFotos">
-    <figure class="cell duo rv" style="--d: 0s;"><img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&amp;fit=crop&amp;w=1000&amp;h=1250&amp;q=74" alt="" loading="lazy" decoding="async" width="1000" height="1250"><span class="cell-slate mono">SC 02 · LUZ</span><figcaption class="cap hand">a luz certa muda o que a pessoa sente</figcaption></figure>
-    <figure class="cell duo rv" style="--d: 0.1s;"><img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&amp;fit=crop&amp;w=1000&amp;h=1250&amp;q=74" alt="" loading="lazy" decoding="async" width="1000" height="1250"><span class="cell-slate mono">SC 03 · CORTE</span><figcaption class="cap hand">o corte é onde o vídeo nasce de novo</figcaption></figure>
-    <figure class="cell duo rv" style="--d: 0.2s;"><img src="https://images.unsplash.com/photo-1524253482453-3fed8d2fe12b?auto=format&amp;fit=crop&amp;w=1000&amp;h=1250&amp;q=74" alt="" loading="lazy" decoding="async" width="1000" height="1250"><span class="cell-slate mono">SC 04 · PÚBLICO</span><figcaption class="cap hand">e no fim, é isso que importa</figcaption></figure>
-  </div>
-</section>
+<!-- ===== INTENÇÃO · 3 fotos empilhadas (roteiro, enquadro, público) ===== -->
+<div id="stack2" class="stack">
+  <section id="int1" class="foto duo stack-item">
+    <img class="bg" src="https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&amp;fit=crop&amp;w=1800&amp;h=1125&amp;q=74" alt="" loading="lazy" decoding="async" width="1800" height="1125">
+    <div class="veil"></div>
+    <svg class="fcorner rv" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path vector-effect="non-scaling-stroke" d="M3,4 C30,2 70,5 97,3 C99,30 96,70 97,97 C70,99 30,96 3,97 C1,70 4,30 3,4 Z"/></svg>
+    <p class="slate">INTENÇÃO 01 · ROTEIRO</p>
+    <p class="say hand rv">antes da câmera: o <span class="scribble under light">roteiro<svg viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M4,22 C40,10 120,30 196,16 M14,32 C70,26 130,36 190,28"/></svg></span> na mão.</p>
+  </section>
+  <section id="int2" class="foto duo stack-item">
+    <img class="bg" src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&amp;fit=crop&amp;w=1800&amp;h=1125&amp;q=74" alt="" loading="lazy" decoding="async" width="1800" height="1125">
+    <div class="veil"></div>
+    <svg class="fcorner rv" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path vector-effect="non-scaling-stroke" d="M3,4 C30,2 70,5 97,3 C99,30 96,70 97,97 C70,99 30,96 3,97 C1,70 4,30 3,4 Z"/></svg>
+    <p class="slate">INTENÇÃO 02 · ENQUADRO</p>
+    <p class="say hand rv">enquadro: você, do <span class="scribble under light">seu jeito<svg viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M4,22 C40,10 120,30 196,16 M14,32 C70,26 130,36 190,28"/></svg></span>.</p>
+  </section>
+  <section id="int3" class="foto duo stack-item">
+    <img class="bg" src="https://images.unsplash.com/photo-1524253482453-3fed8d2fe12b?auto=format&amp;fit=crop&amp;w=1800&amp;h=1125&amp;q=74" alt="" loading="lazy" decoding="async" width="1800" height="1125">
+    <div class="veil"></div>
+    <svg class="fcorner rv" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path vector-effect="non-scaling-stroke" d="M3,4 C30,2 70,5 97,3 C99,30 96,70 97,97 C70,99 30,96 3,97 C1,70 4,30 3,4 Z"/></svg>
+    <p class="slate">INTENÇÃO 03 · CLIQUE</p>
+    <p class="say hand rv">clique. e o <span class="scribble under light">público<svg viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M4,22 C40,10 120,30 196,16 M14,32 C70,26 130,36 190,28"/></svg></span> responde.</p>
+  </section>
+</div>
 
 <!-- ===== HERO 3 : REEL EM VÍDEO (parallax) ===== -->
 <section id="reelSection" style="position: relative; height: 200vh; background: oklch(0.1 0.008 60);">
@@ -416,7 +493,7 @@
     <div class="reelBar" style="top: 0;"></div>
     <div class="reelBar" style="bottom: 0;"></div>
 
-    <div class="reel-hud" style="position: absolute; z-index: 6; left: var(--gx); top: calc(8vh + 32px); display: flex; align-items: center; gap: 11px; font-family: 'Courier Prime', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: oklch(0.97 0.008 85);">
+    <div class="reel-hud" style="position: absolute; z-index: 6; left: var(--gx); top: calc(8vh + 32px); display: flex; align-items: center; gap: 11px; font-family: 'Caveat', cursive; font-size: 20px; font-weight: 600; letter-spacing: 0.01em; text-transform: none; color: oklch(0.97 0.008 85);">
       <span style="width: 10px; height: 10px; border-radius: 50%; background: oklch(0.55 0.22 27); animation: recBlink 1.4s steps(1) infinite;"></span>
       Rec
       <span id="reelTC" class="readout" style="color: oklch(0.8 0.01 85); letter-spacing: 0.1em;">00:00:00:00</span>
@@ -425,7 +502,7 @@
     <div id="reelTitle" style="position: absolute; inset: 0; z-index: 6; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; pointer-events: none; padding: 0 24px; will-change: transform;">
       <div style="font-size: 12px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: oklch(0.72 0.16 27); margin-bottom: 20px;"><span class="hand" style="font-size: 32px; letter-spacing: 0; text-transform: none;">o trabalho rodando</span></div>
       <h2 class="rv-clip" style="margin: 0; font-family: 'Anton', sans-serif; font-weight: 400; font-size: clamp(44px, 10vw, 180px); line-height: 0.84; letter-spacing: -0.015em; color: oklch(0.97 0.008 85);">REEL <span style="color: oklch(0.55 0.22 27);">2025</span></h2>
-      <p style="margin: 24px 0 0; max-width: 520px; font-size: 15px; line-height: 1.6; color: oklch(0.85 0.01 85);">Dez anos de design, cinco de câmera na mão. Isso aqui é o que sobra quando a gente corta o que não presta.</p>
+      <p style="margin: 24px 0 0; max-width: 520px; font-size: 21px; line-height: 1.2; color: oklch(0.85 0.01 85);">Dez anos de design, cinco de câmera na mão. Isso aqui é o que sobra quando a gente corta o que não presta.</p>
     </div>
 
     <div class="hand-note reel-hud rv" aria-hidden="true" style="right: calc(var(--gx) + 160px); bottom: calc(8vh + 34px); color: oklch(0.97 0.008 85); transform: rotate(-5deg);">liga o som.<svg viewBox="0 0 70 40"><path d="M4,32 C26,40 46,30 62,8 M52,8 L63,7 L61,18"/></svg></div>
@@ -433,7 +510,7 @@
       <button id="reelSound" class="soundBtn" type="button" aria-pressed="false"><span id="reelSoundIcon" aria-hidden="true">▶</span> <span id="reelSoundLabel">Ativar som</span></button>
     </div>
 
-    <div class="reel-hud" style="position: absolute; z-index: 6; left: var(--gx); bottom: calc(8vh + 34px); font-family: 'Courier Prime', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: oklch(0.7 0.01 85);">
+    <div class="reel-hud" style="position: absolute; z-index: 6; left: var(--gx); bottom: calc(8vh + 34px); font-family: 'Caveat', cursive; font-size: 20px; font-weight: 600; letter-spacing: 0.01em; text-transform: none; color: oklch(0.7 0.01 85);">
       Roteiro · Direção · Cor
     </div>
   </div>
@@ -455,24 +532,24 @@
 
     <div id="camLoad" style="position: absolute; inset: 0; z-index: 8; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; pointer-events: none; text-align: center;">
       <div style="width: 46px; height: 46px; border: 3px solid oklch(0.72 0.16 27 / 0.25); border-top-color: oklch(0.72 0.16 27); border-radius: 50%; animation: recSpin 0.9s linear infinite;"></div>
-      <div style="font-family: 'Courier Prime', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: oklch(0.72 0.01 85);">Carregando modelo 3D…</div>
+      <div style="font-family: 'Caveat', cursive; font-size: 20px; font-weight: 600; letter-spacing: 0.01em; text-transform: none; color: oklch(0.72 0.01 85);">Carregando modelo 3D…</div>
     </div>
 
     <div id="camFallback" style="position: absolute; inset: 0; z-index: 8; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 18px; pointer-events: none; text-align: center; padding: 0 24px;">
       <div style="font-size: 72px; line-height: 1;">🎥</div>
       <div style="font-family: 'Anton', sans-serif; font-size: clamp(20px,2.4vw,34px); color: oklch(0.97 0.008 85); letter-spacing: 0.01em;">NÃO FOI POSSÍVEL CARREGAR O <span style="color: oklch(0.72 0.16 27);">3D</span></div>
-      <div style="font-size: 13px; line-height: 1.6; color: oklch(0.72 0.01 85); max-width: 440px;">Verifique a conexão — o modelo usa um decodificador carregado via CDN. Recarregue a página para tentar novamente.</div>
+      <div style="font-size: 18px; line-height: 1.2; color: oklch(0.72 0.01 85); max-width: 440px;">Verifique a conexão — o modelo usa um decodificador carregado via CDN. Recarregue a página para tentar novamente.</div>
     </div>
 
     <span class="camBrk tl"></span><span class="camBrk tr"></span><span class="camBrk bl"></span><span class="camBrk br"></span>
 
     <div class="cam-copy" style="position: absolute; left: var(--gx); top: 108px; z-index: 6; max-width: 320px;">
-      <div style="display: flex; align-items: center; gap: 10px; font-family: 'Courier Prime', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: oklch(0.72 0.16 27);">
+      <div style="display: flex; align-items: center; gap: 10px; font-family: 'Caveat', cursive; font-size: 20px; font-weight: 600; letter-spacing: 0.01em; text-transform: none; color: oklch(0.72 0.16 27);">
         <span class="line" style="width: 30px; height: 1px; background: oklch(0.72 0.16 27); display: inline-block;"></span>
         A ferramenta
       </div>
       <h2 class="rv-clip" style="margin: 18px 0 14px; font-family: 'Anton', sans-serif; font-weight: 400; font-size: clamp(30px, 3.6vw, 62px); line-height: 0.94; letter-spacing: -0.005em; color: oklch(0.97 0.008 85);">A CÂMERA É <span style="color: oklch(0.72 0.16 27);">SÓ O MEIO</span>.</h2>
-      <p style="margin: 0; font-size: 15px; line-height: 1.55; color: oklch(0.82 0.01 85);">Qualquer um compra uma dessas. O que não se compra é saber pra onde apontar — e o que cortar depois. Arraste pra girar.</p>
+      <p style="margin: 0; font-size: 21px; line-height: 1.2; color: oklch(0.82 0.01 85);">Qualquer um compra uma dessas. O que não se compra é saber pra onde apontar — e o que cortar depois. Arraste pra girar.</p>
     </div>
 
     <div class="spec" id="spec1" style="left: var(--gx); bottom: 20vh;">
@@ -491,7 +568,7 @@
       <p class="spec-v">Nada sai da timeline sem eu saber o que vai causar.</p>
     </div>
 
-    <div style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 7; padding: 16px 40px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; border-top: 1px solid oklch(0.97 0.008 85 / 0.12); background: oklch(0.12 0.01 60 / 0.55); font-family: 'Courier Prime', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: oklch(0.75 0.01 85);">
+    <div style="position: absolute; left: 0; right: 0; bottom: 0; z-index: 7; padding: 16px 40px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; border-top: 1px solid oklch(0.97 0.008 85 / 0.12); background: oklch(0.12 0.01 60 / 0.55); font-family: 'Caveat', cursive; font-size: 20px; font-weight: 600; letter-spacing: 0.01em; text-transform: none; color: oklch(0.75 0.01 85);">
       <span class="readout">f/<span id="camF">1.8</span></span>
       <span class="readout">Iso <span id="camISO">400</span></span>
       <span class="readout">1/<span id="camShutter">50</span>s</span>
@@ -504,29 +581,29 @@
 <!-- ===== SOBRE ===== -->
 <section id="sobre" style="position: relative; z-index: 60; background: oklch(0.97 0.008 85); padding: clamp(96px, 12vw, 150px) var(--gx) clamp(80px, 10vw, 120px);">
   <div style="max-width: 1200px; margin: 0 auto;">
-    <div style="display: flex; align-items: center; gap: 10px; font-family: 'Courier Prime', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: oklch(0.55 0.22 27); margin-bottom: 28px;">
+    <div style="display: flex; align-items: center; gap: 10px; font-family: 'Caveat', cursive; font-size: 20px; font-weight: 600; letter-spacing: 0.01em; text-transform: none; color: oklch(0.55 0.22 27); margin-bottom: 28px;">
       <span class="line" style="width: 30px; height: 1px; background: oklch(0.55 0.22 27); display: inline-block;"></span>
       Sobre
     </div>
     <div style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 64px; align-items: end;">
       <h2 class="rv-clip" style="margin: 0; font-family: 'Anton', sans-serif; font-weight: 400; font-size: clamp(38px, 5.2vw, 92px); line-height: 0.92; letter-spacing: -0.01em; color: oklch(0.18 0.012 60);">NÃO APRENDA TODOS OS <span class="scribble" style="color: oklch(0.55 0.22 27);">MACETES<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span>. CHAME QUEM JÁ APRENDEU.</h2>
       <div>
-        <p class="rv" style="margin: 0 0 20px; font-size: 16px; line-height: 1.6; color: oklch(0.36 0.012 60);">Sou o Allan. Mais de duzentos clientes, dez anos de design e cinco de câmera na mão me ensinaram uma coisa que não está em curso nenhum: o que funciona muda de nicho pra nicho, e só quem testou muito sabe ler o sinal.</p>
-        <p class="rv" style="--d:.12s; margin: 0; font-size: 16px; line-height: 1.6; color: oklch(0.36 0.012 60);">Meu combinado é simples: uma reunião por mês, algumas pausas pra gravar, e o resto é comigo — roteiro, direção, corte e a leitura fria dos números depois. Você volta a cuidar do seu negócio. E cada vídeo sai sabendo o que vai causar.</p>
+        <p class="rv" style="margin: 0 0 20px; font-size: 22px; line-height: 1.2; color: oklch(0.36 0.012 60);">Sou o Allan. Mais de duzentos clientes, dez anos de design e cinco de câmera na mão me ensinaram uma coisa que não está em curso nenhum: o que funciona muda de nicho pra nicho, e só quem testou muito sabe ler o sinal.</p>
+        <p class="rv" style="--d:.12s; margin: 0; font-size: 22px; line-height: 1.2; color: oklch(0.36 0.012 60);">Meu combinado é simples: uma reunião por mês, algumas pausas pra gravar, e o resto é comigo — roteiro, direção, corte e a leitura fria dos números depois. Você volta a cuidar do seu negócio. E cada vídeo sai sabendo o que vai causar.</p>
       </div>
     </div>
     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 72px; border-top: 1px solid oklch(0.18 0.012 60); padding-top: 40px;">
       <div class="rv" style="--d:0.0s">
         <div class="scribble" style="display: inline-block;"><div class="count" data-n="200" data-suf="+" style="font-family: 'Anton', sans-serif; font-size: clamp(44px, 6vw, 88px); line-height: 0.9; color: oklch(0.55 0.22 27);">200+</div><svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></div>
-        <div style="font-family: 'Courier Prime', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: oklch(0.4 0.012 60); margin-top: 12px;">Clientes atendidos</div>
+        <div style="font-family: 'Caveat', cursive; font-size: 20px; font-weight: 600; letter-spacing: 0.01em; text-transform: none; color: oklch(0.4 0.012 60); margin-top: 12px;">Clientes atendidos</div>
       </div>
       <div class="rv" style="--d:0.1s">
         <div class="count" data-n="10" data-suf=" anos" style="font-family: 'Anton', sans-serif; font-size: clamp(44px, 6vw, 88px); line-height: 0.9; color: oklch(0.18 0.012 60);">10 anos</div>
-        <div style="font-family: 'Courier Prime', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: oklch(0.4 0.012 60); margin-top: 12px;">Como designer gráfico</div>
+        <div style="font-family: 'Caveat', cursive; font-size: 20px; font-weight: 600; letter-spacing: 0.01em; text-transform: none; color: oklch(0.4 0.012 60); margin-top: 12px;">Como designer gráfico</div>
       </div>
       <div class="rv" style="--d:0.2s">
         <div class="count" data-n="5" data-suf=" anos" style="font-family: 'Anton', sans-serif; font-size: clamp(44px, 6vw, 88px); line-height: 0.9; color: oklch(0.18 0.012 60);">5 anos</div>
-        <div style="font-family: 'Courier Prime', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: oklch(0.4 0.012 60); margin-top: 12px;">Como videomaker</div>
+        <div style="font-family: 'Caveat', cursive; font-size: 20px; font-weight: 600; letter-spacing: 0.01em; text-transform: none; color: oklch(0.4 0.012 60); margin-top: 12px;">Como videomaker</div>
       </div>
     </div>
   </div>
@@ -543,31 +620,31 @@
 <!-- ===== SERVIÇOS ===== -->
 <section id="servicos" style="position: relative; z-index: 60; background: oklch(0.18 0.012 60); color: oklch(0.97 0.008 85); padding: clamp(96px, 12vw, 150px) var(--gx);">
   <div style="max-width: 1200px; margin: 0 auto;">
-    <div style="display: flex; align-items: center; gap: 10px; font-family: 'Courier Prime', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: oklch(0.72 0.16 27); margin-bottom: 28px;">
+    <div style="display: flex; align-items: center; gap: 10px; font-family: 'Caveat', cursive; font-size: 20px; font-weight: 600; letter-spacing: 0.01em; text-transform: none; color: oklch(0.72 0.16 27); margin-bottom: 28px;">
       <span class="line" style="width: 30px; height: 1px; background: oklch(0.72 0.16 27); display: inline-block;"></span>
       Serviços
     </div>
     <h2 class="rv-clip" style="margin: 0 0 64px; font-family: 'Anton', sans-serif; font-weight: 400; font-size: clamp(40px, 6vw, 104px); line-height: 0.9; letter-spacing: -0.01em;">MENOS SORTE. <span class="scribble salmon" style="color: oklch(0.72 0.16 27);">MAIS INTENÇÃO.<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span></h2>
     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: oklch(0.3 0.01 60);">
       <div class="rv" style="--d:0.00s; background: oklch(0.18 0.012 60); padding: 44px 40px;">
-        <div style="font-family: 'Courier Prime', monospace; font-size: 12px; letter-spacing: 0.14em; color: oklch(0.72 0.16 27);">01</div>
+        <div style="font-family: 'Caveat', cursive; font-size: 22px; letter-spacing: 0.01em; color: oklch(0.72 0.16 27);">01</div>
         <h3 style="margin: 14px 0 12px; font-family: 'Anton', sans-serif; font-weight: 400; font-size: 34px; letter-spacing: 0.01em;">ESTRATÉGIA</h3>
-        <p style="margin: 0; font-size: 15px; line-height: 1.6; color: oklch(0.78 0.01 85);">A gente descobre o que converte no seu nicho antes de ligar a câmera. Posicionamento não é slogan — é decisão.</p>
+        <p style="margin: 0; font-size: 21px; line-height: 1.2; color: oklch(0.78 0.01 85);">A gente descobre o que converte no seu nicho antes de ligar a câmera. Posicionamento não é slogan — é decisão.</p>
       </div>
       <div class="rv" style="--d:0.09s; background: oklch(0.18 0.012 60); padding: 44px 40px;">
-        <div style="font-family: 'Courier Prime', monospace; font-size: 12px; letter-spacing: 0.14em; color: oklch(0.72 0.16 27);">02</div>
+        <div style="font-family: 'Caveat', cursive; font-size: 22px; letter-spacing: 0.01em; color: oklch(0.72 0.16 27);">02</div>
         <h3 style="margin: 14px 0 12px; font-family: 'Anton', sans-serif; font-weight: 400; font-size: 34px; letter-spacing: 0.01em;">ROTEIRO</h3>
-        <p style="margin: 0; font-size: 15px; line-height: 1.6; color: oklch(0.78 0.01 85);">Eu trago as ideias e o rumo. Você aprova em dez minutos. Ninguém grava no escuro.</p>
+        <p style="margin: 0; font-size: 21px; line-height: 1.2; color: oklch(0.78 0.01 85);">Eu trago as ideias e o rumo. Você aprova em dez minutos. Ninguém grava no escuro.</p>
       </div>
       <div class="rv" style="--d:0.18s; background: oklch(0.18 0.012 60); padding: 44px 40px;">
-        <div style="font-family: 'Courier Prime', monospace; font-size: 12px; letter-spacing: 0.14em; color: oklch(0.72 0.16 27);">03</div>
+        <div style="font-family: 'Caveat', cursive; font-size: 22px; letter-spacing: 0.01em; color: oklch(0.72 0.16 27);">03</div>
         <h3 style="margin: 14px 0 12px; font-family: 'Anton', sans-serif; font-weight: 400; font-size: 34px; letter-spacing: 0.01em;">GRAVAÇÃO</h3>
-        <p style="margin: 0; font-size: 15px; line-height: 1.6; color: oklch(0.78 0.01 85);">Você reserva pausas na agenda. Eu cuido de direção, luz e enquadro. Sem virar peso nas suas costas.</p>
+        <p style="margin: 0; font-size: 21px; line-height: 1.2; color: oklch(0.78 0.01 85);">Você reserva pausas na agenda. Eu cuido de direção, luz e enquadro. Sem virar peso nas suas costas.</p>
       </div>
       <div class="rv" style="--d:0.27s; background: oklch(0.18 0.012 60); padding: 44px 40px;">
-        <div style="font-family: 'Courier Prime', monospace; font-size: 12px; letter-spacing: 0.14em; color: oklch(0.72 0.16 27);">04</div>
+        <div style="font-family: 'Caveat', cursive; font-size: 22px; letter-spacing: 0.01em; color: oklch(0.72 0.16 27);">04</div>
         <h3 style="margin: 14px 0 12px; font-family: 'Anton', sans-serif; font-weight: 400; font-size: 34px; letter-spacing: 0.01em;">EDIÇÃO</h3>
-        <p style="margin: 0; font-size: 15px; line-height: 1.6; color: oklch(0.78 0.01 85);">Corte com ritmo, ajustado pelo que a audiência respondeu no ciclo anterior. Cada mês mais afiado.</p>
+        <p style="margin: 0; font-size: 21px; line-height: 1.2; color: oklch(0.78 0.01 85);">Corte com ritmo, ajustado pelo que a audiência respondeu no ciclo anterior. Cada mês mais afiado.</p>
       </div>
     </div>
   </div>
@@ -578,13 +655,13 @@
   <div style="max-width: 1200px; margin: 0 auto;">
     <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 56px;">
       <div>
-        <div style="display: flex; align-items: center; gap: 10px; font-family: 'Courier Prime', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: oklch(0.55 0.22 27); margin-bottom: 22px;">
+        <div style="display: flex; align-items: center; gap: 10px; font-family: 'Caveat', cursive; font-size: 20px; font-weight: 600; letter-spacing: 0.01em; text-transform: none; color: oklch(0.55 0.22 27); margin-bottom: 22px;">
           <span class="line" style="width: 30px; height: 1px; background: oklch(0.55 0.22 27); display: inline-block;"></span>
           Trabalhos
         </div>
         <h2 class="rv-clip" style="margin: 0; font-family: 'Anton', sans-serif; font-weight: 400; font-size: clamp(40px, 6vw, 104px); line-height: 0.9; letter-spacing: -0.01em; color: oklch(0.18 0.012 60);">SELE<span style="color: oklch(0.55 0.22 27);">ÇÃO</span></h2>
       </div>
-      <p class="rv" style="margin: 0; font-size: 15px; line-height: 1.6; color: oklch(0.4 0.012 60); max-width: 320px;">Amostra. A vitrine de verdade se monta com o seu trabalho — me manda os arquivos e eu troco.<br><span class="hand" style="font-size: 26px; color: oklch(0.55 0.22 27); display: inline-block; margin-top: 8px; transform: rotate(-2deg);">as suas peças entram aqui ↑</span></p>
+      <p class="rv" style="margin: 0; font-size: 21px; line-height: 1.2; color: oklch(0.4 0.012 60); max-width: 320px;">Amostra. A vitrine de verdade se monta com o seu trabalho — me manda os arquivos e eu troco.<br><span class="hand" style="font-size: 26px; color: oklch(0.55 0.22 27); display: inline-block; margin-top: 8px; transform: rotate(-2deg);">as suas peças entram aqui ↑</span></p>
     </div>
     <!-- Imagens de vitrine servidas por CDN (Unsplash) — placeholders até entrarem as peças reais do Allan.
          Para trocar: substitua o src por outra URL de CDN ou por um arquivo local. -->
@@ -623,9 +700,9 @@
   <div class="spot" aria-hidden="true"></div><div class="halftone" aria-hidden="true"></div>
   <div class="stamp light" aria-hidden="true" style="right: var(--gx); top: 110px;"><svg viewBox="0 0 120 120"><defs><path id="stampB" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs><circle cx="60" cy="60" r="56"/><circle cx="60" cy="60" r="32"/><text><textPath href="#stampB">CRIAR COM INTENÇÃO · REC. · </textPath></text><circle class="dot" cx="60" cy="60" r="6"/></svg></div>
   <div style="max-width: 1200px; margin: 0 auto; position: relative; z-index: 2;">
-    <div class="rv" style="font-family: 'Courier Prime', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: oklch(0.97 0.008 85 / 0.8); margin-bottom: 24px;"><span class="hand" style="font-size: 36px; letter-spacing: 0; text-transform: none;">bora criar com intenção?</span></div>
+    <div class="rv" style="font-family: 'Caveat', cursive; font-size: 20px; font-weight: 600; letter-spacing: 0.01em; text-transform: none; color: oklch(0.97 0.008 85 / 0.8); margin-bottom: 24px;"><span class="hand" style="font-size: 36px; letter-spacing: 0; text-transform: none;">bora criar com intenção?</span></div>
     <h2 class="rv-clip" style="margin: 0 0 40px; font-family: 'Anton', sans-serif; font-weight: 400; font-size: clamp(48px, 9vw, 168px); line-height: 0.86; letter-spacing: -0.015em;">AGENDAR<br>UMA <span class="scribble under light">CONVERSA<svg viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M4,22 C40,10 120,30 196,16 M14,32 C70,26 130,36 190,28"/></svg></span></h2>
-    <a href="#contato" class="cta-dark" style="display: inline-flex; align-items: center; gap: 12px; background: oklch(0.18 0.012 60); color: oklch(0.97 0.008 85); padding: 18px 32px; border-radius: 50px; font-size: 15px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;">Falar comigo <span style="font-size:18px;">→</span></a>
+    <a href="#contato" class="cta-dark" style="display: inline-flex; align-items: center; gap: 12px; background: oklch(0.18 0.012 60); color: oklch(0.97 0.008 85); padding: 18px 32px; border-radius: 50px; font-family: 'Caveat', cursive; font-size: 24px; font-weight: 600; letter-spacing: 0; text-transform: none;">Falar comigo <span style="font-size:18px;">→</span></a>
     <p class="hand rv" style="margin: 28px 0 0; font-size: 27px; line-height: 1.15; color: oklch(0.97 0.008 85 / 0.92); max-width: 30ch;">Uma conversa de verdade, pra ver se a gente faz sentido junto. Sem roteiro dessa vez.</p>
   </div>
   <div style="position: absolute; right: -2vw; bottom: -8vh; z-index: 1; width: 42vw; pointer-events: none; mix-blend-mode: multiply; opacity: 0.9;">
@@ -700,7 +777,7 @@
 
   /* cabeçalho: claro sobre as seções escuras e sobre o vermelho */
   var topbar = document.querySelector('.topbar');
-  var escuras = ['reelSection','camSection','servicos','contato','foto1','tiraFotos'].map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  var escuras = ['reelSection','camSection','servicos','contato','foto1','stack1','seqSection','stack2'].map(function(id){ return document.getElementById(id); }).filter(Boolean);
   if (topbar && escuras.length){
     var estado = false;
     (function loop(){
@@ -814,6 +891,9 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (r.bottom > 0 && r.top < window.innerHeight){
       bar.style.width = (p * 100).toFixed(2) + '%';
+      sec.querySelectorAll('.seq-bg').forEach(el => {
+        el.style.transform = 'translate3d(0,' + ((0.5 - p) * (+el.dataset.v || 20)).toFixed(2) + 'vh,0)';
+      });
 
       const i = Math.min(frames.length - 1, Math.floor(p * frames.length));
       if (i !== cur){
@@ -824,6 +904,7 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         // o último frame é o do flash disparando
         const last = (i === frames.length - 1);
         bracket.classList.toggle('on', last);
+        sec.classList.toggle('clique', last);
         if (last && cur < i) fireFlash();
         cur = i;
       }
