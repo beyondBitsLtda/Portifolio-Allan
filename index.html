@@ -230,7 +230,7 @@
     background: linear-gradient(to top, oklch(0.1 0.008 60 / .78), transparent 46%, oklch(0.1 0.008 60 / .3)); }
   .fcorner { position: absolute; inset: 7vh var(--gx); width: calc(100% - 2 * var(--gx)); height: 86vh; pointer-events: none; overflow: visible; }
   .fcorner path { fill: none; stroke: oklch(0.97 0.008 85 / .85); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
-    stroke-dasharray: 4400; stroke-dashoffset: 4400; }   /* non-scaling-stroke mede em px de tela: folga para o perímetro real */
+    stroke-dasharray: var(--L, 6000); stroke-dashoffset: var(--L, 6000); }   /* --L = perímetro real em px, medido em JS */
   .js .fcorner.in path { transition: stroke-dashoffset 1.6s cubic-bezier(.6,0,.2,1) .2s; stroke-dashoffset: 0; }
   .js .fcorner { opacity: 1; transform: none; }   /* a moldura não sobe: só se desenha */
   .foto .slate { position: absolute; left: calc(var(--gx) + 24px); top: calc(7vh + 34px); margin: 0; font-size: 11px; font-weight: 700;
@@ -327,6 +327,47 @@
 
   @media (max-width: 759px) { .seq-bg { opacity: .22; } .stack .foto { height: 70vh; min-height: 420px; } }
   @media (prefers-reduced-motion: reduce) { .seq-bg { transform: none !important; } }
+
+  /* ===== hover: a cor de verdade volta ===== */
+  .duo img, .duo .bg { transition: filter .55s ease, transform .8s cubic-bezier(.2,.7,.2,1); }
+  .duo::before, .duo:not(.work)::after { transition: opacity .55s ease; }
+  .duo:hover img, .duo:hover .bg { filter: none; }
+  .duo:hover::before, .duo:not(.work):hover::after { opacity: 0; }
+  .foto.duo { cursor: crosshair; }
+
+  /* ===== palavras de fundo do "jeito REC." com contraste ===== */
+  #seqWord { color: oklch(0.62 0.24 27 / .14) !important; -webkit-text-stroke: 2px oklch(0.72 0.22 27 / .95) !important;
+    text-shadow: 0 0 28px oklch(0.6 0.24 27 / .45); }
+
+  /* ===== claquete: intro do reel, no fundo claro do site ===== */
+  #claquete { position: relative; z-index: 60; background: oklch(0.97 0.008 85); overflow: hidden; min-height: 92vh; display: flex; align-items: center;
+    padding: clamp(80px, 10vw, 140px) var(--gx); }
+  .claq-copy { position: relative; z-index: 2; max-width: 46ch; display: flex; flex-direction: column; gap: 18px; }
+  .claq-copy h2 { font-family: 'Anton', sans-serif; font-weight: 400; margin: 0; font-size: clamp(44px, 7vw, 120px); line-height: .9; letter-spacing: -.01em; color: oklch(0.18 0.012 60); }
+  .claq-copy h2 em { font-style: normal; color: oklch(0.55 0.22 27); }
+  .claq-copy .hand { font-size: clamp(24px, 2.3vw, 34px); line-height: 1.15; color: oklch(0.3 0.012 60); max-width: 30ch; }
+  .claq-copy .take { font-size: 20px; color: oklch(0.55 0.22 27); }
+  .claq-img { position: absolute; z-index: 1; right: -6vw; top: 50%; width: min(62vw, 980px); transform: translateY(-50%) translateX(22vw) rotate(-6deg); opacity: 0;
+    transition: transform 1.3s cubic-bezier(.2,.7,.2,1), opacity .9s ease; pointer-events: none; }
+  .claq-img.in { transform: translateY(-50%) translateX(0) rotate(-6deg); opacity: 1; }
+  .claq-img img { width: 100%; height: auto; display: block; }
+  .claq-img.photo img { aspect-ratio: 1 / 1; object-fit: cover; box-shadow: 0 30px 80px oklch(0.18 0.012 60 / .28); }
+  .claq-img.photo { width: min(52vw, 760px); }
+  .claq-arrow { position: absolute; z-index: 3; left: 50%; bottom: 14vh; transform: rotate(8deg); }
+  @media (max-width: 899px) {
+    #claquete { min-height: 0; padding-top: 112px; flex-direction: column; align-items: flex-start; gap: 24px; }
+    .claq-img { position: relative; right: auto; top: auto; width: 100%; transform: translateX(22vw) rotate(-4deg); margin-left: 8vw; }
+    .claq-img.in { transform: translateX(0) rotate(-4deg); }
+    .claq-img.photo { width: 92%; }
+    .claq-arrow { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .claq-img { transition: none; opacity: 1; transform: translateY(-50%) rotate(-6deg); } }
+  /* a revelação .rv não pode vencer o transform da claquete */
+  .js .claq-img.rv { opacity: 0; transform: translateY(-50%) translateX(22vw) rotate(-6deg); }
+  .js .claq-img.rv.in { opacity: 1; transform: translateY(-50%) translateX(0) rotate(-6deg); }
+  @media (max-width: 899px) { .js .claq-img.rv { transform: translateX(22vw) rotate(-4deg); } .js .claq-img.rv.in { transform: translateX(0) rotate(-4deg); } }
+  .claq-under { display: block; width: 62%; height: 18px; margin-top: 2px; overflow: visible; }
+  .claq-under path { fill: none; stroke: oklch(0.55 0.22 27); stroke-width: 3; stroke-linecap: round; }
 </style>
 <script type="importmap">
 { "imports": {
@@ -478,6 +519,18 @@
     <p class="say hand rv">clique. e o <span class="scribble under light">público<svg viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M4,22 C40,10 120,30 196,16 M14,32 C70,26 130,36 190,28"/></svg></span> responde.</p>
   </section>
 </div>
+
+<!-- ===== CLAQUETE · intro do reel ===== -->
+<section id="claquete">
+  <div class="claq-copy">
+    <p class="take hand rv">cena 1 · take 1 · <span class="scribble" style="color: oklch(0.55 0.22 27);">rodando<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span></p>
+    <h2 class="rv-clip">SILÊNCIO<br>NO <em>SET</em>.</h2>
+    <p class="hand rv" style="--d:.15s;">é aqui que roteiro vira imagem. tudo que a gente decidiu antes — o porquê, o enquadro, o ritmo — agora tem que aparecer na tela. sem desculpa.</p>
+    <p class="hand rv" style="--d:.3s; color: oklch(0.55 0.22 27);">a claquete bate uma vez só. depois, é o que ficou.<svg class="claq-under" viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M4,22 C40,10 120,30 196,16 M14,32 C70,26 130,36 190,28"/></svg></p>
+  </div>
+  <div class="claq-img rv" aria-hidden="true"><img src="claquete.png" alt="" loading="lazy" decoding="async"></div>
+  <div class="hand-note rv claq-arrow" aria-hidden="true" style="color: oklch(0.55 0.22 27);">role: o reel começa<svg viewBox="0 0 70 40"><path d="M6,6 C20,26 38,34 60,30 M52,22 L61,31 L50,34"/></svg></div>
+</section>
 
 <!-- ===== HERO 3 : REEL EM VÍDEO (parallax) ===== -->
 <section id="reelSection" style="position: relative; height: 200vh; background: oklch(0.1 0.008 60);">
@@ -742,6 +795,16 @@
     while (h.firstChild) inner.appendChild(h.firstChild);
     h.appendChild(inner);
   });
+
+  /* moldura à mão: o traço é medido em px de tela, então o comprimento vem do tamanho real */
+  function medirMolduras(){
+    Array.prototype.forEach.call(document.querySelectorAll('.fcorner'), function(svg){
+      var r = svg.getBoundingClientRect();
+      svg.style.setProperty('--L', Math.ceil(2 * (r.width + r.height) * 1.08));
+    });
+  }
+  medirMolduras();
+  window.addEventListener('resize', medirMolduras);
 
   /* revelação por rolagem */
   var alvos = document.querySelectorAll('.rv, .rv-clip, .line, .scribble');
