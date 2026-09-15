@@ -244,25 +244,45 @@
   .scribble.salmon svg path { stroke: oklch(0.72 0.16 27); }
   .js .hand-note.rv.in svg path, .js .rv.in .hand-note svg path { animation: draw 1s cubic-bezier(.6,0,.2,1) .5s both; }
 
-  .strip { position: relative; z-index: 60; background: oklch(0.97 0.008 85); padding: clamp(80px, 10vw, 140px) var(--gx) clamp(90px, 11vw, 150px); overflow: hidden; }
-  .strip-head { max-width: 1200px; margin: 0 auto clamp(40px, 5vw, 64px); }
-  .strip .row { max-width: 1200px; margin: 0 auto; display: flex; gap: clamp(18px, 3vw, 44px); justify-content: center; align-items: flex-end; flex-wrap: wrap; }
-  .pol { position: relative; margin: 0; background: #fff; padding: 12px 12px 48px; width: min(30vw, 340px); transform: rotate(var(--r));
-    box-shadow: 0 18px 44px oklch(0.18 0.012 60 / .16); }
-  .js .pol.rv { transform: rotate(var(--r)) translateY(26px); } .js .pol.rv.in { transform: rotate(var(--r)); }
-  .pol img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; filter: saturate(.92) contrast(1.04); }
-  .pol .cap { position: absolute; left: 16px; right: 16px; bottom: 10px; margin: 0; font-size: 25px; line-height: 1; color: oklch(0.2 0.012 60); }
-  .pol .tape { top: -13px; left: 50%; margin-left: -56px; transform: rotate(-3deg); }
+  /* tira: três fotos de fora a fora, sem moldura */
+  .strip { position: relative; z-index: 60; background: oklch(0.97 0.008 85); padding: clamp(80px, 10vw, 140px) 0 0; overflow: hidden; }
+  .strip-head { max-width: 1200px; margin: 0 auto clamp(36px, 4.5vw, 56px); padding-inline: var(--gx); }
+  .strip .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; background: oklch(0.97 0.008 85); }
+  .cell { position: relative; margin: 0; height: clamp(420px, 74vh, 760px); overflow: hidden; background: oklch(0.12 0.01 60); }
+  .cell img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .8s cubic-bezier(.2,.7,.2,1); }
+  .cell:hover img { transform: scale(1.04); }
+  .cell-slate { position: absolute; z-index: 3; left: 22px; top: 20px; font-size: 11px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: oklch(0.97 0.008 85 / .9); }
+  .cell .cap { position: absolute; z-index: 3; left: 22px; right: 22px; bottom: 20px; margin: 0; font-size: clamp(24px, 2vw, 32px); line-height: 1; color: oklch(0.97 0.008 85); transform: rotate(-1.5deg); }
+
+  /* duotone vermelho: a imagem vira preto e branco e recebe o vermelho por multiplicação;
+     um segundo véu clareia as sombras para vermelho profundo em vez de preto */
+  .duo img, .duo .bg, .duo-cam .cam-bg { filter: grayscale(1) contrast(1.12) brightness(.92); }
+  .duo::before, .duo-cam .cam-red::before { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: oklch(0.52 0.22 27); mix-blend-mode: multiply; }
+  .duo:not(.work)::after, .duo-cam .cam-red::after { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: oklch(0.22 0.09 27); mix-blend-mode: screen; }   /* a vitrine mantém o próprio ::after (gradiente da legenda) */
+  .foto.duo .veil, .foto.duo .fcorner, .foto.duo .slate, .foto.duo .say, .foto.duo .hand-note { z-index: 2; }
+  .work.duo::after { z-index: 2; }
+  .work.duo img { transition: transform .7s cubic-bezier(.2,.7,.2,1), filter .5s ease; }
+  .work.duo:hover img { filter: none; }
+  .work.duo::before { transition: opacity .5s ease; }
+  .work.duo:hover::before { opacity: 0; }   /* no hover a cor real volta */
+
+  /* câmera 3D: foto grande ao fundo, atrás do modelo */
+  .cam-bg { position: absolute; left: 0; right: 0; top: -6%; width: 100%; height: 112%; object-fit: cover; z-index: 0; }
+  .cam-red { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
   .tape { position: absolute; z-index: 3; width: 112px; height: 26px; background: oklch(0.93 0.035 92 / .82);
     box-shadow: 0 1px 2px oklch(0.18 0.012 60 / .18); pointer-events: none; }
   .tape::after { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, transparent 0 6px, oklch(1 0 0 / .18) 6px 7px); }
-  .work.taped::before { content: ''; position: absolute; z-index: 3; top: -10px; left: 22px; width: 96px; height: 24px; transform: rotate(-6deg);
+  /* a fita fica no ::before do rótulo, porque o ::before do card é o véu vermelho */
+  .work.taped .work-tag::before { content: ''; position: absolute; z-index: 3; top: -26px; left: -8px; width: 96px; height: 24px; transform: rotate(-6deg);
     background: oklch(0.93 0.035 92 / .85); box-shadow: 0 1px 2px oklch(0.18 0.012 60 / .18); }
   .work.taped { overflow: visible; }
 
   @media (max-width: 759px) {
     .foto { min-height: 520px; }
-    .pol { width: min(72vw, 300px); }
+    .strip .row { grid-template-columns: 1fr; }
+    .cell { height: 62vh; }
     .foto .say { max-width: 16ch; font-size: 30px; bottom: calc(7vh + 24px); }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -323,7 +343,7 @@
 
 
 <!-- ===== FOTO · foto1 ===== -->
-<section id="foto1" class="foto">
+<section id="foto1" class="foto duo">
   <img class="bg" src="https://images.unsplash.com/photo-1601506521937-0121a7fc2a6b?auto=format&amp;fit=crop&amp;w=1800&amp;h=1125&amp;q=74" alt="" loading="lazy" decoding="async" width="1800" height="1125">
   <div class="veil"></div>
   <svg class="fcorner rv" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path vector-effect="non-scaling-stroke" pathLength="400" d="M3,4 C30,2 70,5 97,3 C99,30 96,70 97,97 C70,99 30,96 3,97 C1,70 4,30 3,4 Z"/></svg>
@@ -369,16 +389,16 @@
   </div>
 </section>
 
-<!-- ===== FOTOS · TIRA ===== -->
+<!-- ===== FOTOS · TIRA DE FORA A FORA ===== -->
 <section id="tira" class="strip">
   <div class="strip-head">
     <div style="display: flex; align-items: center; gap: 10px; font-family: 'Courier Prime', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: oklch(0.55 0.22 27);"><span class="line" style="width: 30px; height: 1px; background: oklch(0.55 0.22 27); display: inline-block;"></span>Do set pra timeline</div>
     <p class="hand rv" style="margin: 14px 0 0; font-size: clamp(26px, 2.6vw, 38px); line-height: 1.05; color: oklch(0.3 0.012 60); max-width: 26ch;">três coisas que eu não delego: a <span class="scribble " style="color: oklch(0.55 0.22 27);">luz<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span>, o <span class="scribble " style="color: oklch(0.55 0.22 27);">corte<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span> e a cara de quem assiste.</p>
   </div>
-  <div class="row">
-    <figure class="pol rv" style="--r: -3deg; --d: 0s;"><span class="tape" aria-hidden="true" style=""></span><img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&amp;fit=crop&amp;w=720&amp;h=900&amp;q=74" alt="" loading="lazy" decoding="async" width="720" height="900"><figcaption class="cap hand">a luz certa muda o que a pessoa sente</figcaption></figure>
-    <figure class="pol rv" style="--r: 2deg; --d: 0.1s;"><span class="tape" aria-hidden="true" style=""></span><img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&amp;fit=crop&amp;w=720&amp;h=900&amp;q=74" alt="" loading="lazy" decoding="async" width="720" height="900"><figcaption class="cap hand">o corte é onde o vídeo nasce de novo</figcaption></figure>
-    <figure class="pol rv" style="--r: -1.5deg; --d: 0.2s;"><span class="tape" aria-hidden="true" style=""></span><img src="https://images.unsplash.com/photo-1524253482453-3fed8d2fe12b?auto=format&amp;fit=crop&amp;w=720&amp;h=900&amp;q=74" alt="" loading="lazy" decoding="async" width="720" height="900"><figcaption class="cap hand">e no fim, é isso que importa</figcaption></figure>
+  <div class="row" id="tiraFotos">
+    <figure class="cell duo rv" style="--d: 0s;"><img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&amp;fit=crop&amp;w=1000&amp;h=1250&amp;q=74" alt="" loading="lazy" decoding="async" width="1000" height="1250"><span class="cell-slate mono">SC 02 · LUZ</span><figcaption class="cap hand">a luz certa muda o que a pessoa sente</figcaption></figure>
+    <figure class="cell duo rv" style="--d: 0.1s;"><img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&amp;fit=crop&amp;w=1000&amp;h=1250&amp;q=74" alt="" loading="lazy" decoding="async" width="1000" height="1250"><span class="cell-slate mono">SC 03 · CORTE</span><figcaption class="cap hand">o corte é onde o vídeo nasce de novo</figcaption></figure>
+    <figure class="cell duo rv" style="--d: 0.2s;"><img src="https://images.unsplash.com/photo-1524253482453-3fed8d2fe12b?auto=format&amp;fit=crop&amp;w=1000&amp;h=1250&amp;q=74" alt="" loading="lazy" decoding="async" width="1000" height="1250"><span class="cell-slate mono">SC 04 · PÚBLICO</span><figcaption class="cap hand">e no fim, é isso que importa</figcaption></figure>
   </div>
 </section>
 
@@ -420,10 +440,11 @@
 </section>
 
 <!-- ===== HERO 4 : CÂMERA 3D (hero dedicado) ===== -->
-<section id="camSection" style="position: relative; height: 300vh; background: oklch(0.16 0.012 60);">
+<section id="camSection" class="duo-cam" style="position: relative; height: 300vh; background: oklch(0.16 0.012 60);">
   <div style="position: sticky; top: 0; height: 100vh; overflow: hidden; background: oklch(0.16 0.012 60);">
+    <img class="cam-bg" src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&amp;fit=crop&amp;w=1800&amp;h=1125&amp;q=74" alt="" loading="lazy" decoding="async" width="1800" height="1125"><div class="cam-red" aria-hidden="true"></div>
 
-    <div style="position: absolute; inset: 0; z-index: 0; background: radial-gradient(58% 62% at 50% 46%, oklch(0.33 0.03 40) 0%, oklch(0.16 0.012 60) 68%);"></div>
+    <div style="position: absolute; inset: 0; z-index: 0; background: radial-gradient(62% 66% at 50% 48%, transparent 0%, oklch(0.12 0.01 60 / 0.86) 78%);"></div>
     <div style="position: absolute; inset: 0; z-index: 0; opacity: 0.55; background-image: linear-gradient(oklch(0.97 0.008 85 / 0.045) 1px, transparent 1px), linear-gradient(90deg, oklch(0.97 0.008 85 / 0.045) 1px, transparent 1px); background-size: 88px 88px;"></div>
 
     <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 1; pointer-events: none;">
@@ -478,16 +499,6 @@
       <span style="color: oklch(0.72 0.16 27);">arraste · role</span>
     </div>
   </div>
-</section>
-
-<!-- ===== FOTO · foto3 ===== -->
-<section id="foto3" class="foto">
-  <img class="bg" src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&amp;fit=crop&amp;w=1800&amp;h=1125&amp;q=74" alt="" loading="lazy" decoding="async" width="1800" height="1125">
-  <div class="veil"></div>
-  <svg class="fcorner rv" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path vector-effect="non-scaling-stroke" pathLength="400" d="M3,4 C30,2 70,5 97,3 C99,30 96,70 97,97 C70,99 30,96 3,97 C1,70 4,30 3,4 Z"/></svg>
-  <p class="slate mono">SC 07 · EXTERNA · CÂMERA NA MÃO</p>
-  <p class="say hand rv">câmera na mão, <span class="scribble under light">direção na cabeça<svg viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M4,22 C40,10 120,30 196,16 M14,32 C70,26 130,36 190,28"/></svg></span>.</p>
-  
 </section>
 
 <!-- ===== SOBRE ===== -->
@@ -578,27 +589,27 @@
     <!-- Imagens de vitrine servidas por CDN (Unsplash) — placeholders até entrarem as peças reais do Allan.
          Para trocar: substitua o src por outra URL de CDN ou por um arquivo local. -->
     <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
-      <a class="work rv taped" href="#contato" style="--d:0.00s; grid-column: span 2; grid-row: span 2; aspect-ratio: 16/10;">
+      <a class="work rv duo taped" href="#contato" style="--d:0.00s; grid-column: span 2; grid-row: span 2; aspect-ratio: 16/10;">
         <img src="https://images.unsplash.com/photo-1601506521937-0121a7fc2a6b?auto=format&amp;fit=crop&amp;w=1200&amp;h=750&amp;q=72" alt="Set de gravação com câmera de cinema" loading="lazy" decoding="async" width="1200" height="750">
         <span class="work-tag">▶ Produção</span>
         <span class="work-title">SET &amp; DIREÇÃO</span>
       </a>
-      <a class="work rv" href="#contato" style="--d:0.08s; aspect-ratio: 9/16;">
+      <a class="work rv duo" href="#contato" style="--d:0.08s; aspect-ratio: 9/16;">
         <img src="https://images.unsplash.com/photo-1524253482453-3fed8d2fe12b?auto=format&amp;fit=crop&amp;w=700&amp;h=1244&amp;q=72" alt="Público gravando com celulares" loading="lazy" decoding="async" width="700" height="1244">
         <span class="work-tag">▶ Reels</span>
         <span class="work-title">ALCANCE</span>
       </a>
-      <a class="work rv" href="#contato" style="--d:0.16s; aspect-ratio: 9/16;">
+      <a class="work rv duo" href="#contato" style="--d:0.16s; aspect-ratio: 9/16;">
         <img src="https://images.unsplash.com/photo-1512790182412-b19e6d62bc39?auto=format&amp;fit=crop&amp;w=700&amp;h=1244&amp;q=72" alt="Detalhe de lente de câmera" loading="lazy" decoding="async" width="700" height="1244">
         <span class="work-tag">▶ Direção</span>
         <span class="work-title">O OLHAR</span>
       </a>
-      <a class="work rv taped" href="#contato" style="--d:0.24s; aspect-ratio: 16/10;">
+      <a class="work rv duo taped" href="#contato" style="--d:0.24s; aspect-ratio: 16/10;">
         <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&amp;fit=crop&amp;w=900&amp;h=563&amp;q=72" alt="Timeline de edição de vídeo" loading="lazy" decoding="async" width="900" height="563">
         <span class="work-tag">▶ Edição</span>
         <span class="work-title">PÓS &amp; RITMO</span>
       </a>
-      <a class="work rv" href="#contato" style="--d:0.32s; aspect-ratio: 16/10;">
+      <a class="work rv duo" href="#contato" style="--d:0.32s; aspect-ratio: 16/10;">
         <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&amp;fit=crop&amp;w=900&amp;h=563&amp;q=72" alt="Estúdio de produção" loading="lazy" decoding="async" width="900" height="563">
         <span class="work-tag">▶ Estúdio</span>
         <span class="work-title">BASTIDORES</span>
@@ -689,7 +700,7 @@
 
   /* cabeçalho: claro sobre as seções escuras e sobre o vermelho */
   var topbar = document.querySelector('.topbar');
-  var escuras = ['reelSection','camSection','servicos','contato','foto1','foto3'].map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  var escuras = ['reelSection','camSection','servicos','contato','foto1','tiraFotos'].map(function(id){ return document.getElementById(id); }).filter(Boolean);
   if (topbar && escuras.length){
     var estado = false;
     (function loop(){
