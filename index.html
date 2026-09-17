@@ -304,6 +304,8 @@
   .h1-cue { font-size: 19px !important; }
 
   /* ===== fotos empilhadas, uma abaixo da outra, de ponta a ponta ===== */
+  /* faixa de respiro antes e depois do hero do avatar */
+  .respiro { position: relative; z-index: 60; height: clamp(54px, 9vh, 104px); background: oklch(0.97 0.008 85); }
   .stack { position: relative; z-index: 60; background: oklch(0.1 0.008 60); }
   .stack .foto { height: 100vh; min-height: 560px; }
   .stack .foto + .foto { border-top: 3px solid oklch(0.1 0.008 60); }
@@ -343,12 +345,13 @@
   /* ===== claquete: intro do reel, no fundo claro do site ===== */
   #claquete { position: relative; z-index: 60; background: oklch(0.97 0.008 85); overflow: hidden; min-height: 92vh; display: flex; align-items: center;
     padding: clamp(80px, 10vw, 140px) var(--gx); }
-  .claq-copy { position: relative; z-index: 2; max-width: 46ch; display: flex; flex-direction: column; gap: 18px; }
-  .claq-copy h2 { font-family: 'Anton', sans-serif; font-weight: 400; margin: 0; font-size: clamp(44px, 7vw, 120px); line-height: .9; letter-spacing: -.01em; color: oklch(0.18 0.012 60); }
+  /* largura em vw, não em ch: ch usa o corpo de 20px e deixava a coluna com ~370px */
+  .claq-copy { position: relative; z-index: 2; max-width: min(38vw, 760px); display: flex; flex-direction: column; gap: 24px; }
+  .claq-copy h2 { font-family: 'Anton', sans-serif; font-weight: 400; margin: 0; font-size: clamp(50px, 9vw, 158px); line-height: .88; letter-spacing: -.012em; color: oklch(0.18 0.012 60); }
   .claq-copy h2 em { font-style: normal; color: oklch(0.55 0.22 27); }
-  .claq-copy .hand { font-size: clamp(24px, 2.3vw, 34px); line-height: 1.15; color: oklch(0.3 0.012 60); max-width: 30ch; }
-  .claq-copy .take { font-size: 20px; color: oklch(0.55 0.22 27); }
-  .claq-img { position: absolute; z-index: 1; right: -12vw; top: 50%; width: min(76vw, 1220px); transform: translateY(-50%) translateX(22vw) rotate(-6deg); opacity: 0;
+  .claq-copy .hand { font-size: clamp(26px, 3vw, 46px); line-height: 1.14; color: oklch(0.3 0.012 60); max-width: none; }
+  .claq-copy .take { font-size: clamp(20px, 1.6vw, 28px); color: oklch(0.55 0.22 27); }
+  .claq-img { position: absolute; z-index: 1; right: -16vw; top: 50%; width: min(74vw, 1300px); transform: translateY(-50%) translateX(22vw) rotate(-6deg); opacity: 0;
     transition: transform 1.3s cubic-bezier(.2,.7,.2,1), opacity .9s ease; pointer-events: none; }
   .claq-img.in { transform: translateY(-50%) translateX(0) rotate(-6deg); opacity: 1; }
   .claq-img img { width: 100%; height: auto; display: block; transform: scaleX(-1); }   /* espelhada: a mão vem da direita */
@@ -357,6 +360,7 @@
   .claq-arrow { position: absolute; z-index: 3; left: 50%; bottom: 14vh; transform: rotate(8deg); }
   @media (max-width: 899px) {
     #claquete { min-height: 0; padding-top: 112px; flex-direction: column; align-items: flex-start; gap: 24px; }
+    .claq-copy { max-width: none; }
     .claq-img { position: relative; right: auto; top: auto; width: 100%; transform: translateX(22vw) rotate(-4deg); margin-left: 8vw; }
     .claq-img.in { transform: translateX(0) rotate(-4deg); }
     .claq-img.photo { width: 92%; }
@@ -432,16 +436,7 @@
   <div class="hand-note rv" aria-hidden="true" style="right: var(--gx); bottom: 14vh; color: oklch(0.97 0.008 85); transform: rotate(4deg);">luz, direção, corte:<br>tudo na mesma mão<svg viewBox="0 0 70 40"><path d="M4,32 C26,40 46,30 62,8 M52,8 L63,7 L61,18"/></svg></div>
 </section>
 
-<!-- ===== RESULTADO · 3 fotos empilhadas (luz, direção, corte) ===== -->
-<div id="stack1" class="stack">
-  <section id="res1" class="foto duo stack-item">
-    <img class="bg" src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&amp;fit=crop&amp;w=1800&amp;h=1125&amp;q=74" alt="" loading="lazy" decoding="async" width="1800" height="1125">
-    <div class="veil"></div>
-    <svg class="fcorner rv" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path vector-effect="non-scaling-stroke" d="M3,4 C30,2 70,5 97,3 C99,30 96,70 97,97 C70,99 30,96 3,97 C1,70 4,30 3,4 Z"/></svg>
-    <p class="slate">RESULTADO · LUZ</p>
-    <p class="say hand rv">a <span class="scribble under light">luz<svg viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M4,22 C40,10 120,30 196,16 M14,32 C70,26 130,36 190,28"/></svg></span> que a gente montou. não a que apareceu.</p>
-  </section>
-</div>
+<div class="respiro" aria-hidden="true"></div>
 
 <!-- ===== HERO 2 : SEQUÊNCIA DE FRAMES (scroll) ===== -->
 <section id="seqSection" style="position: relative; height: 340vh; background: oklch(0.13 0.01 60);">
@@ -481,6 +476,8 @@
     </div>
   </div>
 </section>
+
+<div class="respiro" aria-hidden="true"></div>
 
 <!-- ===== INTENÇÃO · 3 fotos empilhadas (roteiro, enquadro, público) ===== -->
 <div id="stack2" class="stack">
@@ -813,7 +810,7 @@
 
   /* cabeçalho: claro sobre as seções escuras e sobre o vermelho */
   var topbar = document.querySelector('.topbar');
-  var escuras = ['reelSection','camSection','servicos','contato','foto1','stack1','seqSection','stack2'].map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  var escuras = ['reelSection','camSection','servicos','contato','foto1','seqSection','stack2'].map(function(id){ return document.getElementById(id); }).filter(Boolean);
   if (topbar && escuras.length){
     var estado = false;
     (function loop(){
