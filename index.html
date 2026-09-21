@@ -473,6 +473,26 @@
     #seqStage { inset: 12vh 0 12vh; }
     #seqBracket { inset: 10vh 7vw 10vh; }
   }
+
+  /* ===== hero: lente circular com a variação cromática ===== */
+  #heroAlt {
+    position: absolute; inset: 0; z-index: 7; pointer-events: none;
+    /* o mesmo contexto do hero, senão a palavra perde a centralização vertical */
+    display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(circle at var(--cx, 50%) var(--cy, 50%),
+      #FF2F52 0%, #F00A31 45%, #C60724 100%);
+    clip-path: circle(0px at 50% 50%);
+    will-change: clip-path;
+  }
+  #heroAlt * { animation: none !important; }          /* não repetir a entrada do hero */
+  #heroAlt .h1-word { color: oklch(0.99 0.006 85) !important; }
+  #heroAlt .h1-copy > div { color: oklch(0.99 0.006 85) !important; }
+  #heroAlt .h1-copy .line { background: oklch(0.99 0.006 85) !important; }
+  #heroAlt .h1-copy p { color: oklch(0.99 0.006 85) !important; }
+  #heroAlt .h1-copy p span { color: oklch(0.16 0.012 60) !important; }   /* CASTRO */
+  #heroAlt .chips span { color: oklch(0.99 0.006 85) !important;
+    border-color: oklch(0.99 0.006 85 / .6) !important; }
+  @media (prefers-reduced-motion: reduce) { #heroAlt { display: none; } }
 </style>
 </head>
 <body>
@@ -498,7 +518,7 @@
 </header>
 
 <!-- ===== HERO 1 : PORTFÓLIO ===== -->
-<section style="position: relative; height: 100vh; min-height: 640px; width: 100%; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+<section id="abertura" style="position: relative; height: 100vh; min-height: 640px; width: 100%; overflow: hidden; display: flex; align-items: center; justify-content: center;">
   <div class="h1-copy" style="position: absolute; left: var(--gx); top: 100px; z-index: 5; max-width: min(430px, calc(100vw - 2 * var(--gx)));">
     <div style="display: flex; align-items: center; gap: 10px; font-family: 'Caveat', cursive; font-size: 20px; font-weight: 600; letter-spacing: 0.01em; text-transform: none; color: oklch(0.55 0.22 27);">
       <span class="line" style="width: 30px; height: 1px; background: oklch(0.55 0.22 27); display: inline-block;"></span>
@@ -791,6 +811,54 @@
       requestAnimationFrame(loop);
     })();
   }
+
+  /* hero: a lente circular mostra a troca de cores (fundo neon + palavra invertida) */
+  (function trocaCromatica(){
+    var hero = document.getElementById('abertura');
+    if (!hero || REDUZIDO) return;
+
+    var alt = document.createElement('div');
+    alt.id = 'heroAlt';
+    alt.setAttribute('aria-hidden', 'true');
+    // snapshot antes de inserir: hero.children é vivo e cresceria durante o laço
+    Array.prototype.slice.call(hero.children).forEach(function(el){
+      var c = el.cloneNode(true);
+      c.removeAttribute('id');
+      Array.prototype.forEach.call(c.querySelectorAll('[id]'), function(n){ n.removeAttribute('id'); });
+      alt.appendChild(c);
+    });
+    hero.appendChild(alt);
+
+    var fino = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    var raio = Math.max(150, Math.min(330, window.innerWidth * 0.17));
+    window.addEventListener('resize', function(){
+      raio = Math.max(150, Math.min(330, window.innerWidth * 0.17));
+    });
+
+    var x = 0.5, y = 0.5, r = 0, ax = 0.5, ay = 0.5, ar = 0;
+    if (fino){
+      hero.addEventListener('mousemove', function(e){
+        var b = hero.getBoundingClientRect();
+        x = (e.clientX - b.left) / b.width;
+        y = (e.clientY - b.top) / b.height;
+        r = raio;
+      });
+      hero.addEventListener('mouseleave', function(){ r = 0; });
+    } else {
+      x = 0.62; y = 0.52;   // sem mouse: a lente respira sozinha
+    }
+
+    (function laco(){
+      if (!fino) r = raio * (0.5 + 0.5 * Math.sin(performance.now() / 2600));
+      ax += (x - ax) * 0.14; ay += (y - ay) * 0.14; ar += (r - ar) * 0.12;
+      var cx = (ax * 100).toFixed(2) + '%', cy = (ay * 100).toFixed(2) + '%';
+      alt.style.setProperty('--cx', cx);
+      alt.style.setProperty('--cy', cy);
+      alt.style.clipPath = 'circle(' + ar.toFixed(1) + 'px at ' + cx + ' ' + cy + ')';
+      requestAnimationFrame(laco);
+    })();
+  })();
+
   /* barra de leitura + cursor de gravação + holofote do contato */
   var bar = document.getElementById('readBar');
   var cur = document.getElementById('cur'), cx = -100, cy = -100, tx = -100, ty = -100, curOn = false;
