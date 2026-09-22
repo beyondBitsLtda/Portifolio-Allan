@@ -533,15 +533,20 @@
   #vidro .fio { fill: none; stroke: oklch(0.99 0.006 85); stroke-linecap: round; stroke-linejoin: round;
     filter: drop-shadow(0 1px 2px oklch(0.2 0.09 27 / .55)); }
   #vidro .estilhaco { mix-blend-mode: screen; }
+  #vidro .lasca { fill: oklch(0.99 0.006 85 / .16); stroke: oklch(0.99 0.006 85 / .7);
+    stroke-width: 1; transform-box: fill-box; transform-origin: center; }
 
   #assina { position: absolute; inset: 0; z-index: 12; pointer-events: none;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     text-align: center; opacity: 0; will-change: transform, opacity; }
   #assina span { display: block; font-family: 'Anton', sans-serif; font-weight: 400;
-    font-size: clamp(50px, 13.2vw, 224px); line-height: 0.79; letter-spacing: -0.022em;
-    color: oklch(0.99 0.006 85); text-shadow: 0 10px 46px oklch(0.16 0.09 27 / .5); }
-  #assina .tinta { color: oklch(0.17 0.012 60);
-    text-shadow: 0 0 3px oklch(0.99 0.006 85 / .55), 0 10px 46px oklch(0.99 0.006 85 / .3); }
+    font-size: clamp(50px, 13.2vw, 224px); line-height: 0.86; letter-spacing: -0.012em;
+    color: oklch(0.99 0.006 85); text-shadow: 0 3px 24px oklch(0.15 0.08 27 / .42);
+    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  /* a segunda linha vazada: fecha o bloco optico com a de cima e deixa a foto passar */
+  #assina .tinta { color: transparent; text-shadow: none;
+    letter-spacing: 0.085em; margin-right: -0.085em;   /* o vao sobra a direita; devolve */
+    -webkit-text-stroke: clamp(1.4px, 0.2vw, 3.2px) oklch(0.99 0.006 85); }
   @media (prefers-reduced-motion: reduce) { #vidro, #assina { display: none; } }
 
   /* ===== OBRA · Ecos do Pantanal ===== */
@@ -1038,7 +1043,7 @@
     // ---- o impacto: vidro rachado + assinatura ----
     var vidro = document.getElementById('vidro');
     var assina = document.getElementById('assina');
-    var radiais = [], anelares = [], trincado = false;
+    var radiais = [], anelares = [], lascas = [], voo = [], trincado = false;
 
     function racha(){
       var W = pin.clientWidth, H = pin.clientHeight;
@@ -1088,6 +1093,18 @@
         if (d) anel.push([d, 1.6 - passo * 0.32]);
       }
 
+      // lascas: os cacos que se soltam quando ele atravessa
+      var lasca = [];
+      for (var c = 0; c < 9; c++){
+        var a0 = rnd() * Math.PI * 2, r0 = longo * (0.03 + rnd() * 0.11);
+        var x0 = cx + Math.cos(a0) * r0, y0 = cy + Math.sin(a0) * r0;
+        var t1 = rnd() * Math.PI * 2, t2 = t1 + 1.1 + rnd() * 1.4, g1 = longo * (0.02 + rnd() * 0.035);
+        lasca.push(['M' + pt(x0, y0)
+          + ' L' + pt(x0 + Math.cos(t1) * g1, y0 + Math.sin(t1) * g1)
+          + ' L' + pt(x0 + Math.cos(t2) * g1 * 1.3, y0 + Math.sin(t2) * g1 * 1.3) + ' Z',
+          (rnd() - 0.5) * 70, 80 + rnd() * 180, (rnd() - 0.5) * 260]);
+      }
+
       var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" aria-hidden="true">'
         + '<defs><radialGradient id="vidroBrilho">'
         + '<stop offset="0" stop-color="#fff" stop-opacity=".5"/>'
@@ -1104,9 +1121,14 @@
       perto.forEach(function(d){
         svg += '<path class="fio rad" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" stroke-width="2.6" d="' + d + '"/>';
       });
+      lasca.forEach(function(x){ svg += '<path class="lasca" d="' + x[0] + '"/>'; });
       vidro.innerHTML = svg + '</svg>';
       radiais  = Array.prototype.slice.call(vidro.querySelectorAll('.rad'));
       anelares = Array.prototype.slice.call(vidro.querySelectorAll('.anel'));
+      lascas   = Array.prototype.slice.call(vidro.querySelectorAll('.lasca'));
+      voo      = lasca.map(function(x){ return [x[1], x[2], x[3]]; });
+      // o buraco tem de abrir de onde ele bateu, nao do meio da tela
+      vidro.style.transformOrigin = (cx / W * 100).toFixed(2) + '% ' + (cy / H * 100).toFixed(2) + '%';
     }
     window.addEventListener('resize', function(){
       // o SVG e desenhado em pixels do pino: em outro tamanho ele esticaria
@@ -1211,6 +1233,16 @@
             dx    = f * Math.sin(t * 0.37) * 2.1;
             esc  += f * Math.sin(t * 0.46) * 0.03;
           }
+
+          // atravessa: o vidro cede e ele despenca para a seccao de baixo
+          var sai = clamp((p - 0.80) / 0.20);
+          if (sai > 0){
+            var livre = sai * sai * sai;              // queda livre: quase nada, depois tudo
+            y    += livre * 165;
+            dx   += livre * 9;
+            gira += livre * 34;
+            esc  += livre * 0.55;
+          }
           if (quadro !== atual){
             quadros.forEach(function(el, k){ el.classList.toggle('on', k === quadro); });
             atual = quadro;
@@ -1221,11 +1253,20 @@
           var g = clamp((q - 0.86) / 0.11);
           if (g > 0 && !trincado){ racha(); trincado = true; }
           if (trincado){
-            vidro.style.opacity = g.toFixed(3);
+            // o buraco abre a partir do toque e as lascas despencam
+            vidro.style.opacity = (g * (1 - sai * 0.9)).toFixed(3);
+            vidro.style.transform = 'scale(' + (1 + sai * 0.3).toFixed(3) + ')';
             var fr = (1 - g).toFixed(3);
             var fa = (1 - clamp((g - 0.38) / 0.62)).toFixed(3);
             radiais.forEach(function(el){ el.style.strokeDashoffset = fr; });
             anelares.forEach(function(el){ el.style.strokeDashoffset = fa; });
+            var cai = sai * sai;
+            lascas.forEach(function(el, k){
+              var v = voo[k];
+              el.style.transform = 'translate(' + (v[0] * cai).toFixed(1) + 'px,'
+                + (v[1] * cai * 3).toFixed(1) + 'px) rotate(' + (v[2] * cai).toFixed(1) + 'deg)';
+              el.style.opacity = (1 - cai).toFixed(3);
+            });
           }
           // e a assinatura entra desfocada, ganhando foco
           var na = clamp((q - 0.93) / 0.07);
