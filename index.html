@@ -562,8 +562,17 @@
   .pnt-titulo { position: absolute; z-index: 6; inset: 0; margin: 0;
     display: flex; align-items: center; justify-content: center;
     font-family: 'Caveat', cursive; font-weight: 700;
-    font-size: clamp(56px, 12vw, 190px); line-height: 1; letter-spacing: 0.005em;
-    color: oklch(0.2 0.012 60); pointer-events: none; will-change: transform, opacity; }
+    font-size: clamp(62px, 13.4vw, 214px); line-height: 1; letter-spacing: 0.005em;
+    color: oklch(0.55 0.22 27); pointer-events: none; will-change: transform, opacity; }
+  .pnt-titulo .pt-bloco { position: relative; display: inline-block;
+    transform: rotate(-2.4deg);
+    text-shadow: 0 10px 34px oklch(0.55 0.22 27 / .22); }
+  /* o risco a mao entra depois da frase, desenhado pelo scroll */
+  .pnt-titulo .pt-risco { position: absolute; left: -3%; width: 106%;
+    bottom: -0.1em; height: 0.3em; overflow: visible; }
+  .pnt-titulo .pt-risco path { fill: none; stroke: oklch(0.55 0.22 27);
+    stroke-width: 4; stroke-linecap: round; vector-effect: non-scaling-stroke;
+    stroke-dasharray: 1; stroke-dashoffset: 1; }
   .pnt-titulo .pt-tinta { display: block; padding: 0 .08em;
     -webkit-mask-image: linear-gradient(to right, #000 0%, #000 var(--ate, 0%), transparent calc(var(--ate, 0%) + 5%));
     mask-image: linear-gradient(to right, #000 0%, #000 var(--ate, 0%), transparent calc(var(--ate, 0%) + 5%)); }
@@ -728,7 +737,7 @@
 <!-- ===== PROJETOS · obra 01 : Reel 2026 ===== -->
 <section id="pantanal">
   <div class="pnt-pin">
-    <h2 class="pnt-titulo"><span class="pt-tinta">meus projetos</span><i class="pt-pena" aria-hidden="true"></i></h2>
+    <h2 class="pnt-titulo"><span class="pt-bloco"><span class="pt-tinta">meus projetos</span><svg class="pt-risco" viewBox="0 0 400 46" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M5,24 C86,8 214,36 396,12"/><path pathLength="1" d="M16,38 C112,29 252,43 389,29"/></svg></span><i class="pt-pena" aria-hidden="true"></i></h2>
 
     <p class="pnt-etiqueta hand">obra 01 &middot; <strong>Reel 2026</strong></p>
     <div class="pnt-nome" aria-hidden="true">REEL 2026</div>
@@ -1394,6 +1403,7 @@
       'uniform float u_time;',
       'uniform float u_scroll;',
       'uniform vec2  u_res;',
+      'uniform float u_dens;',   // pixels do canvas por pixel de tela
       '',
       'float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }',
       'vec2 hash2(vec2 p){',
@@ -1461,7 +1471,7 @@
       '  col -= vec3(0.05, 0.21, 0.205) * po * 1.0;',
       '',
       '  // um fio de varredura, herdado do CRT',
-      '  col -= vec3(0.012, 0.021, 0.022) * (sin((gl_FragCoord.y + s * 140.0) * 3.1) * 0.5 + 0.5);',
+      '  col -= vec3(0.012, 0.021, 0.022) * (sin((gl_FragCoord.y / u_dens + s * 140.0) * 3.1) * 0.5 + 0.5);',
       '',
       '  float vinh = 1.0 - smoothstep(0.5, 1.4, length(p * vec2(1.0, 1.1)));',
       '  col *= 0.94 + vinh * 0.06;',
@@ -1491,9 +1501,11 @@
     var uTime = gl.getUniformLocation(prog, 'u_time');
     var uRes = gl.getUniformLocation(prog, 'u_res');
     var uScroll = gl.getUniformLocation(prog, 'u_scroll');
+    var uDens = gl.getUniformLocation(prog, 'u_dens');
 
-    // fundo macio: renderiza abaixo da resolucao da tela e deixa o CSS esticar
-    var escala = window.innerWidth < 900 ? 0.42 : 0.5, refazer = true;
+    // resolucao cheia (o dobro em tela retina). Se a maquina nao aguentar,
+    // o laco abaixo derruba a escala sozinho em vez de engasgar.
+    var escala = Math.min(window.devicePixelRatio || 1, 2), refazer = true;
     function medir(){
       refazer = false;
       var w = Math.max(1, Math.round(tela.clientWidth * escala));
@@ -1502,6 +1514,7 @@
         tela.width = w; tela.height = h;
         gl.viewport(0, 0, w, h);
         gl.uniform2f(uRes, w, h);
+        gl.uniform1f(uDens, escala);
       }
     }
     window.addEventListener('resize', function(){ refazer = true; });
@@ -1515,11 +1528,28 @@
       }, { rootMargin: '10% 0px' }).observe(sec);
     } else { naTela = true; }
 
+    // vigia o ritmo enquanto a seccao esta na tela: se nao fechar ~42fps,
+    // derruba a resolucao um degrau. Duas quedas no maximo, depois desiste.
+    var anterior = 0, soma = 0, amostras = 0, quedas = 0;
+    function afere(agora){
+      if (quedas >= 2) return;
+      if (anterior && agora - anterior < 200){ soma += agora - anterior; amostras++; }
+      anterior = agora;
+      if (amostras < 70) return;
+      if (soma / amostras > 24){
+        escala = Math.max(0.5, escala * 0.62);
+        refazer = true; quedas++;
+      } else { quedas = 2; }
+      soma = 0; amostras = 0;
+    }
+
     var ultimo = -999;
     (function desenha(agora){
       requestAnimationFrame(desenha);
+      if (!naTela || document.hidden){ anterior = 0; return; }
+      afere(agora);
       // 30fps: o campo se move devagar, 60 seria o dobro do custo a toa
-      if (!naTela || document.hidden || agora - ultimo < 32) return;
+      if (agora - ultimo < 32) return;
       ultimo = agora;
       if (refazer) medir();
       gl.uniform1f(uTime, REDUZIDO ? 0 : agora * 0.001);
@@ -1535,7 +1565,9 @@
     if (!sec) return;
     var pin = sec.querySelector('.pnt-pin');
     var titulo = sec.querySelector('.pnt-titulo');
+    var bloco = sec.querySelector('.pt-bloco');
     var tinta = sec.querySelector('.pt-tinta');
+    var risco = Array.prototype.slice.call(sec.querySelectorAll('.pt-risco path'));
     var pena = sec.querySelector('.pt-pena');
     var etiqueta = sec.querySelector('.pnt-etiqueta');
     var nome = sec.querySelector('.pnt-nome');
@@ -1626,8 +1658,13 @@
         var sai = clamp((p - 0.16) / 0.1);
         tinta.style.setProperty('--ate', (suave * 100).toFixed(2) + '%');
         var largura = tinta.offsetWidth;
-        pena.style.left = (tinta.offsetLeft + largura * suave).toFixed(1) + 'px';
+        pena.style.left = (bloco.offsetLeft + largura * suave).toFixed(1) + 'px';
         pena.style.opacity = (escreve > 0.01 && escreve < 0.99 ? 1 : 0);
+        // o risco so comeca depois que a frase termina de ser escrita
+        var rabisco = clamp((p - 0.115) / 0.055);
+        risco.forEach(function(el, k){
+          el.style.strokeDashoffset = (1 - clamp((rabisco - k * 0.3) / 0.7)).toFixed(3);
+        });
         titulo.style.opacity = (1 - sai).toFixed(3);
         titulo.style.transform = 'translateY(' + (sai * -9).toFixed(2) + 'vh) scale(' + (1 - sai * 0.08).toFixed(3) + ')';
 
