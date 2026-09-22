@@ -567,10 +567,22 @@
   .pnt-titulo .pt-pena { position: absolute; top: 50%; width: .1em; height: .1em; border-radius: 50%;
     background: oklch(0.55 0.22 27); opacity: 0; transform: translate(-50%, -50%); }
 
-  /* o shader do cliente (Gilded Fracture) com o ouro trocado pelo vermelho:
-     e o fundo da seccao, entao fica atras de tudo */
-  .pnt-shader { position: absolute; inset: 0; z-index: 0; display: block;
-    width: 100%; height: 100%; pointer-events: none; }
+  /* CRT de fundo: linhas finas, uma varredura macia e um canto de tubo.
+     Fica atras do palco — e fundo, nao filtro em cima do video. */
+  .pnt-crt { position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    overflow: hidden;   /* sem mix-blend-mode: so encosta no creme, alfa da o mesmo */
+    /* o canto de tubo nao se move, entao fica no proprio elemento */
+    background: radial-gradient(128% 116% at 50% 50%, transparent 58%, oklch(0.45 0.05 35 / .17) 100%); }
+  /* as duas camadas que andam sao filhas e viajam em transform, nao em
+     background-position: uma repinta a cada quadro, a outra so compoe */
+  .pc-linhas, .pc-varre { position: absolute; left: 0; right: 0; will-change: transform; }
+  .pc-linhas { top: -6%; height: 112%;
+    background: repeating-linear-gradient(to bottom,
+      oklch(0.42 0.07 30 / .16) 0 1px, transparent 1px 3px); }
+  .pc-varre { top: 0; height: 46%;
+    background: linear-gradient(to bottom, transparent 0%,
+      oklch(0.58 0.12 30 / .2) 42%, oklch(0.58 0.12 30 / .27) 50%,
+      oklch(0.58 0.12 30 / .2) 58%, transparent 100%); }
 
   .pnt-etiqueta { position: absolute; z-index: 6; left: var(--gx); top: calc(8vh + 30px); margin: 0;
     font-size: 23px; color: oklch(0.55 0.22 27); opacity: 0; will-change: opacity; }
@@ -662,6 +674,7 @@
     #pantanal { height: 100vh; }
     .pnt-pin { position: relative; }
     .pnt-titulo { display: none; }
+    .pnt-crt { display: none; }
     .pnt-cena { opacity: 1; }
     .pnt-etiqueta { opacity: 1; }
     .pnt-nome { opacity: .22; filter: none; }
@@ -745,7 +758,7 @@
       </div>
     </div>
 
-    <canvas class="pnt-shader" aria-hidden="true"></canvas>
+    <div class="pnt-crt" aria-hidden="true"><i class="pc-linhas"></i><i class="pc-varre"></i></div>
   </div>
 </section>
 
@@ -1369,422 +1382,6 @@
 
 
 
-  /* fundo da seccao de projetos: shader "Gilded Fracture" do cliente
-     (assets/vidro.html), com o ouro trocado pelo vermelho da marca */
-  (function fratura(){
-    var sec = document.getElementById('pantanal');
-    var tela = sec && sec.querySelector('.pnt-shader');
-    if (!tela) return;
-    var gl = tela.getContext('webgl', { alpha: false, antialias: false, preserveDrawingBuffer: false });
-    if (!gl) return;   // sem WebGL a seccao fica no fundo escuro do CSS
-
-    var vertSrc = [
-      'attribute vec2 a_pos;',
-      'void main() { gl_Position = vec4(a_pos, 0.0, 1.0); }'
-    ].join('\n');
-
-    var fragSrc = [
-    'precision highp float;',
-    'uniform float u_time;',
-    'uniform vec2 u_res;',
-    'uniform float u_crackSpeed;',
-    'uniform float u_glowIntensity;',
-    'uniform vec2 u_mouse;',
-    'uniform float u_scroll;',
-    '',
-    '#define PI 3.14159265359',
-    '',
-    '// ── Hash primitives ──',
-    'float hash(vec2 p) {',
-    '  return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);',
-    '}',
-    '',
-    'vec2 hash2(vec2 p) {',
-    '  return vec2(',
-    '    fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453),',
-    '    fract(sin(dot(p, vec2(269.5, 183.3))) * 43758.5453)',
-    '  );',
-    '}',
-    '',
-    '// ── Smooth value noise ──',
-    'float noise(vec2 p) {',
-    '  vec2 i = floor(p);',
-    '  vec2 f = fract(p);',
-    '  f = f * f * (3.0 - 2.0 * f);',
-    '  float a = hash(i);',
-    '  float b = hash(i + vec2(1.0, 0.0));',
-    '  float c = hash(i + vec2(0.0, 1.0));',
-    '  float d = hash(i + vec2(1.0, 1.0));',
-    '  return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);',
-    '}',
-    '',
-    '// ── FBM ──',
-    'float fbm(vec2 p) {',
-    '  float val = 0.0;',
-    '  float amp = 0.5;',
-    '  float freq = 1.0;',
-    '  for (int i = 0; i < 5; i++) {',
-    '    val += amp * noise(p * freq);',
-    '    freq *= 2.03;',
-    '    amp *= 0.49;',
-    '    p += vec2(1.7, 9.2);',
-    '  }',
-    '  return val;',
-    '}',
-    '',
-    '// ── Domain-warped Voronoi ──',
-    '// Returns: x = dist to nearest, y = edge dist (2nd - 1st), z = cell hash',
-    '// Neighbor loop unrolled manually to avoid variable array indexing',
-    'vec3 kintsugiVoronoi(vec2 p, float t, float warpAmt) {',
-    '  // Domain warp the input coordinates',
-    '  vec2 warp = vec2(',
-    '    fbm(p * 0.8 + t * 0.05),',
-    '    fbm(p * 0.8 + vec2(5.2, 1.3) + t * 0.04)',
-    '  );',
-    '  p += warp * warpAmt;',
-    '',
-    '  vec2 i = floor(p);',
-    '  vec2 f = fract(p);',
-    '  float minDist = 10.0;',
-    '  float secondDist = 10.0;',
-    '  vec2 nearestCell = vec2(0.0);',
-    '',
-    '  // Unrolled 5x5 neighbor search for organic crack shapes',
-    '  // Row -2',
-    '  { vec2 nb = vec2(-2.0, -2.0); vec2 cid = i + nb; vec2 h = hash2(cid); vec2 pt = nb + h * 0.85 + 0.075; pt.x += sin(t * 0.07 + h.x * 20.0) * 0.06; pt.y += cos(t * 0.06 + h.y * 20.0) * 0.06; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2(-1.0, -2.0); vec2 cid = i + nb; vec2 h = hash2(cid); vec2 pt = nb + h * 0.85 + 0.075; pt.x += sin(t * 0.07 + h.x * 20.0) * 0.06; pt.y += cos(t * 0.06 + h.y * 20.0) * 0.06; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2( 0.0, -2.0); vec2 cid = i + nb; vec2 h = hash2(cid); vec2 pt = nb + h * 0.85 + 0.075; pt.x += sin(t * 0.07 + h.x * 20.0) * 0.06; pt.y += cos(t * 0.06 + h.y * 20.0) * 0.06; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2( 1.0, -2.0); vec2 cid = i + nb; vec2 h = hash2(cid); vec2 pt = nb + h * 0.85 + 0.075; pt.x += sin(t * 0.07 + h.x * 20.0) * 0.06; pt.y += cos(t * 0.06 + h.y * 20.0) * 0.06; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2( 2.0, -2.0); vec2 cid = i + nb; vec2 h = hash2(cid); vec2 pt = nb + h * 0.85 + 0.075; pt.x += sin(t * 0.07 + h.x * 20.0) * 0.06; pt.y += cos(t * 0.06 + h.y * 20.0) * 0.06; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  // Row -1',
-    '  { vec2 nb = vec2(-2.0, -1.0); vec2 cid = i + nb; vec2 h = hash2(cid); vec2 pt = nb + h * 0.85 + 0.075; pt.x += sin(t * 0.07 + h.x * 20.0) * 0.06; pt.y += cos(t * 0.06 + h.y * 20.0) * 0.06; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2(-1.0, -1.0); vec2 cid = i + nb; vec2 h = hash2(cid); vec2 pt = nb + h * 0.85 + 0.075; pt.x += sin(t * 0.07 + h.x * 20.0) * 0.06; pt.y += cos(t * 0.06 + h.y * 20.0) * 0.06; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2( 0.0, -1.0); vec2 cid = i + nb; vec2 h = hash2(cid); vec2 pt = nb + h * 0.85 + 0.075; pt.x += sin(t * 0.07 + h.x * 20.0) * 0.06; pt.y += cos(t * 0.06 + h.y * 20.0) * 0.06; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2( 1.0, -1.0); vec2 cid = i + nb; vec2 h = hash2(cid); vec2 pt = nb + h * 0.85 + 0.075; pt.x += sin(t * 0.07 + h.x * 20.0) * 0.06; pt.y += cos(t * 0.06 + h.y * 20.0) * 0.06; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2( 2.0, -1.0); vec2 cid = i + nb; vec2 h = hash2(cid); vec2 pt = nb + h * 0.85 + 0.075; pt.x += sin(t * 0.07 + h.x * 20.0) * 0.06; pt.y += cos(t * 0.06 + h.y * 20.0) * 0.06; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  // Row 0',
-    '  { vec2 nb = vec2(-2.0,  0.0); vec2 cid = i + nb; vec2 h = hash2(cid); vec2 pt = nb + h * 0.85 + 0.075; pt.x += sin(t * 0.07 + h.x * 20.0) * 0.06; pt.y += cos(t * 0.06 + h.y * 20.0) * 0.06; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2(-1.0,  0.0); vec2 cid = i + nb; vec2 h = hash2(cid); vec2 pt = nb + h * 0.85 + 0.075; pt.x += sin(t * 0.07 + h.x * 20.0) * 0.06; pt.y += cos(t * 0.06 + h.y * 20.0) * 0.06; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2( 0.0,  0.0); vec2 cid = i + nb; vec2 h = hash2(cid); vec2 pt = nb + h * 0.85 + 0.075; pt.x += sin(t * 0.07 + h.x * 20.0) * 0.06; pt.y += cos(t * 0.06 + h.y * 20.0) * 0.06; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2( 1.0,  0.0); vec2 cid = i + nb; vec2 h = hash2(cid); vec2 pt = nb + h * 0.85 + 0.075; pt.x += sin(t * 0.07 + h.x * 20.0) * 0.06; pt.y += cos(t * 0.06 + h.y * 20.0) * 0.06; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2( 2.0,  0.0); vec2 cid = i + nb; vec2 h = hash2(cid); vec2 pt = nb + h * 0.85 + 0.075; pt.x += sin(t * 0.07 + h.x * 20.0) * 0.06; pt.y += cos(t * 0.06 + h.y * 20.0) * 0.06; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  // Row 1',
-    '  { vec2 nb = vec2(-2.0,  1.0); vec2 cid = i + nb; vec2 h = hash2(cid); vec2 pt = nb + h * 0.85 + 0.075; pt.x += sin(t * 0.07 + h.x * 20.0) * 0.06; pt.y += cos(t * 0.06 + h.y * 20.0) * 0.06; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2(-1.0,  1.0); vec2 cid = i + nb; vec2 h = hash2(cid); vec2 pt = nb + h * 0.85 + 0.075; pt.x += sin(t * 0.07 + h.x * 20.0) * 0.06; pt.y += cos(t * 0.06 + h.y * 20.0) * 0.06; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2( 0.0,  1.0); vec2 cid = i + nb; vec2 h = hash2(cid); vec2 pt = nb + h * 0.85 + 0.075; pt.x += sin(t * 0.07 + h.x * 20.0) * 0.06; pt.y += cos(t * 0.06 + h.y * 20.0) * 0.06; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2( 1.0,  1.0); vec2 cid = i + nb; vec2 h = hash2(cid); vec2 pt = nb + h * 0.85 + 0.075; pt.x += sin(t * 0.07 + h.x * 20.0) * 0.06; pt.y += cos(t * 0.06 + h.y * 20.0) * 0.06; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2( 2.0,  1.0); vec2 cid = i + nb; vec2 h = hash2(cid); vec2 pt = nb + h * 0.85 + 0.075; pt.x += sin(t * 0.07 + h.x * 20.0) * 0.06; pt.y += cos(t * 0.06 + h.y * 20.0) * 0.06; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  // Row 2',
-    '  { vec2 nb = vec2(-2.0,  2.0); vec2 cid = i + nb; vec2 h = hash2(cid); vec2 pt = nb + h * 0.85 + 0.075; pt.x += sin(t * 0.07 + h.x * 20.0) * 0.06; pt.y += cos(t * 0.06 + h.y * 20.0) * 0.06; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2(-1.0,  2.0); vec2 cid = i + nb; vec2 h = hash2(cid); vec2 pt = nb + h * 0.85 + 0.075; pt.x += sin(t * 0.07 + h.x * 20.0) * 0.06; pt.y += cos(t * 0.06 + h.y * 20.0) * 0.06; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2( 0.0,  2.0); vec2 cid = i + nb; vec2 h = hash2(cid); vec2 pt = nb + h * 0.85 + 0.075; pt.x += sin(t * 0.07 + h.x * 20.0) * 0.06; pt.y += cos(t * 0.06 + h.y * 20.0) * 0.06; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2( 1.0,  2.0); vec2 cid = i + nb; vec2 h = hash2(cid); vec2 pt = nb + h * 0.85 + 0.075; pt.x += sin(t * 0.07 + h.x * 20.0) * 0.06; pt.y += cos(t * 0.06 + h.y * 20.0) * 0.06; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2( 2.0,  2.0); vec2 cid = i + nb; vec2 h = hash2(cid); vec2 pt = nb + h * 0.85 + 0.075; pt.x += sin(t * 0.07 + h.x * 20.0) * 0.06; pt.y += cos(t * 0.06 + h.y * 20.0) * 0.06; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '',
-    '  float edge = sqrt(secondDist) - sqrt(minDist);',
-    '  return vec3(sqrt(minDist), edge, hash(nearestCell));',
-    '}',
-    '',
-    '// ── Fine crack Voronoi (higher frequency, 3x3 neighborhood) ──',
-    'vec3 fineVoronoi(vec2 p, float t) {',
-    '  vec2 warp = vec2(',
-    '    fbm(p * 1.2 + t * 0.03 + vec2(10.0)),',
-    '    fbm(p * 1.2 + t * 0.04 + vec2(20.0, 5.0))',
-    '  );',
-    '  p += warp * 0.4;',
-    '',
-    '  vec2 i = floor(p);',
-    '  vec2 f = fract(p);',
-    '  float minDist = 10.0;',
-    '  float secondDist = 10.0;',
-    '  vec2 nearestCell = vec2(0.0);',
-    '',
-    '  // Unrolled 3x3',
-    '  { vec2 nb = vec2(-1.0, -1.0); vec2 cid = i + nb; vec2 h = hash2(cid + vec2(50.0)); vec2 pt = nb + h * 0.8 + 0.1; pt.x += sin(t * 0.05 + h.x * 15.0) * 0.04; pt.y += cos(t * 0.04 + h.y * 15.0) * 0.04; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2( 0.0, -1.0); vec2 cid = i + nb; vec2 h = hash2(cid + vec2(50.0)); vec2 pt = nb + h * 0.8 + 0.1; pt.x += sin(t * 0.05 + h.x * 15.0) * 0.04; pt.y += cos(t * 0.04 + h.y * 15.0) * 0.04; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2( 1.0, -1.0); vec2 cid = i + nb; vec2 h = hash2(cid + vec2(50.0)); vec2 pt = nb + h * 0.8 + 0.1; pt.x += sin(t * 0.05 + h.x * 15.0) * 0.04; pt.y += cos(t * 0.04 + h.y * 15.0) * 0.04; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2(-1.0,  0.0); vec2 cid = i + nb; vec2 h = hash2(cid + vec2(50.0)); vec2 pt = nb + h * 0.8 + 0.1; pt.x += sin(t * 0.05 + h.x * 15.0) * 0.04; pt.y += cos(t * 0.04 + h.y * 15.0) * 0.04; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2( 0.0,  0.0); vec2 cid = i + nb; vec2 h = hash2(cid + vec2(50.0)); vec2 pt = nb + h * 0.8 + 0.1; pt.x += sin(t * 0.05 + h.x * 15.0) * 0.04; pt.y += cos(t * 0.04 + h.y * 15.0) * 0.04; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2( 1.0,  0.0); vec2 cid = i + nb; vec2 h = hash2(cid + vec2(50.0)); vec2 pt = nb + h * 0.8 + 0.1; pt.x += sin(t * 0.05 + h.x * 15.0) * 0.04; pt.y += cos(t * 0.04 + h.y * 15.0) * 0.04; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2(-1.0,  1.0); vec2 cid = i + nb; vec2 h = hash2(cid + vec2(50.0)); vec2 pt = nb + h * 0.8 + 0.1; pt.x += sin(t * 0.05 + h.x * 15.0) * 0.04; pt.y += cos(t * 0.04 + h.y * 15.0) * 0.04; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2( 0.0,  1.0); vec2 cid = i + nb; vec2 h = hash2(cid + vec2(50.0)); vec2 pt = nb + h * 0.8 + 0.1; pt.x += sin(t * 0.05 + h.x * 15.0) * 0.04; pt.y += cos(t * 0.04 + h.y * 15.0) * 0.04; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2( 1.0,  1.0); vec2 cid = i + nb; vec2 h = hash2(cid + vec2(50.0)); vec2 pt = nb + h * 0.8 + 0.1; pt.x += sin(t * 0.05 + h.x * 15.0) * 0.04; pt.y += cos(t * 0.04 + h.y * 15.0) * 0.04; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '',
-    '  float edge = sqrt(secondDist) - sqrt(minDist);',
-    '  return vec3(sqrt(minDist), edge, hash(nearestCell + vec2(50.0)));',
-    '}',
-    '',
-    '// ── Micro-crack Voronoi (finest detail, 3x3) ──',
-    'vec3 microVoronoi(vec2 p, float t) {',
-    '  vec2 i = floor(p);',
-    '  vec2 f = fract(p);',
-    '  float minDist = 10.0;',
-    '  float secondDist = 10.0;',
-    '  vec2 nearestCell = vec2(0.0);',
-    '',
-    '  { vec2 nb = vec2(-1.0, -1.0); vec2 cid = i + nb; vec2 h = hash2(cid + vec2(200.0)); vec2 pt = nb + h * 0.75 + 0.125; pt.x += sin(t * 0.03 + h.x * 10.0) * 0.03; pt.y += cos(t * 0.025 + h.y * 10.0) * 0.03; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2( 0.0, -1.0); vec2 cid = i + nb; vec2 h = hash2(cid + vec2(200.0)); vec2 pt = nb + h * 0.75 + 0.125; pt.x += sin(t * 0.03 + h.x * 10.0) * 0.03; pt.y += cos(t * 0.025 + h.y * 10.0) * 0.03; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2( 1.0, -1.0); vec2 cid = i + nb; vec2 h = hash2(cid + vec2(200.0)); vec2 pt = nb + h * 0.75 + 0.125; pt.x += sin(t * 0.03 + h.x * 10.0) * 0.03; pt.y += cos(t * 0.025 + h.y * 10.0) * 0.03; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2(-1.0,  0.0); vec2 cid = i + nb; vec2 h = hash2(cid + vec2(200.0)); vec2 pt = nb + h * 0.75 + 0.125; pt.x += sin(t * 0.03 + h.x * 10.0) * 0.03; pt.y += cos(t * 0.025 + h.y * 10.0) * 0.03; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2( 0.0,  0.0); vec2 cid = i + nb; vec2 h = hash2(cid + vec2(200.0)); vec2 pt = nb + h * 0.75 + 0.125; pt.x += sin(t * 0.03 + h.x * 10.0) * 0.03; pt.y += cos(t * 0.025 + h.y * 10.0) * 0.03; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2( 1.0,  0.0); vec2 cid = i + nb; vec2 h = hash2(cid + vec2(200.0)); vec2 pt = nb + h * 0.75 + 0.125; pt.x += sin(t * 0.03 + h.x * 10.0) * 0.03; pt.y += cos(t * 0.025 + h.y * 10.0) * 0.03; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2(-1.0,  1.0); vec2 cid = i + nb; vec2 h = hash2(cid + vec2(200.0)); vec2 pt = nb + h * 0.75 + 0.125; pt.x += sin(t * 0.03 + h.x * 10.0) * 0.03; pt.y += cos(t * 0.025 + h.y * 10.0) * 0.03; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2( 0.0,  1.0); vec2 cid = i + nb; vec2 h = hash2(cid + vec2(200.0)); vec2 pt = nb + h * 0.75 + 0.125; pt.x += sin(t * 0.03 + h.x * 10.0) * 0.03; pt.y += cos(t * 0.025 + h.y * 10.0) * 0.03; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '  { vec2 nb = vec2( 1.0,  1.0); vec2 cid = i + nb; vec2 h = hash2(cid + vec2(200.0)); vec2 pt = nb + h * 0.75 + 0.125; pt.x += sin(t * 0.03 + h.x * 10.0) * 0.03; pt.y += cos(t * 0.025 + h.y * 10.0) * 0.03; float d = dot(pt - f, pt - f); if (d < minDist) { secondDist = minDist; minDist = d; nearestCell = cid; } else if (d < secondDist) { secondDist = d; } }',
-    '',
-    '  float edge = sqrt(secondDist) - sqrt(minDist);',
-    '  return vec3(sqrt(minDist), edge, hash(nearestCell + vec2(200.0)));',
-    '}',
-    '',
-    '// ── Kintsugi crack reveal — cracks appear, glow, heal, new ones form ──',
-    'float crackReveal(float cellHash, float t) {',
-    '  // Each crack region has its own phase',
-    '  float phase = cellHash * PI * 2.0;',
-    '  float cycle = t * 0.12;',
-    '  // Slow breathing: cracks brighten and dim on overlapping cycles',
-    '  float reveal = sin(cycle + phase) * 0.5 + 0.5;',
-    '  reveal *= sin(cycle * 0.7 + phase * 1.3) * 0.3 + 0.7;',
-    '  // Sharpen the reveal curve — more defined on/off',
-    '  reveal = smoothstep(0.15, 0.65, reveal);',
-    '  return reveal;',
-    '}',
-    '',
-    '// ── Gold dust particles near cracks ──',
-    'float goldDust(vec2 p, float t, float crackProximity) {',
-    '  float dust = 0.0;',
-    '  // Layer 1: small particles',
-    '  vec2 dp1 = p * 30.0 + vec2(t * 0.2, t * 0.15);',
-    '  float d1 = noise(dp1);',
-    '  d1 = smoothstep(0.72, 0.78, d1);',
-    '  dust += d1 * 0.6;',
-    '  // Layer 2: tinier sparkles',
-    '  vec2 dp2 = p * 55.0 + vec2(-t * 0.3, t * 0.25);',
-    '  float d2 = noise(dp2);',
-    '  d2 = smoothstep(0.78, 0.82, d2);',
-    '  dust += d2 * 0.4;',
-    '  // Layer 3: rare bright motes',
-    '  vec2 dp3 = p * 18.0 + vec2(t * 0.08, -t * 0.12);',
-    '  float d3 = noise(dp3);',
-    '  d3 = smoothstep(0.82, 0.86, d3);',
-    '  // Pulsing brightness',
-    '  d3 *= 0.5 + 0.5 * sin(t * 2.0 + d3 * 20.0);',
-    '  dust += d3 * 0.8;',
-    '  // Particles only appear near cracks',
-    '  dust *= crackProximity;',
-    '  return dust;',
-    '}',
-    '',
-    'void main() {',
-    '  vec2 fragCoord = gl_FragCoord.xy;',
-    '  vec2 p = (fragCoord - u_res * 0.5) / min(u_res.x, u_res.y);',
-    '  p.y += u_scroll * 0.62;   // a rede inteira anda enquanto a pagina desce',
-    '  vec2 mouseShift = vec2(0.0);',
-    '  if (u_mouse.x > 0.0) {',
-    '    vec2 mNorm = (u_mouse / u_res - 0.5);',
-    '    mouseShift = -mNorm * 0.12;',
-    '  }',
-    '  float t = u_time * u_crackSpeed;',
-    '',
-    '  // ────────────────────────────────────────────',
-    '  // 1. MULTI-SCALE VORONOI CRACK NETWORK',
-    '  //    Each layer shifts differently for parallax depth',
-    '  // ────────────────────────────────────────────',
-    '',
-    '  // Large primary cracks — foreground, least shift',
-    '  vec3 coarse = kintsugiVoronoi((p + mouseShift * 0.8) * 2.5, t, 0.6);',
-    '  float coarseEdge = coarse.y;',
-    '  float coarseCellHash = coarse.z;',
-    '',
-    '  // Medium secondary cracks — middle depth',
-    '  vec3 medium = fineVoronoi((p + mouseShift * 1.8) * 5.5, t);',
-    '  float mediumEdge = medium.y;',
-    '  float mediumCellHash = medium.z;',
-    '',
-    '  // Fine hairline cracks — deepest, most shift',
-    '  vec3 micro = microVoronoi((p + mouseShift * 3.0) * 14.0, t);',
-    '  float microEdge = micro.y;',
-    '',
-    '  // ────────────────────────────────────────────',
-    '  // 2. CRACK REVEAL ANIMATION',
-    '  // Cracks appear, glow bright, then heal away',
-    '  // ────────────────────────────────────────────',
-    '',
-    '  float coarseReveal = crackReveal(coarseCellHash, t);',
-    '  float mediumReveal = crackReveal(mediumCellHash, t * 1.3 + 1.0);',
-    '  // Micro-cracks follow the coarse ones',
-    '  float microReveal = mix(coarseReveal, mediumReveal, 0.5);',
-    '',
-    '  // ────────────────────────────────────────────',
-    '  // 3. CRACK LINE INTENSITIES',
-    '  // Narrow bright core + wide soft glow falloff',
-    '  // ────────────────────────────────────────────',
-    '',
-    '  // Coarse cracks: widest gold lines',
-    '  float coarseCrack = smoothstep(0.08, 0.0, coarseEdge) * coarseReveal;',
-    '  float coarseGlow  = smoothstep(0.22, 0.0, coarseEdge) * coarseReveal;',
-    '  float coarseBloom = smoothstep(0.45, 0.0, coarseEdge) * coarseReveal;',
-    '',
-    '  // Medium cracks: thinner, subtler',
-    '  float medCrack = smoothstep(0.06, 0.0, mediumEdge) * mediumReveal * 0.7;',
-    '  float medGlow  = smoothstep(0.16, 0.0, mediumEdge) * mediumReveal * 0.5;',
-    '',
-    '  // Micro-cracks: hairline, very subtle',
-    '  float microCrack = smoothstep(0.04, 0.0, microEdge) * microReveal * 0.25;',
-    '  float microGlow  = smoothstep(0.10, 0.0, microEdge) * microReveal * 0.15;',
-    '',
-    '  // Combined crack intensities',
-    '  float crackCore = max(coarseCrack, max(medCrack, microCrack));',
-    '  float crackGlow = max(coarseGlow, max(medGlow, microGlow));',
-    '  float crackBloom = coarseBloom;',
-    '',
-    '  // ────────────────────────────────────────────',
-    '  // 4. CERAMICA CLARA',
-    '  //    o creme da pagina, com a textura de placa do original',
-    '  // ────────────────────────────────────────────',
-    '',
-    '  float grain = fbm(p * 8.0 + coarseCellHash * 40.0);',
-    '  float fineGrain = noise(p * 30.0 + mediumCellHash * 60.0) * 0.5;',
-    '  float plateTone = 0.3 + grain * 0.4 + fineGrain * 0.3;',
-    '',
-    '  vec3 cremeAlto = vec3(0.978, 0.971, 0.958);',
-    '  vec3 cremeBaixo = vec3(0.928, 0.915, 0.895);',
-    '  vec3 surface = mix(cremeAlto, cremeBaixo, plateTone);',
-    '',
-    '  // sulco entre as placas: no claro e sombra, nao brilho',
-    '  float edgeHighlight = smoothstep(0.5, 0.15, coarse.x) * 0.3;',
-    '  surface -= vec3(0.035, 0.05, 0.055) * edgeHighlight;',
-    '',
-    '  // ────────────────────────────────────────────',
-    '  // 5. LACA VERMELHA NAS TRINCAS',
-    '  // ────────────────────────────────────────────',
-    '',
-    '  vec3 lacaClara = vec3(0.93, 0.50, 0.48);',
-    '  vec3 lacaCheia = vec3(0.78, 0.10, 0.12);',
-    '  vec3 lacaFunda = vec3(0.42, 0.015, 0.05);',
-    '',
-    '  float flowTurb = fbm(p * 6.0 + t * vec2(0.08, -0.06));',
-    '  float flowTurb2 = fbm(p * 10.0 + t * vec2(-0.05, 0.07) + vec2(30.0));',
-    '  float moltenFlow = flowTurb * 0.6 + flowTurb2 * 0.4;',
-    '',
-    '  float tinta = clamp(crackCore * (0.62 + moltenFlow * 0.38), 0.0, 1.0);',
-    '  vec3 laca = mix(lacaClara, lacaCheia, smoothstep(0.15, 0.55, tinta));',
-    '  laca = mix(laca, lacaFunda, smoothstep(0.55, 1.0, tinta));',
-    '',
-    '  // ────────────────────────────────────────────',
-    '  // 6. COMPOSITE',
-    '  //    o halo nao soma luz: tira verde e azul e o que sobra e vermelho',
-    '  // ────────────────────────────────────────────',
-    '',
-    '  surface -= vec3(0.045, 0.20, 0.20) * crackGlow * 0.95 * u_glowIntensity;',
-    '  surface -= vec3(0.02, 0.085, 0.085) * crackBloom * 0.55 * u_glowIntensity;',
-    '',
-    '  vec3 col = mix(surface, laca, smoothstep(0.0, 0.13, crackCore));',
-    '',
-    '  // ────────────────────────────────────────────',
-    '  // 7. POEIRA DE PIGMENTO perto das trincas',
-    '  // ────────────────────────────────────────────',
-    '',
-    '  float crackProximity = smoothstep(0.5, 0.0, coarseEdge) * coarseReveal;',
-    '  crackProximity = max(crackProximity, smoothstep(0.3, 0.0, mediumEdge) * mediumReveal * 0.5);',
-    '  float dust = goldDust(p, u_time, crackProximity);',
-    '  col -= vec3(0.05, 0.19, 0.19) * dust * 0.55 * u_glowIntensity;',
-    '',
-    '  // ────────────────────────────────────────────',
-    '  // 8. RESPIRO + VINHETA',
-    '  //    no claro basta um sombreado de canto; 50% viraria cinza',
-    '  // ────────────────────────────────────────────',
-    '',
-    '  col *= 0.986 + sin(u_time * 0.15) * 0.014;',
-    '  float edgeDist = length(p * vec2(1.0, 1.1));',
-    '  float vignette = 1.0 - smoothstep(0.45, 1.35, edgeDist);',
-    '  col *= 0.915 + vignette * 0.085;',
-    '',
-    '  // contraste: firma a laca sem acinzentar a ceramica',
-    '  col = clamp(col, 0.0, 1.0);',
-    '  col = col * col * (3.0 - 2.0 * col) * 0.55 + col * 0.45;',
-    '',
-    '  gl_FragColor = vec4(col, 1.0);',
-    '}'
-  ].join('\n');
-
-    function compila(tipo, src){
-      var o = gl.createShader(tipo);
-      gl.shaderSource(o, src); gl.compileShader(o);
-      if (!gl.getShaderParameter(o, gl.COMPILE_STATUS)) console.error(gl.getShaderInfoLog(o));
-      return o;
-    }
-    var prog = gl.createProgram();
-    gl.attachShader(prog, compila(gl.VERTEX_SHADER, vertSrc));
-    gl.attachShader(prog, compila(gl.FRAGMENT_SHADER, fragSrc));
-    gl.linkProgram(prog);
-    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)){ console.error(gl.getProgramInfoLog(prog)); return; }
-    gl.useProgram(prog);
-
-    var buf = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-    var aPos = gl.getAttribLocation(prog, 'a_pos');
-    gl.enableVertexAttribArray(aPos);
-    gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
-
-    var uTime = gl.getUniformLocation(prog, 'u_time');
-    var uRes = gl.getUniformLocation(prog, 'u_res');
-    var uVel = gl.getUniformLocation(prog, 'u_crackSpeed');
-    var uBrilho = gl.getUniformLocation(prog, 'u_glowIntensity');
-    var uMouse = gl.getUniformLocation(prog, 'u_mouse');
-    var uScroll = gl.getUniformLocation(prog, 'u_scroll');
-
-    // o shader e caro por pixel (tres Voronoi com domain warp): renderiza
-    // abaixo da resolucao da tela e deixa o CSS esticar. E fundo, ninguem nota.
-    // sem multiplicar por devicePixelRatio: numa tela retina seria o quadruplo
-    // do trabalho para um padrao que ja e organico e macio.
-    var escala = window.innerWidth < 900 ? 0.5 : 0.62;
-    var mx = -1, my = -1, refazer = true;
-    function medir(){
-      refazer = false;
-      var w = Math.max(1, Math.round(tela.clientWidth * escala));
-      var h = Math.max(1, Math.round(tela.clientHeight * escala));
-      if (tela.width !== w || tela.height !== h){
-        tela.width = w; tela.height = h;
-        gl.viewport(0, 0, w, h);
-        gl.uniform2f(uRes, w, h);
-      }
-    }
-    window.addEventListener('resize', function(){ refazer = true; });
-    medir();
-
-    // so desenha com a seccao na tela: e o trecho mais pesado do site
-    var naTela = false;
-    if ('IntersectionObserver' in window){
-      new IntersectionObserver(function(es){
-        es.forEach(function(e){ naTela = e.isIntersecting; });
-      }, { rootMargin: '10% 0px' }).observe(sec);
-    } else { naTela = true; }
-
-    tela.parentNode.addEventListener('mousemove', function(e){
-      var b = tela.getBoundingClientRect();
-      mx = (e.clientX - b.left) * escala;
-      my = (b.height - (e.clientY - b.top)) * escala;
-    });
-    tela.parentNode.addEventListener('mouseleave', function(){ mx = -1; my = -1; });
-
-    var ultimo = -999;
-    (function desenha(agora){
-      requestAnimationFrame(desenha);
-      // 30fps: a rede leva segundos para mudar, 60 seria gastar o dobro a toa
-      if (naTela && !document.hidden && agora - ultimo >= 32){
-        ultimo = agora;
-        if (refazer) medir();
-        gl.uniform1f(uTime, REDUZIDO ? 0 : agora * 0.001);
-        gl.uniform1f(uVel, 0.3);
-        gl.uniform1f(uBrilho, 0.85);
-        gl.uniform2f(uMouse, mx, my);
-        gl.uniform1f(uScroll, parseFloat(sec.dataset.p || 0));
-        gl.drawArrays(gl.TRIANGLES, 0, 3);
-      }
-    })(0);
-  })();
-
   /* projetos: abertura escrita a mao, widget 3D,
      boneco em parafuso e o projeto em tela cheia */
   (function pantanal(){
@@ -1796,6 +1393,8 @@
     var pena = sec.querySelector('.pt-pena');
     var etiqueta = sec.querySelector('.pnt-etiqueta');
     var nome = sec.querySelector('.pnt-nome');
+    var linhas = sec.querySelector('.pc-linhas');
+    var varre = sec.querySelector('.pc-varre');
     var cena = sec.querySelector('.pnt-cena');
     var palco = sec.querySelector('.pnt-palco');
     var orbita = sec.querySelector('.pnt-orbita');
@@ -1875,7 +1474,7 @@
         var total = r.height - window.innerHeight;
         var p = clamp(total > 0 ? (-r.top) / total : 0);
         var t = performance.now() / 1000;
-        sec.dataset.p = p.toFixed(4);   // o shader le daqui
+        var H = pin.clientHeight;
 
         // 1. a escrita a mao: a mascara abre da esquerda para a direita
         var escreve = clamp(p / 0.13);
@@ -1894,6 +1493,14 @@
         cena.style.opacity = macio.toFixed(3);
         cena.style.transform = 'scale(' + (0.86 + macio * 0.14).toFixed(4) + ')';
         etiqueta.style.opacity = macio.toFixed(3);
+
+        // 3. CRT: as linhas andam com o scroll e a varredura faz uma passagem
+        // por seccao. A deriva no tempo e minima, so para nao parecer congelado.
+        // o passo do padrao e 3px, entao o resto da divisao da o mesmo desenho
+        // por muito menos deslocamento
+        linhas.style.transform = 'translateY(' + ((p * 150 + t * 2) % 3).toFixed(2) + 'px)';
+        var banda = H * 0.46;
+        varre.style.transform = 'translateY(' + (p * (H + banda) - banda).toFixed(1) + 'px)';
 
         // 4. o nome atravessa a tela e so fica nitido no meio do caminho
         var fora = Math.abs(p - 0.55) * 2.2;
