@@ -526,6 +526,96 @@
     #heroPin { position: relative; }
     #queda { display: none; }
   }
+
+  /* ===== o impacto: vidro rachado + assinatura ===== */
+  #vidro { position: absolute; inset: 0; z-index: 11; pointer-events: none; opacity: 0; }
+  #vidro svg { display: block; width: 100%; height: 100%; }
+  #vidro .fio { fill: none; stroke: oklch(0.99 0.006 85); stroke-linecap: round; stroke-linejoin: round;
+    filter: drop-shadow(0 1px 2px oklch(0.2 0.09 27 / .55)); }
+  #vidro .estilhaco { mix-blend-mode: screen; }
+
+  #assina { position: absolute; inset: 0; z-index: 12; pointer-events: none;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; opacity: 0; will-change: transform, opacity; }
+  #assina span { display: block; font-family: 'Anton', sans-serif; font-weight: 400;
+    font-size: clamp(50px, 13.2vw, 224px); line-height: 0.79; letter-spacing: -0.022em;
+    color: oklch(0.99 0.006 85); text-shadow: 0 10px 46px oklch(0.16 0.09 27 / .5); }
+  #assina .tinta { color: oklch(0.17 0.012 60);
+    text-shadow: 0 0 3px oklch(0.99 0.006 85 / .55), 0 10px 46px oklch(0.99 0.006 85 / .3); }
+  @media (prefers-reduced-motion: reduce) { #vidro, #assina { display: none; } }
+
+  /* ===== OBRA · Ecos do Pantanal ===== */
+  #pantanal { position: relative; z-index: 60; height: 280vh; background: oklch(0.985 0.006 85); }
+  .pnt-pin { position: sticky; top: 0; height: 100vh; min-height: 620px; overflow: hidden;
+    background: oklch(0.985 0.006 85); }
+
+  /* o vento: riscos vermelhos caindo, de um objeto que passou rapido demais */
+  .pnt-vento { position: absolute; inset: -10% 0; z-index: 1; pointer-events: none; will-change: transform; }
+  .pnt-vento svg { display: block; width: 100%; height: 100%; }
+  .pnt-vento path { fill: none; stroke: oklch(0.55 0.22 27); stroke-linecap: round;
+    stroke-width: var(--w); opacity: 0; animation: pntVento var(--d) linear var(--atraso) infinite; }
+  @keyframes pntVento {
+    0%   { opacity: 0;        transform: translateY(calc(var(--m) * -1)); }
+    22%  { opacity: var(--o); }
+    78%  { opacity: var(--o); }
+    100% { opacity: 0;        transform: translateY(var(--m)); }
+  }
+  .pnt-halo { position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: radial-gradient(circle at 50% 46%, oklch(0.55 0.22 27 / .16), transparent 58%); }
+
+  .pnt-etiqueta { position: absolute; z-index: 6; left: var(--gx); top: calc(8vh + 30px); margin: 0;
+    font-size: 23px; color: oklch(0.55 0.22 27); }
+  .pnt-etiqueta strong { font-weight: 700; color: oklch(0.32 0.012 60); }
+
+  /* o nome passa atras do widget e desfoca nas pontas */
+  .pnt-nome { position: absolute; z-index: 2; left: 0; right: 0; top: 50%; margin: 0;
+    font-family: 'Anton', sans-serif; font-weight: 400; font-size: clamp(44px, 9.4vw, 158px);
+    line-height: 0.82; letter-spacing: -0.02em; white-space: nowrap; text-align: center;
+    color: oklch(0.55 0.22 27); opacity: 0; transform: translateY(-50%);
+    pointer-events: none; user-select: none; will-change: transform, filter; }
+
+  /* o palco 3D: o widget fica em z=0 e o boneco orbita em volta dele */
+  .pnt-cena { position: absolute; inset: 0; z-index: 4; pointer-events: none;
+    display: flex; align-items: center; justify-content: center;
+    perspective: 1200px; perspective-origin: 50% 48%; }
+  .pnt-palco { position: relative; transform-style: preserve-3d; will-change: transform; }
+  .pnt-widget { position: relative; width: min(54vw, 720px); aspect-ratio: 16 / 9;
+    border-radius: 18px; overflow: hidden; background: oklch(0.12 0.01 60);
+    border: 6px solid oklch(0.985 0.006 85);
+    box-shadow: 0 40px 90px oklch(0.2 0.09 27 / .28), 0 0 0 1px oklch(0.55 0.22 27 / .28); }
+  .pnt-widget video { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .pnt-tag { position: absolute; left: 14px; bottom: 12px; padding: 4px 11px; border-radius: 999px;
+    background: oklch(0.55 0.22 27); color: oklch(0.99 0.006 85);
+    font-family: 'Caveat', cursive; font-size: 19px; font-weight: 600; }
+
+  .pnt-orbita { position: absolute; inset: 0; transform-style: preserve-3d; pointer-events: none; }
+  .pnt-boneco { position: absolute; left: 50%; top: 50%; width: 34vh; height: 34vh;
+    margin: -17vh 0 0 -17vh; transform-style: preserve-3d; }
+  .pb-frame { position: absolute; inset: 0; opacity: 0;
+    background-repeat: no-repeat; background-position: center center; background-size: contain;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-position: center center; mask-position: center center;
+    -webkit-mask-size: contain; mask-size: contain; }
+  .pb-frame.on { opacity: 1; }
+
+  .pnt-sub { position: absolute; z-index: 6; left: var(--gx); right: var(--gx);
+    bottom: calc(8vh + 30px); margin: 0; text-align: center;
+    font-size: clamp(22px, 2.3vw, 34px); color: oklch(0.32 0.012 60); }
+  .pnt-nota { position: absolute; z-index: 6; right: var(--gx); top: calc(8vh + 26px);
+    color: oklch(0.55 0.22 27); transform: rotate(4deg); }
+
+  @media (max-width: 899px) {
+    .pnt-widget { width: 86vw; }
+    .pnt-boneco { width: 26vh; height: 26vh; margin: -13vh 0 0 -13vh; }
+    .pnt-nota { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #pantanal { height: 100vh; }
+    .pnt-pin { position: relative; }
+    .pnt-vento path { animation: none; opacity: var(--o); }
+    .pnt-nome { opacity: .22; filter: none; }
+    .pnt-orbita { display: none; }
+  }
 </style>
 </head>
 <body>
@@ -573,18 +663,40 @@
       <div class="q-frame" data-i="1" style="background-image: url('assets/fall-2.jpg'); -webkit-mask-image: url('assets/fall-2-mask.png'); mask-image: url('assets/fall-2-mask.png');"></div>
       <div class="q-frame" data-i="2" style="background-image: url('assets/fall-3.jpg'); -webkit-mask-image: url('assets/fall-3-mask.png'); mask-image: url('assets/fall-3-mask.png');"></div>
     </div>
+    <div id="vidro" aria-hidden="true"></div>
+    <div id="assina" aria-hidden="true"><span>ALLAN KEVIN</span><span class="tinta">CASTRO</span></div>
   </div>
 </section>
 
 
-<!-- ===== FOTO · foto1 ===== -->
-<section id="foto1" class="foto duo">
-  <img class="bg" src="https://images.unsplash.com/photo-1601506521937-0121a7fc2a6b?auto=format&amp;fit=crop&amp;w=1800&amp;h=1125&amp;q=74" alt="" loading="lazy" decoding="async" width="1800" height="1125">
-  <div class="veil"></div>
-  <svg class="fcorner rv" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path vector-effect="non-scaling-stroke" pathLength="400" d="M3,4 C30,2 70,5 97,3 C99,30 96,70 97,97 C70,99 30,96 3,97 C1,70 4,30 3,4 Z"/></svg>
-  <p class="slate mono">SC 01 · TAKE 03 · SET</p>
-  <p class="say hand rv">isso aqui é <span class="scribble under light">set de verdade<svg viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M4,22 C40,10 120,30 196,16 M14,32 C70,26 130,36 190,28"/></svg></span>. sem filtro.</p>
-  <div class="hand-note rv" aria-hidden="true" style="right: var(--gx); bottom: 14vh; color: oklch(0.97 0.008 85); transform: rotate(4deg);">luz, direção, corte:<br>tudo na mesma mão<svg viewBox="0 0 70 40"><path d="M4,32 C26,40 46,30 62,8 M52,8 L63,7 L61,18"/></svg></div>
+<!-- ===== OBRA · Ecos do Pantanal ===== -->
+<section id="pantanal">
+  <div class="pnt-pin">
+    <div class="pnt-vento" aria-hidden="true"></div>
+    <div class="pnt-halo" aria-hidden="true"></div>
+
+    <p class="pnt-etiqueta hand rv">obra 01 &middot; <strong>Ecos do Pantanal</strong></p>
+    <h2 class="pnt-nome">ECOS DO PANTANAL</h2>
+
+    <div class="pnt-cena" aria-hidden="true">
+      <div class="pnt-palco">
+        <div class="pnt-widget">
+          <video id="pntVideo" src="video.mp4" muted loop playsinline preload="metadata" disablepictureinpicture></video>
+          <span class="pnt-tag">reel 2026</span>
+        </div>
+        <div class="pnt-orbita">
+          <div class="pnt-boneco">
+      <div class="pb-frame on" style="background-image: url('assets/fall-1.jpg'); -webkit-mask-image: url('assets/fall-1-mask.png'); mask-image: url('assets/fall-1-mask.png');"></div>
+      <div class="pb-frame" style="background-image: url('assets/fall-2.jpg'); -webkit-mask-image: url('assets/fall-2-mask.png'); mask-image: url('assets/fall-2-mask.png');"></div>
+      <div class="pb-frame" style="background-image: url('assets/fall-3.jpg'); -webkit-mask-image: url('assets/fall-3-mask.png'); mask-image: url('assets/fall-3-mask.png');"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="pnt-sub hand rv">Esporte e <span class="scribble">conserva&ccedil;&atilde;o<svg viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M4,22 C40,10 120,30 196,16 M14,32 C70,26 130,36 190,28"/></svg></span> em Aquidauana</p>
+    <div class="hand-note pnt-nota rv" aria-hidden="true">ele ainda t&aacute; caindo<svg viewBox="0 0 70 40"><path d="M4,32 C26,40 46,30 62,8 M52,8 L63,7 L61,18"/></svg></div>
+  </div>
 </section>
 
 <!-- ===== CLAQUETE · intro do reel ===== -->
@@ -922,6 +1034,85 @@
     // clamp vive no script módulo; aqui é script clássico, escopo separado
     function clamp(v){ return v < 0 ? 0 : (v > 1 ? 1 : v); }
 
+
+    // ---- o impacto: vidro rachado + assinatura ----
+    var vidro = document.getElementById('vidro');
+    var assina = document.getElementById('assina');
+    var radiais = [], anelares = [], trincado = false;
+
+    function racha(){
+      var W = pin.clientWidth, H = pin.clientHeight;
+      var cx = W * 0.26, cy = H * 0.62;          // onde a mao dele encosta no vidro
+      var longo = Math.hypot(W, H);
+      var semente = 20260921;                    // fixa: o desenho e sempre o mesmo
+      function rnd(){ semente = (semente * 1103515245 + 12345) & 0x7fffffff; return semente / 0x7fffffff; }
+      function pt(x, y){ return x.toFixed(1) + ' ' + y.toFixed(1); }
+
+      var n = 18;
+      var vert = [], perto = [], longe = [], anel = [];
+
+      for (var i = 0; i < n; i++){
+        var a = (i / n) * Math.PI * 2 + (rnd() - 0.5) * 0.32;
+        // uma em cada quatro escapa longe; o resto fica na zona do impacto
+        var alcance = longo * (i % 4 === 0 ? 0.5 + rnd() * 0.52 : 0.13 + rnd() * 0.19);
+        var passos = 3 + (rnd() * 4 | 0);
+        var v = [[cx, cy]], r = 0;
+        for (var k = 0; k < passos; k++){
+          r += alcance / passos * (0.6 + rnd() * 0.8);   // trecho reto e desvio: vidro nao curva
+          a += (rnd() - 0.5) * 0.36;
+          v.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r]);
+        }
+        vert.push(v);
+
+        // a trinca engrossa no impacto e afina ao se afastar: dois tracos por radial
+        var corte = Math.min(2, v.length - 1);
+        var d = 'M' + pt(v[0][0], v[0][1]);
+        for (var k = 1; k <= corte; k++) d += ' L' + pt(v[k][0], v[k][1]);
+        perto.push(d);
+        if (v.length > corte + 1){
+          d = 'M' + pt(v[corte][0], v[corte][1]);
+          for (var k = corte + 1; k < v.length; k++) d += ' L' + pt(v[k][0], v[k][1]);
+          longe.push(d);
+        }
+      }
+
+      // aneis: ligam o mesmo degrau de radiais vizinhas, e quebram onde a radial acaba
+      for (var passo = 1; passo <= 3; passo++){
+        var d = '', emendando = false;
+        for (var i = 0; i <= n; i++){
+          var p = vert[i % n][passo];
+          if (!p){ emendando = false; continue; }
+          d += (emendando ? ' L' : ' M') + pt(p[0], p[1]);
+          emendando = true;
+        }
+        if (d) anel.push([d, 1.6 - passo * 0.32]);
+      }
+
+      var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" aria-hidden="true">'
+        + '<defs><radialGradient id="vidroBrilho">'
+        + '<stop offset="0" stop-color="#fff" stop-opacity=".5"/>'
+        + '<stop offset="1" stop-color="#fff" stop-opacity="0"/>'
+        + '</radialGradient></defs>'
+        + '<circle class="estilhaco" cx="' + cx.toFixed(1) + '" cy="' + cy.toFixed(1) + '" r="'
+        + (longo * 0.1).toFixed(1) + '" fill="url(#vidroBrilho)"/>';
+      anel.forEach(function(x){
+        svg += '<path class="fio anel" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" stroke-width="' + x[1].toFixed(2) + '" d="' + x[0] + '"/>';
+      });
+      longe.forEach(function(d){
+        svg += '<path class="fio rad" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" stroke-width="1" d="' + d + '"/>';
+      });
+      perto.forEach(function(d){
+        svg += '<path class="fio rad" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" stroke-width="2.6" d="' + d + '"/>';
+      });
+      vidro.innerHTML = svg + '</svg>';
+      radiais  = Array.prototype.slice.call(vidro.querySelectorAll('.rad'));
+      anelares = Array.prototype.slice.call(vidro.querySelectorAll('.anel'));
+    }
+    window.addEventListener('resize', function(){
+      // o SVG e desenhado em pixels do pino: em outro tamanho ele esticaria
+      if (trincado){ trincado = false; vidro.innerHTML = ''; radiais = []; anelares = []; }
+    });
+
     var quadros = Array.prototype.slice.call(queda.querySelectorAll('.q-frame'));
     // pre-carrega cor e recorte: a troca de quadro nao pode piscar
     [1,2,3].forEach(function(n){
@@ -1025,11 +1216,124 @@
             atual = quadro;
           }
           queda.style.transform = 'translate3d(' + dx.toFixed(2) + 'vw,' + y.toFixed(2) + 'vh,0) scale(' + esc.toFixed(3) + ') rotate(' + gira.toFixed(2) + 'deg)';
+
+          // o vidro racha do ponto onde a mao encosta; os aneis vem depois das radiais
+          var g = clamp((q - 0.86) / 0.11);
+          if (g > 0 && !trincado){ racha(); trincado = true; }
+          if (trincado){
+            vidro.style.opacity = g.toFixed(3);
+            var fr = (1 - g).toFixed(3);
+            var fa = (1 - clamp((g - 0.38) / 0.62)).toFixed(3);
+            radiais.forEach(function(el){ el.style.strokeDashoffset = fr; });
+            anelares.forEach(function(el){ el.style.strokeDashoffset = fa; });
+          }
+          // e a assinatura entra desfocada, ganhando foco
+          var na = clamp((q - 0.93) / 0.07);
+          assina.style.opacity = na.toFixed(3);
+          assina.style.transform = 'scale(' + (1.07 - na * 0.07).toFixed(4) + ')';
+          assina.style.filter = na < 1 ? 'blur(' + ((1 - na) * 16).toFixed(1) + 'px)' : 'none';
+        } else if (trincado || assina.style.opacity){
+          vidro.style.opacity = 0;
+          assina.style.opacity = 0;
         }
       }
       requestAnimationFrame(loop);
     }
     requestAnimationFrame(loop);
+  })();
+
+
+  /* obra: vento vermelho, widget 3D e o boneco descendo em parafuso em volta dele */
+  (function pantanal(){
+    var sec = document.getElementById('pantanal');
+    if (!sec) return;
+    var pin = sec.querySelector('.pnt-pin');
+    var vento = sec.querySelector('.pnt-vento');
+    var nome = sec.querySelector('.pnt-nome');
+    var palco = sec.querySelector('.pnt-palco');
+    var orbita = sec.querySelector('.pnt-orbita');
+    var boneco = sec.querySelector('.pnt-boneco');
+    var video = document.getElementById('pntVideo');
+    var quadros = Array.prototype.slice.call(sec.querySelectorAll('.pb-frame'));
+    function clamp(v){ return v < 0 ? 0 : (v > 1 ? 1 : v); }
+
+    // o vento e desenhado uma vez, em pixels do pino
+    function sopra(){
+      var W = pin.clientWidth, H = pin.clientHeight * 1.2;
+      var semente = 190726;
+      function rnd(){ semente = (semente * 1103515245 + 12345) & 0x7fffffff; return semente / 0x7fffffff; }
+      var d = '<svg viewBox="0 0 ' + W.toFixed(0) + ' ' + H.toFixed(0) + '" preserveAspectRatio="none">';
+      for (var i = 0; i < 44; i++){
+        var x = rnd() * W * 1.1 - W * 0.05;
+        var y = rnd() * H * 0.9 - H * 0.05;
+        var alt = H * (0.1 + rnd() * 0.42);
+        var fuga = (rnd() - 0.5) * W * 0.1;          // o risco escapa de lado no fim da queda
+        d += '<path style="--w:' + (0.7 + rnd() * 2.8).toFixed(2)
+           + ';--o:' + (0.14 + rnd() * 0.5).toFixed(2)
+           + ';--m:' + (H * (0.06 + rnd() * 0.1)).toFixed(0) + 'px'
+           + ';--d:' + (7 + rnd() * 9).toFixed(1) + 's'
+           + ';--atraso:-' + (rnd() * 12).toFixed(1) + 's"'
+           + ' d="M' + x.toFixed(1) + ' ' + y.toFixed(1)
+           + ' Q' + (x + fuga * 0.4).toFixed(1) + ' ' + (y + alt * 0.62).toFixed(1)
+           + ' ' + (x + fuga).toFixed(1) + ' ' + (y + alt).toFixed(1) + '"/>';
+      }
+      vento.innerHTML = d + '</svg>';
+    }
+    sopra();
+    var espera;
+    window.addEventListener('resize', function(){
+      clearTimeout(espera); espera = setTimeout(sopra, 200);
+    });
+
+    // o video so roda enquanto a seccao esta na tela
+    if (video && 'IntersectionObserver' in window){
+      new IntersectionObserver(function(es){
+        es.forEach(function(e){
+          if (e.isIntersecting){ video.play().catch(function(){}); } else { video.pause(); }
+        });
+      }, { threshold: 0.05 }).observe(sec);
+    }
+
+    if (REDUZIDO) return;
+    var atual = -1;
+    (function laco(){
+      var r = sec.getBoundingClientRect();
+      if (r.bottom > 0 && r.top < window.innerHeight){
+        var total = r.height - window.innerHeight;
+        var p = clamp(total > 0 ? (-r.top) / total : 0);
+        var t = performance.now() / 1000;
+
+        // vento: parallax leve, so para o fundo nao ficar colado
+        vento.style.transform = 'translateY(' + (p * -9).toFixed(2) + 'vh)';
+
+        // o nome atravessa a tela e so fica nitido no meio do caminho
+        var fora = Math.abs(p - 0.5) * 2;            // 1 nas pontas, 0 no centro
+        nome.style.transform = 'translateY(-50%) translateX(' + ((0.5 - p) * 116).toFixed(2) + 'vw)';
+        nome.style.filter = 'blur(' + (fora * fora * 16).toFixed(1) + 'px)';
+        nome.style.opacity = (0.92 - fora * 0.72).toFixed(3);
+
+        // o widget respira em 3D
+        palco.style.transform = 'rotateX(' + (6 - p * 11).toFixed(2) + 'deg) rotateY('
+          + (Math.sin(t * 0.21) * 6).toFixed(2) + 'deg)';
+
+        // o parafuso: o boneco desce girando em volta do widget.
+        // o preserve-3d cuida sozinho de quem passa na frente e quem passa atras.
+        var giro = p * 860 + t * 13;                 // 13 graus/s: segue vivo parado na tela
+        var raio = Math.min(pin.clientWidth * 0.33, 440);
+        orbita.style.transform = 'translateY(' + (-26 + p * 52).toFixed(2) + 'vh) rotateY(' + giro.toFixed(2) + 'deg)';
+        boneco.style.transform = 'translateZ(' + raio.toFixed(0) + 'px) rotateY(' + (-giro).toFixed(2) + 'deg) rotate('
+          + (Math.sin(giro * Math.PI / 180) * 16 - 8).toFixed(2) + 'deg)';
+
+        // troca de pose a cada meia volta: acompanha o giro, nao o relogio
+        var i = Math.floor(giro / 180) % 3;
+        if (i < 0) i += 3;
+        if (i !== atual){
+          quadros.forEach(function(el, k){ el.classList.toggle('on', k === i); });
+          atual = i;
+        }
+      }
+      requestAnimationFrame(laco);
+    })();
   })();
 
   /* barra de leitura + cursor de gravação + holofote do contato */
