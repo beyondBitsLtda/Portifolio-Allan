@@ -561,8 +561,8 @@
     stroke-width: var(--w); opacity: 0; animation: pntVento var(--d) linear var(--atraso) infinite; }
   @keyframes pntVento {
     0%   { opacity: 0;        transform: translateY(calc(var(--m) * -1)); }
-    22%  { opacity: var(--o); }
-    78%  { opacity: var(--o); }
+    12%  { opacity: var(--o); }
+    88%  { opacity: var(--o); }
     100% { opacity: 0;        transform: translateY(var(--m)); }
   }
   .pnt-halo { position: absolute; inset: 0; z-index: 1; pointer-events: none;
@@ -584,7 +584,7 @@
     display: flex; align-items: center; justify-content: center;
     perspective: 1200px; perspective-origin: 50% 48%; }
   .pnt-palco { position: relative; transform-style: preserve-3d; will-change: transform; }
-  .pnt-widget { position: relative; width: min(54vw, 720px); aspect-ratio: 16 / 9;
+  .pnt-widget { position: relative; width: min(77vw, 1120px, 122vh); aspect-ratio: 16 / 9;
     border-radius: 18px; overflow: hidden; background: oklch(0.12 0.01 60);
     border: 6px solid oklch(0.985 0.006 85);
     box-shadow: 0 40px 90px oklch(0.2 0.09 27 / .28), 0 0 0 1px oklch(0.55 0.22 27 / .28); }
@@ -594,8 +594,8 @@
     font-family: 'Caveat', cursive; font-size: 19px; font-weight: 600; }
 
   .pnt-orbita { position: absolute; inset: 0; transform-style: preserve-3d; pointer-events: none; }
-  .pnt-boneco { position: absolute; left: 50%; top: 50%; width: 34vh; height: 34vh;
-    margin: -17vh 0 0 -17vh; transform-style: preserve-3d; }
+  .pnt-boneco { position: absolute; left: 50%; top: 50%; width: 40vh; height: 40vh;
+    margin: -20vh 0 0 -20vh; transform-style: preserve-3d; }
   .pb-frame { position: absolute; inset: 0; opacity: 0;
     background-repeat: no-repeat; background-position: center center; background-size: contain;
     -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
@@ -604,14 +604,14 @@
   .pb-frame.on { opacity: 1; }
 
   .pnt-sub { position: absolute; z-index: 6; left: var(--gx); right: var(--gx);
-    bottom: calc(8vh + 30px); margin: 0; text-align: center;
+    bottom: calc(5vh + 16px); margin: 0; text-align: center;
     font-size: clamp(22px, 2.3vw, 34px); color: oklch(0.32 0.012 60); }
   .pnt-nota { position: absolute; z-index: 6; right: var(--gx); top: calc(8vh + 26px);
     color: oklch(0.55 0.22 27); transform: rotate(4deg); }
 
   @media (max-width: 899px) {
-    .pnt-widget { width: 86vw; }
-    .pnt-boneco { width: 26vh; height: 26vh; margin: -13vh 0 0 -13vh; }
+    .pnt-widget { width: 93vw; }
+    .pnt-boneco { width: 30vh; height: 30vh; margin: -15vh 0 0 -15vh; }
     .pnt-nota { display: none; }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -1044,6 +1044,7 @@
     var vidro = document.getElementById('vidro');
     var assina = document.getElementById('assina');
     var radiais = [], anelares = [], lascas = [], voo = [], trincado = false;
+    var batida = 0;   // instante da pancada; o tranco toca uma vez e amortece sozinho
 
     function racha(){
       var W = pin.clientWidth, H = pin.clientHeight;
@@ -1218,7 +1219,7 @@
         if (q > 0){
           var t = performance.now() / 1000;
           var e = q * q * q;                          // ease-in forte: a queda acelera no fim
-          var passo = Math.round(e * 15) / 15;        // stop-motion: o corpo anda aos trancos
+          var passo = Math.round(e * 11) / 11;        // stop-motion: poucos passos = tranco seco
           var quadro = Math.floor(q * 11) % 3;        // 11 trocas de quadro = tombo, nao deslize
           var y = -48 + passo * 54;
           var dx = 0;
@@ -1233,6 +1234,26 @@
             dx    = f * Math.sin(t * 0.37) * 2.1;
             esc  += f * Math.sin(t * 0.46) * 0.03;
           }
+
+          // a pancada: dispara ao tocar o vidro e amortece no tempo, nao no scroll —
+          // preso ao scroll ele congelaria torto se voce parasse no meio
+          if (q >= 0.86 && !batida) batida = performance.now();
+          if (q < 0.80) batida = 0;
+          var soco = 0, socoY = 0;
+          if (batida){
+            var dt = (performance.now() - batida) / 1000;
+            if (dt < 0.9){
+              var amort = Math.exp(-dt * 7);
+              soco  = amort * Math.cos(dt * 38);
+              socoY = amort * Math.sin(dt * 30) * 11;
+            }
+          }
+          // o pino leva o tranco inteiro; a escala cobre a folga para nao abrir borda
+          pin.style.transform = soco
+            ? 'translate3d(' + (soco * 16).toFixed(2) + 'px,' + socoY.toFixed(2) + 'px,0) scale('
+              + (1 + Math.abs(soco) * 0.03).toFixed(4) + ')'
+            : 'none';
+          esc += Math.abs(soco) * 0.1;                // e ele mesmo recua no baque
 
           // atravessa: o vidro cede e ele despenca para a seccao de baixo
           var sai = clamp((p - 0.80) / 0.20);
@@ -1276,6 +1297,8 @@
         } else if (trincado || assina.style.opacity){
           vidro.style.opacity = 0;
           assina.style.opacity = 0;
+          pin.style.transform = 'none';
+          batida = 0;
         }
       }
       requestAnimationFrame(loop);
@@ -1307,13 +1330,13 @@
       for (var i = 0; i < 44; i++){
         var x = rnd() * W * 1.1 - W * 0.05;
         var y = rnd() * H * 0.9 - H * 0.05;
-        var alt = H * (0.1 + rnd() * 0.42);
+        var alt = H * (0.2 + rnd() * 0.6);          // risco comprido: e velocidade, nao chuvisco
         var fuga = (rnd() - 0.5) * W * 0.1;          // o risco escapa de lado no fim da queda
         d += '<path style="--w:' + (0.7 + rnd() * 2.8).toFixed(2)
            + ';--o:' + (0.14 + rnd() * 0.5).toFixed(2)
-           + ';--m:' + (H * (0.06 + rnd() * 0.1)).toFixed(0) + 'px'
-           + ';--d:' + (7 + rnd() * 9).toFixed(1) + 's'
-           + ';--atraso:-' + (rnd() * 12).toFixed(1) + 's"'
+           + ';--m:' + (H * (0.2 + rnd() * 0.34)).toFixed(0) + 'px'
+           + ';--d:' + (1.4 + rnd() * 2.6).toFixed(2) + 's'
+           + ';--atraso:-' + (rnd() * 4).toFixed(2) + 's"'
            + ' d="M' + x.toFixed(1) + ' ' + y.toFixed(1)
            + ' Q' + (x + fuga * 0.4).toFixed(1) + ' ' + (y + alt * 0.62).toFixed(1)
            + ' ' + (x + fuga).toFixed(1) + ' ' + (y + alt).toFixed(1) + '"/>';
@@ -1360,7 +1383,7 @@
         // o parafuso: o boneco desce girando em volta do widget.
         // o preserve-3d cuida sozinho de quem passa na frente e quem passa atras.
         var giro = p * 860 + t * 13;                 // 13 graus/s: segue vivo parado na tela
-        var raio = Math.min(pin.clientWidth * 0.33, 440);
+        var raio = Math.min(pin.clientWidth * 0.46, 680);
         orbita.style.transform = 'translateY(' + (-26 + p * 52).toFixed(2) + 'vh) rotateY(' + giro.toFixed(2) + 'deg)';
         boneco.style.transform = 'translateZ(' + raio.toFixed(0) + 'px) rotateY(' + (-giro).toFixed(2) + 'deg) rotate('
           + (Math.sin(giro * Math.PI / 180) * 16 - 8).toFixed(2) + 'deg)';
