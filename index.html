@@ -1008,19 +1008,23 @@
           var passo = Math.round(e * 15) / 15;        // stop-motion: o corpo anda aos trancos
           var quadro = Math.floor(q * 11) % 3;        // 11 trocas de quadro = tombo, nao deslize
           var y = -48 + passo * 54;
+          var dx = 0;
           var esc = 0.16 + passo * 1.62;
           var gira = (quadro === 1 ? 12 : (quadro === 2 ? -8 : 3)) + passo * 8;
-          if (q > 0.9){                               // colado na tela: ele se debate
-            quadro = Math.floor(t * 15) % 3;
-            gira  += Math.sin(t * 13) * 5.5 + Math.sin(t * 23) * 2.2;
-            y     += Math.sin(t * 17) * 1.8;
-            esc   += Math.sin(t * 9) * 0.06;
+          if (q > 0.88){
+            // colado na tela ele segura a ultima pose e so flutua: trocar de quadro
+            // aqui vira pisca-pisca, e com crossfade vira dupla exposicao
+            var f = clamp((q - 0.88) / 0.12);         // rampa: o balanco entra sem tranco
+            gira += f * (Math.sin(t * 0.62) * 3.4 + Math.sin(t * 0.41) * 1.6);
+            y    += f * Math.sin(t * 0.53) * 1.5;
+            dx    = f * Math.sin(t * 0.37) * 2.1;
+            esc  += f * Math.sin(t * 0.46) * 0.03;
           }
           if (quadro !== atual){
             quadros.forEach(function(el, k){ el.classList.toggle('on', k === quadro); });
             atual = quadro;
           }
-          queda.style.transform = 'translate3d(0,' + y.toFixed(2) + 'vh,0) scale(' + esc.toFixed(3) + ') rotate(' + gira.toFixed(2) + 'deg)';
+          queda.style.transform = 'translate3d(' + dx.toFixed(2) + 'vw,' + y.toFixed(2) + 'vh,0) scale(' + esc.toFixed(3) + ') rotate(' + gira.toFixed(2) + 'deg)';
         }
       }
       requestAnimationFrame(loop);
