@@ -694,12 +694,26 @@
      proprio, e transformar o pino brigaria com ele. */
   .curva { backface-visibility: hidden; }
   @media (prefers-reduced-motion: reduce) { .curva { transform: none !important; } }
+  /* o sombreado do tubo: escurece as bordas como o interior de um cilindro.
+     E isso, mais que a geometria, que faz a pagina parecer curva. */
+  #curvatura { position: fixed; inset: 0; z-index: 150; pointer-events: none;
+    opacity: 0; mix-blend-mode: multiply; will-change: opacity;
+    background:
+      linear-gradient(to right,
+        oklch(0.35 0.03 40 / .20) 0%, oklch(0.35 0.03 40 / .05) 10%,
+        transparent 24%, transparent 76%,
+        oklch(0.35 0.03 40 / .05) 90%, oklch(0.35 0.03 40 / .20) 100%),
+      linear-gradient(to bottom,
+        oklch(0.35 0.03 40 / .15) 0%, transparent 14%,
+        transparent 86%, oklch(0.35 0.03 40 / .15) 100%); }
+  @media (prefers-reduced-motion: reduce) { #curvatura { display: none; } }
 </style>
 </head>
 <body>
 
 <!-- flash da câmera, disparado no último frame do hero 2 -->
 <div id="flashLayer"></div>
+<div id="curvatura" aria-hidden="true"></div>
 <div id="readBar" aria-hidden="true"></div>
 <div id="cur" aria-hidden="true"></div>
 
@@ -1812,12 +1826,62 @@
      endireita no meio da tela e volta a curvar ao sair */
   (function desenrola(){
     if (REDUZIDO) return;
-    var alvos = ['claquete', 'servicos', 'sobre', 'trabalhos', 'trajetoria', 'contato']
+    var secoes = ['claquete', 'servicos', 'sobre', 'trabalhos', 'trajetoria', 'contato']
       .map(function(id){ return document.getElementById(id); }).filter(Boolean);
     var rodape = document.querySelector('footer');
-    if (rodape) alvos.push(rodape);
-    if (!alvos.length) return;
+    if (rodape) secoes.push(rodape);
+    if (!secoes.length) return;
+
+    // desce ate achar blocos do tamanho de uma linha: um bloco alto demais
+    // continuaria chato na tela, e a curva so aparece com varios segmentos
+    // .rv e .line entram usando transform; escrever transform inline neles
+    // mataria a revelacao. Onde houver um deles, a curva para no pai.
+    function anima(el){
+      return el.classList.contains('rv') || el.classList.contains('line');
+    }
+    function linhas(raiz){
+      var saida = [];
+      (function anda(el, nivel){
+        var filhos = Array.prototype.filter.call(el.children, function(f){
+          var cs = getComputedStyle(f);
+          return cs.position !== 'absolute' && cs.position !== 'fixed' && f.offsetHeight >= 36;
+        });
+        if (!filhos.length || filhos.some(anima) || nivel >= 4){
+          if (el !== raiz || !filhos.length) saida.push(el);
+          else filhos.forEach(function(f){ saida.push(f); });
+          return;
+        }
+        filhos.forEach(function(f){
+          if (f.offsetHeight > window.innerHeight * 0.66) anda(f, nivel + 1);
+          else saida.push(f);
+        });
+      })(raiz, 0);
+      return saida.filter(function(el){ return !anima(el); });
+    }
+
+    var alvos = [];
+    secoes.forEach(function(sec){
+      var l = linhas(sec);
+      alvos = alvos.concat(l.length ? l : [sec]);
+    });
     alvos.forEach(function(el){ el.classList.add('curva'); });
+    // um bloco pode nascer depois (reveal, video): remede de vez em quando
+    var espera;
+    window.addEventListener('resize', function(){
+      clearTimeout(espera);
+      espera = setTimeout(function(){
+        alvos.forEach(function(el){ el.classList.remove('curva'); el.style.transform = ''; });
+        alvos = [];
+        secoes.forEach(function(sec){
+          var l = linhas(sec);
+          alvos = alvos.concat(l.length ? l : [sec]);
+        });
+        alvos.forEach(function(el){ el.classList.add('curva'); });
+      }, 250);
+    });
+
+    var tubo = document.getElementById('curvatura');
+    var abertura = document.getElementById('abertura');
 
     (function laco(){
       var alt = window.innerHeight, meio = alt / 2;
@@ -1825,11 +1889,20 @@
         var r = el.getBoundingClientRect();
         if (r.bottom < -240 || r.top > alt + 240) return;   // fora de vista, nao mexe
         // quanto o centro do bloco esta longe do centro da tela, de -1 a 1
-        var d = ((r.top + r.height / 2) - meio) / (alt * 1.15);
+        var d = ((r.top + r.height / 2) - meio) / (alt * 0.62);
         d = d < -1 ? -1 : (d > 1 ? 1 : d);
-        el.style.transform = 'perspective(1500px) rotateX(' + (d * 14).toFixed(2)
-          + 'deg) scale(' + (1 - Math.abs(d) * 0.06).toFixed(4) + ')';
+        // o recuo cresce com o quadrado da distancia: e o que transforma uma
+        // sequencia de planos inclinados na parede de um cilindro
+        el.style.transform = 'perspective(1200px) translateZ(' + (-(d * d) * 330).toFixed(0)
+          + 'px) rotateX(' + (d * 22).toFixed(2) + 'deg)';
       });
+
+      // o tubo so acende depois da primeira hero
+      if (tubo && abertura){
+        var ra = abertura.getBoundingClientRect();
+        var acende = (alt - ra.bottom) / (alt * 0.5);
+        tubo.style.opacity = (acende < 0 ? 0 : (acende > 1 ? 1 : acende)).toFixed(3);
+      }
       requestAnimationFrame(laco);
     })();
   })();
