@@ -552,13 +552,11 @@
     -webkit-text-stroke: clamp(1.4px, 0.2vw, 3.2px) oklch(0.99 0.006 85); }
   @media (prefers-reduced-motion: reduce) { #vidro, #assina { display: none; } }
 
-  /* ===== PROJETOS · obra 01 ===== */
-  #pantanal { position: relative; z-index: 60; height: 320vh; background: oklch(0.985 0.006 85); }
+  /* ===== PROJETOS · dois atos no mesmo pino ===== */
+  #pantanal { position: relative; z-index: 60; height: 560vh; background: oklch(0.985 0.006 85); }
   .pnt-pin { position: sticky; top: 0; height: 100vh; min-height: 620px; overflow: hidden;
     background: oklch(0.985 0.006 85); }
 
-  /* a abertura escrita a mao: a tinta aparece da esquerda para a direita
-     sob uma pena que corre junto */
   .pnt-titulo { position: absolute; z-index: 6; inset: 0; margin: 0;
     display: flex; align-items: center; justify-content: center;
     font-family: 'Caveat', cursive; font-weight: 700;
@@ -579,14 +577,16 @@
   .pnt-titulo .pt-pena { position: absolute; top: 50%; width: .1em; height: .1em; border-radius: 50%;
     background: oklch(0.55 0.22 27); opacity: 0; transform: translate(-50%, -50%); }
 
-  /* fundo: campo de curvas de nivel + particulas, desenhado em WebGL.
-     Fica atras do palco — e fundo, nao filtro em cima do video. */
+  /* fundo: campo de curvas de nivel + particulas, desenhado em WebGL */
   .pnt-campo { position: absolute; inset: 0; z-index: 1; display: block;
     width: 100%; height: 100%; pointer-events: none; }
 
-  .pnt-etiqueta { position: absolute; z-index: 6; left: var(--gx); top: calc(8vh + 30px); margin: 0;
-    font-size: 23px; color: oklch(0.55 0.22 27); opacity: 0; will-change: opacity; }
-  .pnt-etiqueta strong { font-weight: 700; color: oklch(0.32 0.012 60); }
+  /* o trilho desliza de um ato para o outro sem soltar o pino: e o que
+     mantem a queda continua entre um video e o seguinte */
+  .pnt-trilho { position: absolute; inset: 0; z-index: 2; will-change: transform; }
+  .pnt-ato { position: absolute; left: 0; right: 0; height: 100%; }
+  .pnt-ato[data-ato="0"] { top: 0; }
+  .pnt-ato[data-ato="1"] { top: 100%; }
 
   /* o nome passa atras do widget e desfoca nas pontas */
   .pnt-nome { position: absolute; z-index: 2; left: 0; right: 0; top: 50%;
@@ -617,6 +617,13 @@
     font-size: 21px; color: oklch(0.99 0.006 85); text-shadow: 0 2px 10px oklch(0.15 0.02 60 / .8); }
 
   .pnt-orbita { position: absolute; inset: 0; transform-style: preserve-3d; pointer-events: none; }
+  .pnt-camera { position: absolute; left: 50%; top: 50%; width: 30vh; height: 30vh;
+    margin: -15vh 0 0 -15vh; transform-style: preserve-3d;
+    background-repeat: no-repeat; background-position: center center; background-size: contain;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-position: center center; mask-position: center center;
+    -webkit-mask-size: contain; mask-size: contain;
+    filter: drop-shadow(0 14px 26px oklch(0.25 0.03 30 / .3)); }
   .pnt-boneco { position: absolute; left: 50%; top: 50%; width: 40vh; height: 40vh;
     margin: -20vh 0 0 -20vh; transform-style: preserve-3d; }
   .pb-frame { position: absolute; inset: 0; opacity: 0;
@@ -664,6 +671,7 @@
   @media (max-width: 899px) {
     .pnt-widget { width: 93vw; }
     .pnt-boneco { width: 30vh; height: 30vh; margin: -15vh 0 0 -15vh; }
+    .pnt-camera { width: 22vh; height: 22vh; margin: -11vh 0 0 -11vh; }
     .pnt-toque { font-size: 17px; right: 12px; bottom: 11px; }
     .pm-veu { background: linear-gradient(to bottom, oklch(0.08 0.01 60 / .2) 0%, oklch(0.08 0.01 60 / .35) 40%, oklch(0.08 0.01 60 / .95) 72%); }
     .pm-texto { top: auto; width: 100%; justify-content: flex-end; padding: 0 22px 16vh; gap: 10px;
@@ -671,12 +679,13 @@
     .pnt-modal.on .pm-texto { transform: none; }
   }
   @media (prefers-reduced-motion: reduce) {
-    #pantanal { height: 100vh; }
-    .pnt-pin { position: relative; }
+    #pantanal { height: 200vh; }
+    .pnt-pin { position: relative; height: 100vh; }
+    .pnt-ato { position: relative; top: auto !important; }
+    .pnt-trilho { position: relative; transform: none !important; }
     .pnt-titulo { display: none; }
     .pnt-campo { display: none; }
     .pnt-cena { opacity: 1; }
-    .pnt-etiqueta { opacity: 1; }
     .pnt-nome { opacity: .22; filter: none; }
     .pnt-orbita { display: none; }
   }
@@ -734,46 +743,84 @@
 </section>
 
 
-<!-- ===== PROJETOS · obra 01 : Reel 2026 ===== -->
+<!-- ===== PROJETOS · dois atos no mesmo pino ===== -->
 <section id="pantanal">
   <div class="pnt-pin">
+    <canvas class="pnt-campo" aria-hidden="true"></canvas>
+
     <h2 class="pnt-titulo"><span class="pt-bloco"><span class="pt-tinta">meus projetos</span><svg class="pt-risco" viewBox="0 0 400 46" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M5,24 C86,8 214,36 396,12"/><path pathLength="1" d="M16,38 C112,29 252,43 389,29"/></svg></span><i class="pt-pena" aria-hidden="true"></i></h2>
 
-    <p class="pnt-etiqueta hand">obra 01 &middot; <strong>Reel 2026</strong></p>
-    <div class="pnt-nome" aria-hidden="true">REEL 2026</div>
-
-    <div class="pnt-cena">
-      <div class="pnt-palco">
-        <button class="pnt-widget" type="button" aria-haspopup="dialog" aria-label="Abrir o projeto Reel 2026">
-          <video id="pntVideo" src="video.mp4" muted loop playsinline preload="metadata" disablepictureinpicture></video>
-          <span class="pnt-tag">reel 2026</span>
-          <span class="pnt-toque hand">clique para ver o projeto</span>
-        </button>
-        <div class="pnt-orbita" aria-hidden="true">
-          <div class="pnt-boneco">
-          <div class="pb-frame on" style="background-image: url('assets/q1.jpg'); -webkit-mask-image: url('assets/q1-mask.png'); mask-image: url('assets/q1-mask.png');"></div>
-          <div class="pb-frame" style="background-image: url('assets/q2.jpg'); -webkit-mask-image: url('assets/q2-mask.png'); mask-image: url('assets/q2-mask.png');"></div>
-          <div class="pb-frame" style="background-image: url('assets/q3.jpg'); -webkit-mask-image: url('assets/q3-mask.png'); mask-image: url('assets/q3-mask.png');"></div>
+    <div class="pnt-trilho">
+      <div class="pnt-ato" data-ato="0">
+        <div class="pnt-nome" aria-hidden="true">REEL 2026</div>
+        <div class="pnt-cena">
+          <div class="pnt-palco">
+            <button class="pnt-widget" type="button" aria-haspopup="dialog"
+              aria-label="Abrir o projeto Reel 2026"
+              data-titulo="Reel 2026" data-tag="Birdview Produ&ccedil;&otilde;es &middot; 2026"
+              data-sub="Dire&ccedil;&atilde;o &middot; C&acirc;mera &middot; Montagem &middot; Cor"
+              data-t1="Um ano de trabalho condensado em poucos minutos. Cultura, esporte e marca &mdash; o que sobrou depois de cortar tudo que n&atilde;o precisava estar l&aacute;."
+              data-t2="Cada frame aqui passou pela mesma pergunta: isso conta alguma coisa? O que n&atilde;o contava, ficou de fora."
+              data-link="https://www.instagram.com/birdviewproducoes/" data-link-rotulo="Ver mais no Instagram"
+              data-video="video.mp4">
+              <video class="pnt-video" src="video.mp4" muted loop playsinline preload="metadata" disablepictureinpicture></video>
+              <span class="pnt-tag">reel 2026</span>
+              <span class="pnt-toque hand">clique para ver o projeto</span>
+            </button>
+            <div class="pnt-orbita" aria-hidden="true">
+              <div class="pnt-boneco">
+            <div class="pb-frame on" style="background-image: url('assets/q1.jpg'); -webkit-mask-image: url('assets/q1-mask.png'); mask-image: url('assets/q1-mask.png');"></div>
+            <div class="pb-frame" style="background-image: url('assets/q2.jpg'); -webkit-mask-image: url('assets/q2-mask.png'); mask-image: url('assets/q2-mask.png');"></div>
+            <div class="pb-frame" style="background-image: url('assets/q3.jpg'); -webkit-mask-image: url('assets/q3-mask.png'); mask-image: url('assets/q3-mask.png');"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pnt-ato" data-ato="1">
+        <div class="pnt-nome" aria-hidden="true">ECOS DO PANTANAL</div>
+        <div class="pnt-cena">
+          <div class="pnt-palco">
+            <button class="pnt-widget" type="button" aria-haspopup="dialog"
+              aria-label="Abrir o projeto Ecos do Pantanal"
+              data-titulo="Ecos do Pantanal" data-tag="Lei Aldir Blanc &middot; Document&aacute;rio"
+              data-sub="Esporte &middot; Conserva&ccedil;&atilde;o ambiental &middot; Narrativa humana"
+              data-t1="Produ&ccedil;&atilde;o audiovisual que integra esporte e conscientiza&ccedil;&atilde;o ambiental, destacando a import&acirc;ncia da preserva&ccedil;&atilde;o do Pantanal por meio de narrativas humanas e experi&ecirc;ncias reais."
+              data-t2="Projeto realizado com incentivo p&uacute;blico, refor&ccedil;ando o compromisso com a cultura e o meio ambiente."
+              data-link="https://www.youtube.com/watch?v=8U4cpeMxG2w" data-link-rotulo="Assistir no YouTube"
+              data-video="assets/ecos-pantanal.mp4">
+              <video class="pnt-video" src="assets/ecos-pantanal.mp4" muted loop playsinline preload="none" disablepictureinpicture></video>
+              <span class="pnt-tag">ecos do pantanal</span>
+              <span class="pnt-toque hand">clique para ver o projeto</span>
+            </button>
+            <div class="pnt-orbita" aria-hidden="true">
+              <div class="pnt-boneco">
+            <div class="pb-frame on" style="background-image: url('assets/fall-1.jpg'); -webkit-mask-image: url('assets/fall-1-mask.png'); mask-image: url('assets/fall-1-mask.png');"></div>
+            <div class="pb-frame" style="background-image: url('assets/fall-2.jpg'); -webkit-mask-image: url('assets/fall-2-mask.png'); mask-image: url('assets/fall-2-mask.png');"></div>
+            <div class="pb-frame" style="background-image: url('assets/fall-3.jpg'); -webkit-mask-image: url('assets/fall-3-mask.png'); mask-image: url('assets/fall-3-mask.png');"></div>
+              </div>
+            </div>
+            <div class="pnt-orbita pnt-orbita-cam" aria-hidden="true">
+              <div class="pnt-camera" style="background-image: url('assets/cam.jpg'); -webkit-mask-image: url('assets/cam-mask.png'); mask-image: url('assets/cam-mask.png');"></div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
-    <canvas class="pnt-campo" aria-hidden="true"></canvas>
   </div>
 </section>
 
 <div class="pnt-modal" id="pntModal" role="dialog" aria-modal="true" aria-labelledby="pmTitulo" hidden>
-  <video id="pntCheio" class="pm-tela" src="video.mp4" muted loop playsinline preload="none" disablepictureinpicture></video>
+  <video id="pntCheio" class="pm-tela" muted loop playsinline preload="none" disablepictureinpicture></video>
   <div class="pm-veu" aria-hidden="true"></div>
   <div class="pm-crt" aria-hidden="true"></div>
   <aside class="pm-texto">
-    <span class="pm-tag">Birdview Produ&ccedil;&otilde;es &middot; 2026</span>
-    <h3 id="pmTitulo">Reel 2026</h3>
-    <p class="pm-sub hand">Dire&ccedil;&atilde;o &middot; C&acirc;mera &middot; Montagem &middot; Cor</p>
-    <p>Um ano de trabalho condensado em poucos minutos. Cultura, esporte e marca &mdash; o que sobrou depois de cortar tudo que n&atilde;o precisava estar l&aacute;.</p>
-    <p>Cada frame aqui passou pela mesma pergunta: isso conta alguma coisa? O que n&atilde;o contava, ficou de fora.</p>
-    <a class="pm-link" href="https://www.instagram.com/birdviewproducoes/" target="_blank" rel="noopener">Ver mais no Instagram &#8599;</a>
+    <span class="pm-tag"></span>
+    <h3 id="pmTitulo"></h3>
+    <p class="pm-sub hand"></p>
+    <p class="pm-t1"></p>
+    <p class="pm-t2"></p>
+    <a class="pm-link" href="#" target="_blank" rel="noopener"></a>
   </aside>
   <button class="pm-som" type="button" aria-pressed="false">Ativar som</button>
   <button class="pm-fechar" type="button" aria-label="Fechar o projeto">&#10005;</button>
@@ -1558,46 +1605,69 @@
     })(0);
   })();
 
-  /* projetos: abertura escrita a mao, widget 3D,
-     boneco em parafuso e o projeto em tela cheia */
+  /* projetos: dois atos no mesmo pino. O giro nao reinicia entre eles —
+     e o mesmo tombo continuando de um video para o outro. */
   (function pantanal(){
     var sec = document.getElementById('pantanal');
     if (!sec) return;
     var pin = sec.querySelector('.pnt-pin');
+    var trilho = sec.querySelector('.pnt-trilho');
     var titulo = sec.querySelector('.pnt-titulo');
     var bloco = sec.querySelector('.pt-bloco');
     var tinta = sec.querySelector('.pt-tinta');
-    var risco = Array.prototype.slice.call(sec.querySelectorAll('.pt-risco path'));
     var pena = sec.querySelector('.pt-pena');
-    var etiqueta = sec.querySelector('.pnt-etiqueta');
-    var nome = sec.querySelector('.pnt-nome');
-    var cena = sec.querySelector('.pnt-cena');
-    var palco = sec.querySelector('.pnt-palco');
-    var orbita = sec.querySelector('.pnt-orbita');
-    var boneco = sec.querySelector('.pnt-boneco');
-    var botao = sec.querySelector('.pnt-widget');
-    var video = document.getElementById('pntVideo');
-    var quadros = Array.prototype.slice.call(sec.querySelectorAll('.pb-frame'));
+    var risco = Array.prototype.slice.call(sec.querySelectorAll('.pt-risco path'));
     function clamp(v){ return v < 0 ? 0 : (v > 1 ? 1 : v); }
 
-    // ---- o projeto em tela cheia ----
+    var atos = Array.prototype.slice.call(sec.querySelectorAll('.pnt-ato')).map(function(el){
+      return {
+        nome: el.querySelector('.pnt-nome'),
+        cena: el.querySelector('.pnt-cena'),
+        palco: el.querySelector('.pnt-palco'),
+        orbita: el.querySelector('.pnt-orbita:not(.pnt-orbita-cam)'),
+        boneco: el.querySelector('.pnt-boneco'),
+        orbCam: el.querySelector('.pnt-orbita-cam'),
+        camera: el.querySelector('.pnt-camera'),
+        botao: el.querySelector('.pnt-widget'),
+        video: el.querySelector('.pnt-video'),
+        quadros: Array.prototype.slice.call(el.querySelectorAll('.pb-frame')),
+        atual: -1
+      };
+    });
+
+    // ---- o projeto em tela cheia: um modal so, preenchido pelo dataset ----
     var modal = document.getElementById('pntModal');
     var cheio = document.getElementById('pntCheio');
     var btSom = modal && modal.querySelector('.pm-som');
     var btFecha = modal && modal.querySelector('.pm-fechar');
-    var aberto = false, voltarFoco = null;
+    var aberto = false, voltarFoco = null, tocando = -1;
 
-    function abrir(){
+    function escreve(sel, txt){
+      var el = modal.querySelector(sel);
+      if (el) el.textContent = txt || '';
+    }
+    function abrir(bt){
       if (aberto || !modal) return;
       aberto = true;
-      voltarFoco = document.activeElement;
+      voltarFoco = bt;
+      var d = bt.dataset;
+      escreve('.pm-tag', d.tag);
+      escreve('#pmTitulo', d.titulo);
+      escreve('.pm-sub', d.sub);
+      escreve('.pm-t1', d.t1);
+      escreve('.pm-t2', d.t2);
+      var link = modal.querySelector('.pm-link');
+      link.href = d.link || '#';
+      link.textContent = (d.linkRotulo || 'Abrir') + ' ↗';
       modal.hidden = false;
-      // o vidoe do widget e o de tela cheia sao dois elementos (mesmo arquivo,
-      // mesmo cache); herdar o tempo faz a troca parecer continua
-      try { cheio.currentTime = video.currentTime || 0; } catch (e) {}
+      // a fonte so e atribuida aqui: com preload="none" o arquivo nem comeca
+      // a baixar antes de alguem pedir para ver
+      var mesma = cheio.getAttribute('src') === d.video;
+      if (!mesma){ cheio.src = d.video; }
+      var origem = atos.filter(function(a){ return a.botao === bt; })[0];
+      if (mesma && origem){ try { cheio.currentTime = origem.video.currentTime || 0; } catch (e) {} }
       cheio.play().catch(function(){});
-      video.pause();
-      // trava a pagina sem deixar o conteudo pular quando a barra some
+      atos.forEach(function(a){ a.video.pause(); });
       var folga = window.innerWidth - document.documentElement.clientWidth;
       document.documentElement.style.overflow = 'hidden';
       if (folga > 0) document.documentElement.style.paddingRight = folga + 'px';
@@ -1614,15 +1684,19 @@
       setTimeout(function(){
         if (!aberto){
           modal.hidden = true;
-          video.play().catch(function(){});
+          // solta o buffer: o video da obra 2 e grande
+          cheio.removeAttribute('src');
+          cheio.load();
+          if (atos[tocando]) atos[tocando].video.play().catch(function(){});
         }
       }, 340);
       if (voltarFoco && voltarFoco.focus) voltarFoco.focus();
     }
-    if (botao) botao.addEventListener('click', abrir);
+    atos.forEach(function(a){
+      if (a.botao) a.botao.addEventListener('click', function(){ abrir(a.botao); });
+    });
     if (btFecha) btFecha.addEventListener('click', fechar);
     if (modal) modal.addEventListener('click', function(e){
-      // clique no fundo fecha; no painel, nao
       if (e.target === modal || e.target.classList.contains('pm-veu')) fechar();
     });
     document.addEventListener('keydown', function(e){ if (e.key === 'Escape') fechar(); });
@@ -1632,18 +1706,23 @@
       btSom.textContent = cheio.muted ? 'Ativar som' : 'Desativar som';
     });
 
-    // o video do widget so roda enquanto a seccao esta na tela
-    if (video && 'IntersectionObserver' in window){
-      new IntersectionObserver(function(es){
-        es.forEach(function(e){
-          if (e.isIntersecting && !aberto){ video.play().catch(function(){}); }
-          else { video.pause(); }
-        });
-      }, { threshold: 0.05 }).observe(sec);
+    // fora da tela, nenhum dos dois toca
+    var visivel = false;
+    function ajustaSom(){
+      atos.forEach(function(a, k){
+        if (!visivel || aberto || k !== tocando) a.video.pause();
+        else a.video.play().catch(function(){});
+      });
     }
+    if ('IntersectionObserver' in window){
+      new IntersectionObserver(function(es){
+        es.forEach(function(e){ visivel = e.isIntersecting; });
+        ajustaSom();
+      }, { threshold: 0.02 }).observe(sec);
+    } else { visivel = true; }
 
-    if (REDUZIDO) return;
-    var atual = -1;
+    if (REDUZIDO){ tocando = 0; ajustaSom(); return; }
+
     (function laco(){
       var r = sec.getBoundingClientRect();
       if (r.bottom > 0 && r.top < window.innerHeight){
@@ -1652,54 +1731,67 @@
         var t = performance.now() / 1000;
         sec.dataset.p = p.toFixed(4);   // o shader do fundo le daqui
 
-        // 1. a escrita a mao: a mascara abre da esquerda para a direita
-        var escreve = clamp(p / 0.13);
+        // a abertura escrita a mao: a tinta abre da esquerda para a direita
+        var escreve = clamp(p / 0.085);
         var suave = escreve * escreve * (3 - 2 * escreve);
-        var sai = clamp((p - 0.16) / 0.1);
+        var saiTit = clamp((p - 0.115) / 0.075);
         tinta.style.setProperty('--ate', (suave * 100).toFixed(2) + '%');
-        var largura = tinta.offsetWidth;
-        pena.style.left = (bloco.offsetLeft + largura * suave).toFixed(1) + 'px';
+        pena.style.left = (bloco.offsetLeft + tinta.offsetWidth * suave).toFixed(1) + 'px';
         pena.style.opacity = (escreve > 0.01 && escreve < 0.99 ? 1 : 0);
-        // o risco so comeca depois que a frase termina de ser escrita
-        var rabisco = clamp((p - 0.115) / 0.055);
+        var rabisco = clamp((p - 0.075) / 0.045);
         risco.forEach(function(el, k){
           el.style.strokeDashoffset = (1 - clamp((rabisco - k * 0.3) / 0.7)).toFixed(3);
         });
-        titulo.style.opacity = (1 - sai).toFixed(3);
-        titulo.style.transform = 'translateY(' + (sai * -9).toFixed(2) + 'vh) scale(' + (1 - sai * 0.08).toFixed(3) + ')';
+        titulo.style.opacity = (1 - saiTit).toFixed(3);
+        titulo.style.transform = 'translateY(' + (saiTit * -9).toFixed(2) + 'vh) scale(' + (1 - saiTit * 0.08).toFixed(3) + ')';
 
-        // 2. o projeto entra depois que a frase termina de ser escrita
-        var entra = clamp((p - 0.15) / 0.13);
-        var macio = entra * entra * (3 - 2 * entra);
-        cena.style.opacity = macio.toFixed(3);
-        cena.style.transform = 'scale(' + (0.86 + macio * 0.14).toFixed(4) + ')';
-        etiqueta.style.opacity = macio.toFixed(3);
+        // o trilho troca de ato sem soltar o pino
+        var desliza = clamp((p - 0.47) / 0.1);
+        var macio = desliza * desliza * (3 - 2 * desliza);
+        trilho.style.transform = 'translateY(' + (-macio * 100).toFixed(3) + '%)';
 
-        // 4. o nome atravessa a tela e so fica nitido no meio do caminho
-        var fora = Math.abs(p - 0.55) * 2.2;
-        nome.style.transform = 'translateY(-50%) translateX(' + ((0.55 - p) * 116).toFixed(2) + 'vw)';
-        nome.style.filter = 'blur(' + (fora * fora * 16).toFixed(1) + 'px)';
-        nome.style.opacity = (Math.min(macio, 0.92 - fora * 0.72)).toFixed(3);
-
-        // 5. o widget respira em 3D
-        palco.style.transform = 'rotateX(' + (6 - p * 11).toFixed(2) + 'deg) rotateY('
-          + (Math.sin(t * 0.21) * 6).toFixed(2) + 'deg)';
-
-        // 6. o parafuso: o boneco desce girando em volta do widget.
-        // o preserve-3d cuida sozinho de quem passa na frente e quem passa atras.
-        var giro = p * 860 + t * 13;                 // 13 graus/s: segue vivo parado na tela
+        // um giro so para os dois atos: e o que da a sensacao de queda continua
+        var giro = p * 1360 + t * 13;
         var raio = Math.min(pin.clientWidth * 0.46, 680);
-        orbita.style.transform = 'translateY(' + (-26 + p * 52).toFixed(2) + 'vh) rotateY(' + giro.toFixed(2) + 'deg)';
-        boneco.style.transform = 'translateZ(' + raio.toFixed(0) + 'px) rotateY(' + (-giro).toFixed(2) + 'deg) rotate('
-          + (Math.sin(giro * Math.PI / 180) * 16 - 8).toFixed(2) + 'deg)';
 
-        // troca de pose a cada meia volta: acompanha o giro, nao o relogio
-        var i = Math.floor(giro / 180) % 3;
-        if (i < 0) i += 3;
-        if (i !== atual){
-          quadros.forEach(function(el, k){ el.classList.toggle('on', k === i); });
-          atual = i;
-        }
+        atos.forEach(function(a, k){
+          var pa = k === 0 ? clamp(p / 0.47) : clamp((p - 0.52) / 0.48);
+          var entra = k === 0 ? clamp((p - 0.125) / 0.08) : 1;   // depois da frase sair
+          a.cena.style.opacity = entra.toFixed(3);
+          a.cena.style.transform = 'scale(' + (0.9 + entra * 0.1).toFixed(4) + ')';
+
+          var fora = Math.abs(pa - 0.5) * 2.1;
+          a.nome.style.transform = 'translateY(-50%) translateX(' + ((0.5 - pa) * 116).toFixed(2) + 'vw)';
+          a.nome.style.filter = 'blur(' + (fora * fora * 16).toFixed(1) + 'px)';
+          a.nome.style.opacity = Math.max(0, 0.92 - fora * 0.72).toFixed(3);
+
+          a.palco.style.transform = 'rotateX(' + (6 - pa * 11).toFixed(2) + 'deg) rotateY('
+            + (Math.sin(t * 0.21 + k) * 6).toFixed(2) + 'deg)';
+
+          var g = giro + k * 137;   // cada ato pega o tombo numa fase diferente
+          a.orbita.style.transform = 'translateY(' + (-26 + pa * 52).toFixed(2) + 'vh) rotateY(' + g.toFixed(2) + 'deg)';
+          a.boneco.style.transform = 'translateZ(' + raio.toFixed(0) + 'px) rotateY(' + (-g).toFixed(2) + 'deg) rotate('
+            + (Math.sin(g * Math.PI / 180) * 16 - 8).toFixed(2) + 'deg)';
+
+          if (a.camera){
+            // a camera cai junto, meia volta atras e num raio maior: quando ela
+            // passa na frente, chega bem mais perto da tela que ele
+            var gc = g + 168, rc = raio * 1.2;
+            a.orbCam.style.transform = 'translateY(' + (-16 + pa * 44).toFixed(2) + 'vh) rotateY(' + gc.toFixed(2) + 'deg)';
+            a.camera.style.transform = 'translateZ(' + rc.toFixed(0) + 'px) rotateY(' + (-gc).toFixed(2) + 'deg) rotate('
+              + ((gc * 0.55) % 360).toFixed(2) + 'deg)';
+          }
+
+          var i = Math.floor(g / 180) % 3;
+          if (i < 0) i += 3;
+          if (i !== a.atual){
+            a.quadros.forEach(function(el, j){ el.classList.toggle('on', j === i); });
+            a.atual = i;
+          }
+        });
+
+        var quem = macio < 0.5 ? 0 : 1;
+        if (quem !== tocando){ tocando = quem; ajustaSom(); }
       }
       requestAnimationFrame(laco);
     })();
