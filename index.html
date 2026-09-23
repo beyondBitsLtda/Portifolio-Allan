@@ -584,7 +584,7 @@
   /* o trilho desliza de um ato para o outro sem soltar o pino: e o que
      mantem a queda continua entre um video e o seguinte */
   .pnt-trilho { position: absolute; inset: 0; z-index: 2; will-change: transform; }
-  .pnt-ato { position: absolute; left: 0; right: 0; height: 100%; }
+  .pnt-ato { position: absolute; left: 0; right: 0; height: 100%; overflow: hidden; }
   .pnt-ato[data-ato="0"] { top: 0; }
   .pnt-ato[data-ato="1"] { top: 100%; }
 
@@ -689,6 +689,11 @@
     .pnt-nome { opacity: .22; filter: none; }
     .pnt-orbita { display: none; }
   }
+  /* a pagina desenrolando: cada bloco entra e sai curvado.
+     So os blocos que realmente rolam — as seccoes com pino tem movimento
+     proprio, e transformar o pino brigaria com ele. */
+  .curva { backface-visibility: hidden; }
+  @media (prefers-reduced-motion: reduce) { .curva { transform: none !important; } }
 </style>
 </head>
 <body>
@@ -793,13 +798,6 @@
               <span class="pnt-tag">ecos do pantanal</span>
               <span class="pnt-toque hand">clique para ver o projeto</span>
             </button>
-            <div class="pnt-orbita" aria-hidden="true">
-              <div class="pnt-boneco">
-            <div class="pb-frame on" style="background-image: url('assets/fall-1.jpg'); -webkit-mask-image: url('assets/fall-1-mask.png'); mask-image: url('assets/fall-1-mask.png');"></div>
-            <div class="pb-frame" style="background-image: url('assets/fall-2.jpg'); -webkit-mask-image: url('assets/fall-2-mask.png'); mask-image: url('assets/fall-2-mask.png');"></div>
-            <div class="pb-frame" style="background-image: url('assets/fall-3.jpg'); -webkit-mask-image: url('assets/fall-3-mask.png'); mask-image: url('assets/fall-3-mask.png');"></div>
-              </div>
-            </div>
             <div class="pnt-orbita pnt-orbita-cam" aria-hidden="true">
               <div class="pnt-camera" style="background-image: url('assets/cam.jpg'); -webkit-mask-image: url('assets/cam-mask.png'); mask-image: url('assets/cam-mask.png');"></div>
             </div>
@@ -1758,7 +1756,17 @@
           var pa = k === 0 ? clamp(p / 0.47) : clamp((p - 0.52) / 0.48);
           var entra = k === 0 ? clamp((p - 0.125) / 0.08) : 1;   // depois da frase sair
           a.cena.style.opacity = entra.toFixed(3);
-          a.cena.style.transform = 'scale(' + (0.9 + entra * 0.1).toFixed(4) + ')';
+          if (k === 0){
+            a.cena.style.transform = 'scale(' + (0.9 + entra * 0.1).toFixed(4) + ')';
+          } else {
+            // o segundo video nao nasce no centro: entra de lado e escorrega
+            // ate o meio da tela conforme o ato avanca
+            var chega = clamp((pa - 0.02) / 0.42);
+            var m = chega * chega * (3 - 2 * chega);
+            a.cena.style.transform = 'translate3d(' + ((1 - m) * 36).toFixed(2) + 'vw,'
+              + ((1 - m) * 15).toFixed(2) + 'vh,0) scale(' + (0.76 + m * 0.24).toFixed(4)
+              + ') rotate(' + ((1 - m) * 4.5).toFixed(2) + 'deg)';
+          }
 
           var fora = Math.abs(pa - 0.5) * 2.1;
           a.nome.style.transform = 'translateY(-50%) translateX(' + ((0.5 - pa) * 116).toFixed(2) + 'vw)';
@@ -1769,9 +1777,11 @@
             + (Math.sin(t * 0.21 + k) * 6).toFixed(2) + 'deg)';
 
           var g = giro + k * 137;   // cada ato pega o tombo numa fase diferente
-          a.orbita.style.transform = 'translateY(' + (-26 + pa * 52).toFixed(2) + 'vh) rotateY(' + g.toFixed(2) + 'deg)';
-          a.boneco.style.transform = 'translateZ(' + raio.toFixed(0) + 'px) rotateY(' + (-g).toFixed(2) + 'deg) rotate('
-            + (Math.sin(g * Math.PI / 180) * 16 - 8).toFixed(2) + 'deg)';
+          if (a.orbita){
+            a.orbita.style.transform = 'translateY(' + (-26 + pa * 52).toFixed(2) + 'vh) rotateY(' + g.toFixed(2) + 'deg)';
+            a.boneco.style.transform = 'translateZ(' + raio.toFixed(0) + 'px) rotateY(' + (-g).toFixed(2) + 'deg) rotate('
+              + (Math.sin(g * Math.PI / 180) * 16 - 8).toFixed(2) + 'deg)';
+          }
 
           if (a.camera){
             // a camera cai junto, meia volta atras e num raio maior: quando ela
@@ -1784,7 +1794,7 @@
 
           var i = Math.floor(g / 180) % 3;
           if (i < 0) i += 3;
-          if (i !== a.atual){
+          if (a.quadros.length && i !== a.atual){
             a.quadros.forEach(function(el, j){ el.classList.toggle('on', j === i); });
             a.atual = i;
           }
@@ -1793,6 +1803,33 @@
         var quem = macio < 0.5 ? 0 : 1;
         if (quem !== tocando){ tocando = quem; ajustaSom(); }
       }
+      requestAnimationFrame(laco);
+    })();
+  })();
+
+
+  /* da segunda hero em diante a pagina desenrola: cada bloco chega curvado,
+     endireita no meio da tela e volta a curvar ao sair */
+  (function desenrola(){
+    if (REDUZIDO) return;
+    var alvos = ['claquete', 'servicos', 'sobre', 'trabalhos', 'trajetoria', 'contato']
+      .map(function(id){ return document.getElementById(id); }).filter(Boolean);
+    var rodape = document.querySelector('footer');
+    if (rodape) alvos.push(rodape);
+    if (!alvos.length) return;
+    alvos.forEach(function(el){ el.classList.add('curva'); });
+
+    (function laco(){
+      var alt = window.innerHeight, meio = alt / 2;
+      alvos.forEach(function(el){
+        var r = el.getBoundingClientRect();
+        if (r.bottom < -240 || r.top > alt + 240) return;   // fora de vista, nao mexe
+        // quanto o centro do bloco esta longe do centro da tela, de -1 a 1
+        var d = ((r.top + r.height / 2) - meio) / (alt * 1.15);
+        d = d < -1 ? -1 : (d > 1 ? 1 : d);
+        el.style.transform = 'perspective(1500px) rotateX(' + (d * 14).toFixed(2)
+          + 'deg) scale(' + (1 - Math.abs(d) * 0.06).toFixed(4) + ')';
+      });
       requestAnimationFrame(laco);
     })();
   })();
