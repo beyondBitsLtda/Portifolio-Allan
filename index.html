@@ -649,7 +649,7 @@
     will-change: transform; }
   .acv-palco > * { position: absolute !important; left: 50%; top: 50%; }
 
-  .acv-canvas { width: min(74vh, 78vw); height: min(74vh, 78vw);
+  .acv-canvas { width: min(86vh, 92vw); height: min(86vh, 92vw);
     display: block; pointer-events: none;
     transform: translate(-50%, -50%) translateZ(0px); }
   /* a sombra de contato e a onda do baque vivem logo atras do plano zero */
@@ -663,7 +663,7 @@
     transform: translate(-50%, -50%) translateZ(-1px) rotateX(74deg) scale(0.15); }
 
   .acv-palco .gal-item { width: var(--lado); height: var(--lado); margin: 0;
-    --lado: min(19vh, 23vw); will-change: transform, clip-path; }
+    --lado: min(29vh, 33vw); will-change: transform, clip-path; }
 
   .gal-item { position: relative; display: block; overflow: hidden;
     border-radius: 16px; text-decoration: none; color: inherit;
@@ -688,7 +688,8 @@
 
   @media (max-width: 899px) {
     .pnt-acervo { padding: 10vh 16px 5vh; }
-    .acv-palco .gal-item { --lado: min(17vh, 30vw); border-radius: 12px; }
+    .acv-canvas { width: min(64vh, 88vw); height: min(64vh, 88vw); }
+    .acv-palco .gal-item { --lado: min(15vh, 27vw); border-radius: 11px; }
     .gal-nome { font-size: clamp(13px, 3.4vw, 19px); left: 10px; bottom: 9px; }
   }
 
@@ -1899,7 +1900,9 @@
             var so = orb * orb * (3 - 2 * orb);
             var ang0 = pg * 300 + t * 10;
             var L = a.galeria[0] ? a.galeria[0].offsetWidth : 200;
-            var R = Math.min(pin.clientWidth * 0.3, 400);
+            var estreito = pin.clientWidth < 900;
+            var R = estreito ? pin.clientWidth * 0.29   // senao os laterais saem da tela
+                             : Math.min(pin.clientWidth * 0.34, 470);
             a.galeria.forEach(function(el, j){
               var ent = clamp((pg - (atraso[j] || 0)) / 0.2);
               var sent = ent * ent * (3 - 2 * ent);
@@ -1912,7 +1915,7 @@
               var ox = Math.sin(ang) * R, oz = Math.cos(ang) * R;
               // anel inclinado: na frente desce, atras sobe, e o meio
               // fica livre para a camera
-              var oy = Math.cos(ang) * 96 + Math.sin(ang * 2) * 14;
+              var oy = Math.cos(ang) * (estreito ? 88 : 140) + Math.sin(ang * 2) * 16;
 
               var gz = -55;   // atras do plano da camera, para ela cair na frente
               var x = gx + (ex - gx) * se; x += (ox - x) * so;
@@ -2218,7 +2221,7 @@ if (tela && !reduzido) {
     const cx = new THREE.Box3().setFromObject(g.scene);
     const tam = cx.getSize(new THREE.Vector3());
     g.scene.position.sub(cx.getCenter(new THREE.Vector3()));
-    g.scene.scale.setScalar(6.4 / Math.max(tam.x, tam.y, tam.z));
+    g.scene.scale.setScalar(9.6 / Math.max(tam.x, tam.y, tam.z));
     grupo = new THREE.Group();
     grupo.add(g.scene);
     cena.add(grupo);
@@ -2259,9 +2262,12 @@ if (tela && !reduzido) {
       // 1. a queda: fica la em cima e desaba, acelerando
       const q = trava(pg / 0.40);
       const e = q * q;   // acelera, mas entra no quadro desde cedo
-      // 2. gira no proprio eixo vertical, rapido na queda e lento depois
-      grupo.rotation.y = -e * 17 - Math.max(0, pg - 0.40) * 4 - t * 0.22;
-      grupo.rotation.z = (1 - e) * 0.28;
+      // 2. tomba de ponta-cabeca enquanto cai. Linear em q, nao na curva
+      // da altura: assim a velocidade de giro e constante e ela pousa em pe,
+      // no zero exato. O Y fica para a volta lenta depois de pousada.
+      grupo.rotation.x = -(1 - q) * Math.PI * 2 * 2.5;
+      grupo.rotation.y = -Math.max(0, pg - 0.40) * 1.6 - t * 0.16;
+      grupo.rotation.z = (1 - q) * 0.22;
 
       // 3. o baque: amassa e volta, amortecido no tempo
       if (pg >= 0.40 && !bateu) bateu = agora;
