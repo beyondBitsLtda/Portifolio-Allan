@@ -636,37 +636,46 @@
   .pnt-boneco { filter: drop-shadow(0 16px 30px oklch(0.25 0.03 30 / .34)); }
 
 
-  /* ===== o acervo: quatro colunas fechando a seccao ===== */
+  /* ===== o acervo: dois em cima, dois embaixo ===== */
   .pnt-galeria { position: absolute; inset: 0; z-index: 3;
-    display: flex; flex-direction: column; justify-content: center;
-    gap: 3vh; padding: 12vh var(--gx) 9vh; }
-  .gal-rotulo { margin: 0; font-size: clamp(22px, 2.2vw, 34px); color: oklch(0.55 0.22 27); }
-  .gal-grade { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(12px, 1.4vw, 24px); }
-  .gal-item { position: relative; display: block; text-decoration: none; color: inherit;
-    opacity: 0; will-change: transform, opacity; }
-  .gal-foto { display: block; position: relative; overflow: hidden; border-radius: 14px;
-    aspect-ratio: 3 / 4; background: oklch(0.9 0.01 60);
-    box-shadow: 0 18px 44px oklch(0.25 0.04 30 / .18); }
-  .gal-foto img { display: block; width: 100%; height: 100%; object-fit: cover;
-    transition: transform .6s cubic-bezier(.2,.65,.2,1), filter .5s ease;
-    filter: saturate(0.82) contrast(1.04); }
-  .gal-item:hover .gal-foto img, .gal-item:focus-visible .gal-foto img {
-    transform: scale(1.06); filter: saturate(1) contrast(1.04); }
-  .gal-tag { display: inline-block; margin: 14px 0 0; padding: 3px 10px; border-radius: 999px;
-    background: oklch(0.55 0.22 27); color: oklch(0.99 0.006 85);
-    font-family: 'Caveat', cursive; font-size: 17px; font-weight: 600; }
-  .gal-nome { display: block; margin: 8px 0 0; font-family: 'Anton', sans-serif; font-weight: 400;
-    font-size: clamp(19px, 1.9vw, 31px); line-height: 0.98; letter-spacing: -0.012em;
-    color: oklch(0.18 0.012 60); }
-  .gal-sub { display: block; margin: 3px 0 0; font-size: clamp(16px, 1.25vw, 21px);
-    color: oklch(0.45 0.012 60); }
+    display: flex; flex-direction: column; gap: 2.2vh;
+    padding: 13vh var(--gx) 8vh; }
+  .gal-rotulo { margin: 0; flex: none;
+    font-size: clamp(22px, 2.2vw, 34px); color: oklch(0.55 0.22 27); }
+  .gal-grade { flex: 1; min-height: 0; display: grid;
+    grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+    gap: clamp(12px, 1.3vw, 22px); }
+  .gal-item { position: relative; display: block; overflow: hidden;
+    border-radius: 16px; text-decoration: none; color: inherit;
+    background: oklch(0.88 0.01 60); will-change: clip-path, transform;
+    clip-path: inset(0 0 100% 0);
+    box-shadow: 0 18px 44px oklch(0.25 0.04 30 / .16);
+    transition: transform .5s cubic-bezier(.2,.65,.2,1),
+                filter .45s ease, box-shadow .5s ease; }
+  .gal-item img { position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; filter: saturate(0.84) contrast(1.05);
+    transition: transform .7s cubic-bezier(.2,.65,.2,1); }
+  /* o veu so embaixo: e o que deixa o nome legivel sem caixa de texto */
+  .gal-item::after { content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(to top, oklch(0.15 0.02 40 / .8) 0%,
+      oklch(0.15 0.02 40 / .2) 28%, transparent 54%); }
+  .gal-nome { position: absolute; z-index: 2;
+    left: clamp(16px, 1.7vw, 30px); bottom: clamp(12px, 1.4vw, 24px);
+    font-family: 'Anton', sans-serif; font-weight: 400;
+    font-size: clamp(21px, 2.5vw, 46px); line-height: 0.96; letter-spacing: -0.015em;
+    color: oklch(0.99 0.006 85); text-shadow: 0 4px 18px oklch(0.14 0.02 40 / .55); }
+  /* apontar um ladrilho manda os outros para tras */
+  .gal-grade:hover .gal-item { filter: saturate(0.5) brightness(0.9); }
+  .gal-grade .gal-item:hover, .gal-grade .gal-item:focus-visible {
+    filter: none; transform: translateY(-5px);
+    box-shadow: 0 28px 64px oklch(0.25 0.04 30 / .28); }
+  .gal-item:hover img, .gal-item:focus-visible img { transform: scale(1.07); }
 
   @media (max-width: 899px) {
-    .pnt-galeria { padding: 11vh 20px 8vh; gap: 2vh; }
-    .gal-grade { grid-template-columns: 1fr 1fr; gap: 12px; }
-    .gal-foto { aspect-ratio: 1 / 1; border-radius: 11px; }
-    .gal-tag { font-size: 15px; margin-top: 9px; }
-    .gal-nome { margin-top: 5px; }
+    .pnt-galeria { padding: 11vh 18px 7vh; gap: 1.6vh; }
+    .gal-grade { gap: 10px; }
+    .gal-item { border-radius: 12px; }
+    .gal-nome { font-size: clamp(17px, 4.4vw, 26px); left: 13px; bottom: 11px; }
   }
 
   /* ===== o projeto em tela cheia ===== */
@@ -723,7 +732,7 @@
     .pnt-cena { opacity: 1; }
     .pnt-nome { opacity: .22; filter: none; }
     .pnt-orbita { display: none; }
-    .gal-item { opacity: 1 !important; transform: none !important; }
+    .gal-item { clip-path: none !important; transform: none !important; }
   }
   /* a pagina desenrolando: cada bloco entra e sai curvado.
      So os blocos que realmente rolam — as seccoes com pino tem movimento
@@ -858,30 +867,22 @@
         <div class="pnt-galeria">
           <p class="gal-rotulo hand">e tem mais no acervo</p>
           <div class="gal-grade">
-        <a class="gal-item" href="#trabalhos">
-          <span class="gal-foto"><img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&amp;fit=crop&amp;w=900&amp;h=1200&amp;q=72" alt="" loading="lazy" decoding="async" width="900" height="1200"></span>
-          <span class="gal-tag">Birdview &middot; 2026</span>
-          <span class="gal-nome">Reel 2026</span>
-          <span class="gal-sub hand">um ano em poucos minutos</span>
-        </a>
-        <a class="gal-item" href="#trabalhos">
-          <span class="gal-foto"><img src="https://images.unsplash.com/photo-1547483238-f400e65ccd56?auto=format&amp;fit=crop&amp;w=900&amp;h=1200&amp;q=72" alt="" loading="lazy" decoding="async" width="900" height="1200"></span>
-          <span class="gal-tag">Lei Aldir Blanc</span>
-          <span class="gal-nome">Ecos do Pantanal</span>
-          <span class="gal-sub hand">Esporte e Conserva&ccedil;&atilde;o</span>
-        </a>
-        <a class="gal-item" href="#trabalhos">
-          <span class="gal-foto"><img src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&amp;fit=crop&amp;w=900&amp;h=1200&amp;q=72" alt="" loading="lazy" decoding="async" width="900" height="1200"></span>
-          <span class="gal-tag">Acervo documental</span>
-          <span class="gal-nome">Museu da Pessoa</span>
-          <span class="gal-sub hand">Marambaia Eco Criativa</span>
-        </a>
-        <a class="gal-item" href="#trabalhos">
-          <span class="gal-foto"><img src="https://images.unsplash.com/photo-1519892300165-cb5542fb47c7?auto=format&amp;fit=crop&amp;w=900&amp;h=1200&amp;q=72" alt="" loading="lazy" decoding="async" width="900" height="1200"></span>
-          <span class="gal-tag">Produ&ccedil;&atilde;o + dire&ccedil;&atilde;o</span>
-          <span class="gal-nome">Atot&ocirc;</span>
-          <span class="gal-sub hand">Sil&ecirc;ncio, o Rei Est&aacute; na Terra</span>
-        </a>
+            <a class="gal-item" href="#trabalhos">
+              <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&amp;fit=crop&amp;w=1100&amp;h=760&amp;q=72" alt="" loading="lazy" decoding="async" width="1100" height="760">
+              <span class="gal-nome">Reel 2026</span>
+            </a>
+            <a class="gal-item" href="#trabalhos">
+              <img src="https://images.unsplash.com/photo-1547483238-f400e65ccd56?auto=format&amp;fit=crop&amp;w=1100&amp;h=760&amp;q=72" alt="" loading="lazy" decoding="async" width="1100" height="760">
+              <span class="gal-nome">Ecos do Pantanal</span>
+            </a>
+            <a class="gal-item" href="#trabalhos">
+              <img src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&amp;fit=crop&amp;w=1100&amp;h=760&amp;q=72" alt="" loading="lazy" decoding="async" width="1100" height="760">
+              <span class="gal-nome">Museu da Pessoa</span>
+            </a>
+            <a class="gal-item" href="#trabalhos">
+              <img src="https://images.unsplash.com/photo-1519892300165-cb5542fb47c7?auto=format&amp;fit=crop&amp;w=1100&amp;h=760&amp;q=72" alt="" loading="lazy" decoding="async" width="1100" height="760">
+              <span class="gal-nome">Atot&ocirc;</span>
+            </a>
           </div>
         </div>
       </div>
@@ -1839,12 +1840,14 @@
         atos.forEach(function(a, k){
           if (k === 2){
             // a galeria: as quatro colunas sobem uma atras da outra
-            var pg = clamp((p - 0.70) / 0.14);
+            var pg = clamp((p - 0.70) / 0.16);
+            // atraso em diagonal: cima-esquerda primeiro, baixo-direita por ultimo
+            var atraso = [0, 0.13, 0.13, 0.26];
             a.galeria.forEach(function(el, j){
-              var q = clamp((pg - j * 0.1) / 0.55);
+              var at = atraso[j] || 0;
+              var q = clamp((pg - at) / 0.6);
               var sq = q * q * (3 - 2 * q);
-              el.style.opacity = sq.toFixed(3);
-              el.style.transform = 'translateY(' + ((1 - sq) * 7).toFixed(2) + 'vh)';
+              el.style.clipPath = 'inset(0 0 ' + ((1 - sq) * 100).toFixed(2) + '% 0)';
             });
             return;
           }
