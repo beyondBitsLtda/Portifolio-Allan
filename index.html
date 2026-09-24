@@ -638,14 +638,19 @@
 
   /* ===== o acervo: dois em cima, dois embaixo ===== */
   .pnt-galeria { position: absolute; inset: 0; z-index: 3;
-    display: flex; flex-direction: column; gap: 2.2vh;
-    padding: 13vh var(--gx) 8vh; }
+    display: flex; flex-direction: column; gap: 1.8vh;
+    padding: 11.5vh var(--gx) 6vh; }
   .gal-rotulo { margin: 0; flex: none;
     font-size: clamp(22px, 2.2vw, 34px); color: oklch(0.55 0.22 27); }
-  .gal-grade { flex: 1; min-height: 0; display: grid;
-    grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
-    gap: clamp(12px, 1.3vw, 22px); }
+  /* a propria celula e quadrada: o lado e o menor entre o que cabe em
+     altura e o que cabe em largura. Assim o ladrilho so preenche. */
+  .gal-grade { --g: clamp(14px, 1.5vw, 26px); --lado: min(36vh, 40vw);
+    flex: 1; min-height: 0; display: grid;
+    grid-template-columns: repeat(2, var(--lado));
+    grid-template-rows: repeat(2, var(--lado));
+    justify-content: center; align-content: center; gap: var(--g); }
   .gal-item { position: relative; display: block; overflow: hidden;
+    width: 100%; height: 100%;
     border-radius: 16px; text-decoration: none; color: inherit;
     background: oklch(0.88 0.01 60); will-change: clip-path, transform;
     clip-path: inset(0 0 100% 0);
@@ -673,7 +678,7 @@
 
   @media (max-width: 899px) {
     .pnt-galeria { padding: 11vh 18px 7vh; gap: 1.6vh; }
-    .gal-grade { gap: 10px; }
+    .gal-grade { --g: 10px; --lado: min(33vh, 43vw); }
     .gal-item { border-radius: 12px; }
     .gal-nome { font-size: clamp(17px, 4.4vw, 26px); left: 13px; bottom: 11px; }
   }
@@ -868,19 +873,19 @@
           <p class="gal-rotulo hand">e tem mais no acervo</p>
           <div class="gal-grade">
             <a class="gal-item" href="#trabalhos">
-              <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&amp;fit=crop&amp;w=1100&amp;h=760&amp;q=72" alt="" loading="lazy" decoding="async" width="1100" height="760">
+              <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&amp;fit=crop&amp;w=900&amp;h=900&amp;q=72" alt="" loading="lazy" decoding="async" width="900" height="900">
               <span class="gal-nome">Reel 2026</span>
             </a>
             <a class="gal-item" href="#trabalhos">
-              <img src="https://images.unsplash.com/photo-1547483238-f400e65ccd56?auto=format&amp;fit=crop&amp;w=1100&amp;h=760&amp;q=72" alt="" loading="lazy" decoding="async" width="1100" height="760">
+              <img src="https://images.unsplash.com/photo-1547483238-f400e65ccd56?auto=format&amp;fit=crop&amp;w=900&amp;h=900&amp;q=72" alt="" loading="lazy" decoding="async" width="900" height="900">
               <span class="gal-nome">Ecos do Pantanal</span>
             </a>
             <a class="gal-item" href="#trabalhos">
-              <img src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&amp;fit=crop&amp;w=1100&amp;h=760&amp;q=72" alt="" loading="lazy" decoding="async" width="1100" height="760">
+              <img src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&amp;fit=crop&amp;w=900&amp;h=900&amp;q=72" alt="" loading="lazy" decoding="async" width="900" height="900">
               <span class="gal-nome">Museu da Pessoa</span>
             </a>
             <a class="gal-item" href="#trabalhos">
-              <img src="https://images.unsplash.com/photo-1519892300165-cb5542fb47c7?auto=format&amp;fit=crop&amp;w=1100&amp;h=760&amp;q=72" alt="" loading="lazy" decoding="async" width="1100" height="760">
+              <img src="https://images.unsplash.com/photo-1519892300165-cb5542fb47c7?auto=format&amp;fit=crop&amp;w=900&amp;h=900&amp;q=72" alt="" loading="lazy" decoding="async" width="900" height="900">
               <span class="gal-nome">Atot&ocirc;</span>
             </a>
           </div>
