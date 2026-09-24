@@ -553,7 +553,7 @@
   @media (prefers-reduced-motion: reduce) { #vidro, #assina { display: none; } }
 
   /* ===== PROJETOS · dois atos no mesmo pino ===== */
-  #pantanal { position: relative; z-index: 60; height: 560vh; background: oklch(0.985 0.006 85); }
+  #pantanal { position: relative; z-index: 60; height: 800vh; background: oklch(0.985 0.006 85); }
   .pnt-pin { position: sticky; top: 0; height: 100vh; min-height: 620px; overflow: hidden;
     background: oklch(0.985 0.006 85); }
 
@@ -587,6 +587,7 @@
   .pnt-ato { position: absolute; left: 0; right: 0; height: 100%; overflow: hidden; }
   .pnt-ato[data-ato="0"] { top: 0; }
   .pnt-ato[data-ato="1"] { top: 100%; }
+  .pnt-ato[data-ato="2"] { top: 200%; }
 
   /* o nome passa atras do widget e desfoca nas pontas */
   .pnt-nome { position: absolute; z-index: 2; left: 0; right: 0; top: 50%;
@@ -633,6 +634,40 @@
     -webkit-mask-size: contain; mask-size: contain; }
   .pb-frame.on { opacity: 1; }
   .pnt-boneco { filter: drop-shadow(0 16px 30px oklch(0.25 0.03 30 / .34)); }
+
+
+  /* ===== o acervo: quatro colunas fechando a seccao ===== */
+  .pnt-galeria { position: absolute; inset: 0; z-index: 3;
+    display: flex; flex-direction: column; justify-content: center;
+    gap: 3vh; padding: 12vh var(--gx) 9vh; }
+  .gal-rotulo { margin: 0; font-size: clamp(22px, 2.2vw, 34px); color: oklch(0.55 0.22 27); }
+  .gal-grade { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(12px, 1.4vw, 24px); }
+  .gal-item { position: relative; display: block; text-decoration: none; color: inherit;
+    opacity: 0; will-change: transform, opacity; }
+  .gal-foto { display: block; position: relative; overflow: hidden; border-radius: 14px;
+    aspect-ratio: 3 / 4; background: oklch(0.9 0.01 60);
+    box-shadow: 0 18px 44px oklch(0.25 0.04 30 / .18); }
+  .gal-foto img { display: block; width: 100%; height: 100%; object-fit: cover;
+    transition: transform .6s cubic-bezier(.2,.65,.2,1), filter .5s ease;
+    filter: saturate(0.82) contrast(1.04); }
+  .gal-item:hover .gal-foto img, .gal-item:focus-visible .gal-foto img {
+    transform: scale(1.06); filter: saturate(1) contrast(1.04); }
+  .gal-tag { display: inline-block; margin: 14px 0 0; padding: 3px 10px; border-radius: 999px;
+    background: oklch(0.55 0.22 27); color: oklch(0.99 0.006 85);
+    font-family: 'Caveat', cursive; font-size: 17px; font-weight: 600; }
+  .gal-nome { display: block; margin: 8px 0 0; font-family: 'Anton', sans-serif; font-weight: 400;
+    font-size: clamp(19px, 1.9vw, 31px); line-height: 0.98; letter-spacing: -0.012em;
+    color: oklch(0.18 0.012 60); }
+  .gal-sub { display: block; margin: 3px 0 0; font-size: clamp(16px, 1.25vw, 21px);
+    color: oklch(0.45 0.012 60); }
+
+  @media (max-width: 899px) {
+    .pnt-galeria { padding: 11vh 20px 8vh; gap: 2vh; }
+    .gal-grade { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .gal-foto { aspect-ratio: 1 / 1; border-radius: 11px; }
+    .gal-tag { font-size: 15px; margin-top: 9px; }
+    .gal-nome { margin-top: 5px; }
+  }
 
   /* ===== o projeto em tela cheia ===== */
   /* acima do cabecalho (200) e da barra de leitura (300), abaixo do cursor (950) */
@@ -688,6 +723,7 @@
     .pnt-cena { opacity: 1; }
     .pnt-nome { opacity: .22; filter: none; }
     .pnt-orbita { display: none; }
+    .gal-item { opacity: 1 !important; transform: none !important; }
   }
   /* a pagina desenrolando: cada bloco entra e sai curvado.
      So os blocos que realmente rolam — as seccoes com pino tem movimento
@@ -700,12 +736,12 @@
     opacity: 0; mix-blend-mode: multiply; will-change: opacity;
     background:
       linear-gradient(to right,
-        oklch(0.35 0.03 40 / .20) 0%, oklch(0.35 0.03 40 / .05) 10%,
-        transparent 24%, transparent 76%,
-        oklch(0.35 0.03 40 / .05) 90%, oklch(0.35 0.03 40 / .20) 100%),
+        oklch(0.32 0.04 40 / .34) 0%, oklch(0.32 0.04 40 / .10) 11%,
+        transparent 27%, transparent 73%,
+        oklch(0.32 0.04 40 / .10) 89%, oklch(0.32 0.04 40 / .34) 100%),
       linear-gradient(to bottom,
-        oklch(0.35 0.03 40 / .15) 0%, transparent 14%,
-        transparent 86%, oklch(0.35 0.03 40 / .15) 100%); }
+        oklch(0.32 0.04 40 / .26) 0%, transparent 15%,
+        transparent 85%, oklch(0.32 0.04 40 / .26) 100%); }
   @media (prefers-reduced-motion: reduce) { #curvatura { display: none; } }
 </style>
 </head>
@@ -815,6 +851,37 @@
             <div class="pnt-orbita pnt-orbita-cam" aria-hidden="true">
               <div class="pnt-camera" style="background-image: url('assets/cam.jpg'); -webkit-mask-image: url('assets/cam-mask.png'); mask-image: url('assets/cam-mask.png');"></div>
             </div>
+          </div>
+        </div>
+      </div>
+      <div class="pnt-ato" data-ato="2">
+        <div class="pnt-galeria">
+          <p class="gal-rotulo hand">e tem mais no acervo</p>
+          <div class="gal-grade">
+        <a class="gal-item" href="#trabalhos">
+          <span class="gal-foto"><img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&amp;fit=crop&amp;w=900&amp;h=1200&amp;q=72" alt="" loading="lazy" decoding="async" width="900" height="1200"></span>
+          <span class="gal-tag">Birdview &middot; 2026</span>
+          <span class="gal-nome">Reel 2026</span>
+          <span class="gal-sub hand">um ano em poucos minutos</span>
+        </a>
+        <a class="gal-item" href="#trabalhos">
+          <span class="gal-foto"><img src="https://images.unsplash.com/photo-1547483238-f400e65ccd56?auto=format&amp;fit=crop&amp;w=900&amp;h=1200&amp;q=72" alt="" loading="lazy" decoding="async" width="900" height="1200"></span>
+          <span class="gal-tag">Lei Aldir Blanc</span>
+          <span class="gal-nome">Ecos do Pantanal</span>
+          <span class="gal-sub hand">Esporte e Conserva&ccedil;&atilde;o</span>
+        </a>
+        <a class="gal-item" href="#trabalhos">
+          <span class="gal-foto"><img src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&amp;fit=crop&amp;w=900&amp;h=1200&amp;q=72" alt="" loading="lazy" decoding="async" width="900" height="1200"></span>
+          <span class="gal-tag">Acervo documental</span>
+          <span class="gal-nome">Museu da Pessoa</span>
+          <span class="gal-sub hand">Marambaia Eco Criativa</span>
+        </a>
+        <a class="gal-item" href="#trabalhos">
+          <span class="gal-foto"><img src="https://images.unsplash.com/photo-1519892300165-cb5542fb47c7?auto=format&amp;fit=crop&amp;w=900&amp;h=1200&amp;q=72" alt="" loading="lazy" decoding="async" width="900" height="1200"></span>
+          <span class="gal-tag">Produ&ccedil;&atilde;o + dire&ccedil;&atilde;o</span>
+          <span class="gal-nome">Atot&ocirc;</span>
+          <span class="gal-sub hand">Sil&ecirc;ncio, o Rei Est&aacute; na Terra</span>
+        </a>
           </div>
         </div>
       </div>
@@ -1642,6 +1709,7 @@
         camera: el.querySelector('.pnt-camera'),
         botao: el.querySelector('.pnt-widget'),
         video: el.querySelector('.pnt-video'),
+        galeria: Array.prototype.slice.call(el.querySelectorAll('.gal-item')),
         quadros: Array.prototype.slice.call(el.querySelectorAll('.pb-frame')),
         atual: -1
       };
@@ -1722,6 +1790,7 @@
     var visivel = false;
     function ajustaSom(){
       atos.forEach(function(a, k){
+        if (!a.video) return;
         if (!visivel || aberto || k !== tocando) a.video.pause();
         else a.video.play().catch(function(){});
       });
@@ -1757,17 +1826,29 @@
         titulo.style.opacity = (1 - saiTit).toFixed(3);
         titulo.style.transform = 'translateY(' + (saiTit * -9).toFixed(2) + 'vh) scale(' + (1 - saiTit * 0.08).toFixed(3) + ')';
 
-        // o trilho troca de ato sem soltar o pino
-        var desliza = clamp((p - 0.47) / 0.1);
-        var macio = desliza * desliza * (3 - 2 * desliza);
-        trilho.style.transform = 'translateY(' + (-macio * 100).toFixed(3) + '%)';
+        // o trilho troca de ato sem soltar o pino, duas vezes
+        var d1 = clamp((p - 0.33) / 0.08), d2 = clamp((p - 0.68) / 0.08);
+        var m1 = d1 * d1 * (3 - 2 * d1), m2 = d2 * d2 * (3 - 2 * d2);
+        var macio = m1;
+        trilho.style.transform = 'translateY(' + (-(m1 + m2) * 100).toFixed(3) + '%)';
 
         // um giro so para os dois atos: e o que da a sensacao de queda continua
         var giro = p * 1360 + t * 13;
         var raio = Math.min(pin.clientWidth * 0.46, 680);
 
         atos.forEach(function(a, k){
-          var pa = k === 0 ? clamp(p / 0.47) : clamp((p - 0.52) / 0.48);
+          if (k === 2){
+            // a galeria: as quatro colunas sobem uma atras da outra
+            var pg = clamp((p - 0.70) / 0.14);
+            a.galeria.forEach(function(el, j){
+              var q = clamp((pg - j * 0.1) / 0.55);
+              var sq = q * q * (3 - 2 * q);
+              el.style.opacity = sq.toFixed(3);
+              el.style.transform = 'translateY(' + ((1 - sq) * 7).toFixed(2) + 'vh)';
+            });
+            return;
+          }
+          var pa = k === 0 ? clamp(p / 0.35) : clamp((p - 0.38) / 0.32);
           var entra = k === 0 ? clamp((p - 0.125) / 0.08) : 1;   // depois da frase sair
           a.cena.style.opacity = entra.toFixed(3);
           if (k === 0){
@@ -1814,7 +1895,7 @@
           }
         });
 
-        var quem = macio < 0.5 ? 0 : 1;
+        var quem = m2 > 0.5 ? -1 : (m1 < 0.5 ? 0 : 1);   // na galeria, nenhum toca
         if (quem !== tocando){ tocando = quem; ajustaSom(); }
       }
       requestAnimationFrame(laco);
@@ -1889,12 +1970,12 @@
         var r = el.getBoundingClientRect();
         if (r.bottom < -240 || r.top > alt + 240) return;   // fora de vista, nao mexe
         // quanto o centro do bloco esta longe do centro da tela, de -1 a 1
-        var d = ((r.top + r.height / 2) - meio) / (alt * 0.62);
+        var d = ((r.top + r.height / 2) - meio) / (alt * 0.58);
         d = d < -1 ? -1 : (d > 1 ? 1 : d);
         // o recuo cresce com o quadrado da distancia: e o que transforma uma
         // sequencia de planos inclinados na parede de um cilindro
-        el.style.transform = 'perspective(1200px) translateZ(' + (-(d * d) * 330).toFixed(0)
-          + 'px) rotateX(' + (d * 22).toFixed(2) + 'deg)';
+        el.style.transform = 'perspective(900px) translateZ(' + (-(d * d) * 760).toFixed(0)
+          + 'px) rotateX(' + (d * 34).toFixed(2) + 'deg)';
       });
 
       // o tubo so acende depois da primeira hero
