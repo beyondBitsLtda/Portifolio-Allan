@@ -636,51 +636,60 @@
   .pnt-boneco { filter: drop-shadow(0 16px 30px oklch(0.25 0.03 30 / .34)); }
 
 
-  /* ===== o acervo: dois em cima, dois embaixo ===== */
-  .pnt-galeria { position: absolute; inset: 0; z-index: 3;
-    display: flex; flex-direction: column; gap: 1.8vh;
-    padding: 11.5vh var(--gx) 6vh; }
+  /* ===== o acervo: a camera cai e os projetos passam a orbitar ===== */
+  .pnt-acervo { position: absolute; inset: 0; z-index: 3;
+    display: flex; flex-direction: column; gap: 1.6vh;
+    padding: 11vh var(--gx) 5vh; }
   .gal-rotulo { margin: 0; flex: none;
     font-size: clamp(22px, 2.2vw, 34px); color: oklch(0.55 0.22 27); }
-  /* a propria celula e quadrada: o lado e o menor entre o que cabe em
-     altura e o que cabe em largura. Assim o ladrilho so preenche. */
-  .gal-grade { --g: clamp(14px, 1.5vw, 26px); --lado: min(36vh, 40vw);
-    flex: 1; min-height: 0; display: grid;
-    grid-template-columns: repeat(2, var(--lado));
-    grid-template-rows: repeat(2, var(--lado));
-    justify-content: center; align-content: center; gap: var(--g); }
+  .acv-cena { flex: 1; min-height: 0; position: relative;
+    perspective: 1150px; perspective-origin: 50% 47%; }
+  /* tudo no mesmo contexto 3D: e o navegador que decide quem tapa quem */
+  .acv-palco { position: absolute; inset: 0; transform-style: preserve-3d;
+    will-change: transform; }
+  .acv-palco > * { position: absolute !important; left: 50%; top: 50%; }
+
+  .acv-canvas { width: min(74vh, 78vw); height: min(74vh, 78vw);
+    display: block; pointer-events: none;
+    transform: translate(-50%, -50%) translateZ(0px); }
+  /* a sombra de contato e a onda do baque vivem logo atras do plano zero */
+  .acv-sombra { width: min(40vh, 44vw); height: min(11vh, 12vw); pointer-events: none;
+    margin-top: min(21vh, 23vw); opacity: 0; will-change: transform, opacity;
+    background: radial-gradient(ellipse at center, oklch(0.3 0.03 30 / .55), transparent 68%);
+    transform: translate(-50%, -50%) translateZ(-2px); }
+  .acv-onda { width: min(34vh, 38vw); height: min(34vh, 38vw); pointer-events: none;
+    margin-top: min(16vh, 18vw); opacity: 0; will-change: transform, opacity;
+    border: 2px solid oklch(0.55 0.22 27 / .8); border-radius: 50%;
+    transform: translate(-50%, -50%) translateZ(-1px) rotateX(74deg) scale(0.15); }
+
+  .acv-palco .gal-item { width: var(--lado); height: var(--lado); margin: 0;
+    --lado: min(19vh, 23vw); will-change: transform, clip-path; }
+
   .gal-item { position: relative; display: block; overflow: hidden;
-    width: 100%; height: 100%;
     border-radius: 16px; text-decoration: none; color: inherit;
-    background: oklch(0.88 0.01 60); will-change: clip-path, transform;
-    clip-path: inset(0 0 100% 0);
-    box-shadow: 0 18px 44px oklch(0.25 0.04 30 / .16);
-    transition: transform .5s cubic-bezier(.2,.65,.2,1),
-                filter .45s ease, box-shadow .5s ease; }
+    background: oklch(0.88 0.01 60); clip-path: inset(0 0 100% 0);
+    box-shadow: 0 18px 44px oklch(0.25 0.04 30 / .2);
+    transition: filter .45s ease, box-shadow .5s ease; }
   .gal-item img { position: absolute; inset: 0; width: 100%; height: 100%;
     object-fit: cover; filter: saturate(0.84) contrast(1.05);
     transition: transform .7s cubic-bezier(.2,.65,.2,1); }
-  /* o veu so embaixo: e o que deixa o nome legivel sem caixa de texto */
   .gal-item::after { content: ''; position: absolute; inset: 0; pointer-events: none;
     background: linear-gradient(to top, oklch(0.15 0.02 40 / .8) 0%,
-      oklch(0.15 0.02 40 / .2) 28%, transparent 54%); }
+      oklch(0.15 0.02 40 / .2) 30%, transparent 56%); }
   .gal-nome { position: absolute; z-index: 2;
-    left: clamp(16px, 1.7vw, 30px); bottom: clamp(12px, 1.4vw, 24px);
+    left: clamp(12px, 1.2vw, 20px); bottom: clamp(10px, 1vw, 16px);
     font-family: 'Anton', sans-serif; font-weight: 400;
-    font-size: clamp(21px, 2.5vw, 46px); line-height: 0.96; letter-spacing: -0.015em;
-    color: oklch(0.99 0.006 85); text-shadow: 0 4px 18px oklch(0.14 0.02 40 / .55); }
-  /* apontar um ladrilho manda os outros para tras */
-  .gal-grade:hover .gal-item { filter: saturate(0.5) brightness(0.9); }
-  .gal-grade .gal-item:hover, .gal-grade .gal-item:focus-visible {
-    filter: none; transform: translateY(-5px);
-    box-shadow: 0 28px 64px oklch(0.25 0.04 30 / .28); }
+    font-size: clamp(15px, 1.5vw, 26px); line-height: 0.98; letter-spacing: -0.015em;
+    color: oklch(0.99 0.006 85); text-shadow: 0 4px 18px oklch(0.14 0.02 40 / .6); }
+  .acv-palco:hover .gal-item { filter: saturate(0.5) brightness(0.88); }
+  .acv-palco .gal-item:hover, .acv-palco .gal-item:focus-visible {
+    filter: none; box-shadow: 0 26px 60px oklch(0.25 0.04 30 / .3); }
   .gal-item:hover img, .gal-item:focus-visible img { transform: scale(1.07); }
 
   @media (max-width: 899px) {
-    .pnt-galeria { padding: 11vh 18px 7vh; gap: 1.6vh; }
-    .gal-grade { --g: 10px; --lado: min(33vh, 43vw); }
-    .gal-item { border-radius: 12px; }
-    .gal-nome { font-size: clamp(17px, 4.4vw, 26px); left: 13px; bottom: 11px; }
+    .pnt-acervo { padding: 10vh 16px 5vh; }
+    .acv-palco .gal-item { --lado: min(17vh, 30vw); border-radius: 12px; }
+    .gal-nome { font-size: clamp(13px, 3.4vw, 19px); left: 10px; bottom: 9px; }
   }
 
   /* ===== o projeto em tela cheia ===== */
@@ -737,7 +746,8 @@
     .pnt-cena { opacity: 1; }
     .pnt-nome { opacity: .22; filter: none; }
     .pnt-orbita { display: none; }
-    .gal-item { clip-path: none !important; transform: none !important; }
+    .gal-item { clip-path: none !important; }
+    .acv-canvas, .acv-onda, .acv-sombra { display: none; }
   }
   /* a pagina desenrolando: cada bloco entra e sai curvado.
      So os blocos que realmente rolam — as seccoes com pino tem movimento
@@ -869,25 +879,30 @@
         </div>
       </div>
       <div class="pnt-ato" data-ato="2">
-        <div class="pnt-galeria">
+        <div class="pnt-acervo">
           <p class="gal-rotulo hand">e tem mais no acervo</p>
-          <div class="gal-grade">
-            <a class="gal-item" href="#trabalhos">
-              <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&amp;fit=crop&amp;w=900&amp;h=900&amp;q=72" alt="" loading="lazy" decoding="async" width="900" height="900">
-              <span class="gal-nome">Reel 2026</span>
-            </a>
-            <a class="gal-item" href="#trabalhos">
-              <img src="https://images.unsplash.com/photo-1547483238-f400e65ccd56?auto=format&amp;fit=crop&amp;w=900&amp;h=900&amp;q=72" alt="" loading="lazy" decoding="async" width="900" height="900">
-              <span class="gal-nome">Ecos do Pantanal</span>
-            </a>
-            <a class="gal-item" href="#trabalhos">
-              <img src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&amp;fit=crop&amp;w=900&amp;h=900&amp;q=72" alt="" loading="lazy" decoding="async" width="900" height="900">
-              <span class="gal-nome">Museu da Pessoa</span>
-            </a>
-            <a class="gal-item" href="#trabalhos">
-              <img src="https://images.unsplash.com/photo-1519892300165-cb5542fb47c7?auto=format&amp;fit=crop&amp;w=900&amp;h=900&amp;q=72" alt="" loading="lazy" decoding="async" width="900" height="900">
-              <span class="gal-nome">Atot&ocirc;</span>
-            </a>
+          <div class="acv-cena">
+            <div class="acv-palco">
+              <div class="acv-sombra" aria-hidden="true"></div>
+              <div class="acv-onda" aria-hidden="true"></div>
+              <canvas class="acv-canvas" aria-hidden="true"></canvas>
+          <a class="gal-item" href="#trabalhos">
+            <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&amp;fit=crop&amp;w=900&amp;h=900&amp;q=72" alt="" loading="lazy" decoding="async" width="900" height="900">
+            <span class="gal-nome">Reel 2026</span>
+          </a>
+          <a class="gal-item" href="#trabalhos">
+            <img src="https://images.unsplash.com/photo-1547483238-f400e65ccd56?auto=format&amp;fit=crop&amp;w=900&amp;h=900&amp;q=72" alt="" loading="lazy" decoding="async" width="900" height="900">
+            <span class="gal-nome">Ecos do Pantanal</span>
+          </a>
+          <a class="gal-item" href="#trabalhos">
+            <img src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&amp;fit=crop&amp;w=900&amp;h=900&amp;q=72" alt="" loading="lazy" decoding="async" width="900" height="900">
+            <span class="gal-nome">Museu da Pessoa</span>
+          </a>
+          <a class="gal-item" href="#trabalhos">
+            <img src="https://images.unsplash.com/photo-1519892300165-cb5542fb47c7?auto=format&amp;fit=crop&amp;w=900&amp;h=900&amp;q=72" alt="" loading="lazy" decoding="async" width="900" height="900">
+            <span class="gal-nome">Atot&ocirc;</span>
+          </a>
+            </div>
           </div>
         </div>
       </div>
@@ -1697,6 +1712,10 @@
     if (!sec) return;
     var pin = sec.querySelector('.pnt-pin');
     var trilho = sec.querySelector('.pnt-trilho');
+    var palcoAcv = sec.querySelector('.acv-palco');
+    var ondaAcv = sec.querySelector('.acv-onda');
+    var sombraAcv = sec.querySelector('.acv-sombra');
+    var bateuAcv = 0;   // instante do baque; o tranco toca uma vez so
     var titulo = sec.querySelector('.pnt-titulo');
     var bloco = sec.querySelector('.pt-bloco');
     var tinta = sec.querySelector('.pt-tinta');
@@ -1844,15 +1863,63 @@
 
         atos.forEach(function(a, k){
           if (k === 2){
-            // a galeria: as quatro colunas sobem uma atras da outra
-            var pg = clamp((p - 0.70) / 0.16);
-            // atraso em diagonal: cima-esquerda primeiro, baixo-direita por ultimo
-            var atraso = [0, 0.13, 0.13, 0.26];
+            var pg = clamp((p - 0.70) / 0.30);
+            sec.dataset.acv = pg.toFixed(4);   // o modulo do three.js le daqui
+
+            // o baque: dispara ao tocar o chao e amortece no tempo, nao no
+            // scroll — preso ao scroll ele congelaria torto se voce parasse
+            if (pg >= 0.40 && !bateuAcv) bateuAcv = performance.now();
+            if (pg < 0.34) bateuAcv = 0;
+            var soco = 0;
+            if (bateuAcv){
+              var dtA = (performance.now() - bateuAcv) / 1000;
+              if (dtA < 0.85) soco = Math.exp(-dtA * 8) * Math.cos(dtA * 42);
+            }
+            palcoAcv.style.transform = soco
+              ? 'translate3d(' + (soco * 14).toFixed(1) + 'px,' + (soco * 10).toFixed(1) + 'px,0)'
+              : 'none';
+
+            // a onda que sai do ponto do impacto, deitada no chao
+            var od = clamp((pg - 0.40) / 0.18);
+            ondaAcv.style.opacity = (od > 0 && od < 1 ? (1 - od) * 0.75 : 0).toFixed(3);
+            ondaAcv.style.transform = 'translate(-50%,-50%) translateZ(-1px) rotateX(74deg) scale('
+              + (0.15 + od * 2.9).toFixed(3) + ')';
+
+            // a sombra de contato aperta conforme a camera desce
+            var sqA = clamp((pg - 0.14) / 0.26);
+            sombraAcv.style.opacity = (sqA * 0.55).toFixed(3);
+            sombraAcv.style.transform = 'translate(-50%,-50%) translateZ(-2px) scale('
+              + (1.55 - sqA * 0.65).toFixed(3) + ')';
+
+            // os cards: grade -> arremesso -> orbita
+            var atraso = [0, 0.05, 0.05, 0.1];
+            var esp = clamp((pg - 0.40) / 0.14);
+            var orb = clamp((pg - 0.52) / 0.22);
+            var se = esp * esp * (3 - 2 * esp);
+            var so = orb * orb * (3 - 2 * orb);
+            var ang0 = pg * 300 + t * 10;
+            var L = a.galeria[0] ? a.galeria[0].offsetWidth : 200;
+            var R = Math.min(pin.clientWidth * 0.3, 400);
             a.galeria.forEach(function(el, j){
-              var at = atraso[j] || 0;
-              var q = clamp((pg - at) / 0.6);
-              var sq = q * q * (3 - 2 * q);
-              el.style.clipPath = 'inset(0 0 ' + ((1 - sq) * 100).toFixed(2) + '% 0)';
+              var ent = clamp((pg - (atraso[j] || 0)) / 0.2);
+              var sent = ent * ent * (3 - 2 * ent);
+              el.style.clipPath = 'inset(0 0 ' + ((1 - sent) * 100).toFixed(2) + '% 0)';
+
+              var gx = ((j % 2) ? 1 : -1) * (L * 0.54 + 10);
+              var gy = ((j > 1) ? 1 : -1) * (L * 0.54 + 10);
+              var ex = gx * 2.25, ey = gy * 2.25 - 40, ez = 150;   // arremesso
+              var ang = (ang0 + j * 90) * Math.PI / 180;
+              var ox = Math.sin(ang) * R, oz = Math.cos(ang) * R;
+              // anel inclinado: na frente desce, atras sobe, e o meio
+              // fica livre para a camera
+              var oy = Math.cos(ang) * 96 + Math.sin(ang * 2) * 14;
+
+              var gz = -55;   // atras do plano da camera, para ela cair na frente
+              var x = gx + (ex - gx) * se; x += (ox - x) * so;
+              var y = gy + (ey - gy) * se; y += (oy - y) * so;
+              var z = gz + (ez - gz) * se; z += (oz - z) * so;
+              el.style.transform = 'translate(-50%,-50%) translate3d('
+                + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,' + z.toFixed(1) + 'px)';
             });
             return;
           }
@@ -2027,6 +2094,14 @@
 })();
 </script>
 
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.min.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
 <script type="module">
 const clamp = (v,a=0,b=1)=>Math.max(a,Math.min(b,v));
 
@@ -2095,6 +2170,118 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 })();
 
 
+</script>
+
+<script type="module">
+/* o acervo: a camera 3D despenca girando, bate no chao e vira o centro
+   em volta do qual os projetos orbitam. O canvas e transparente e mora no
+   mesmo contexto preserve-3d dos cards, entao a oclusao sai de graca. */
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const sec = document.getElementById('pantanal');
+const tela = sec && sec.querySelector('.acv-canvas');
+const reduzido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+if (tela && !reduzido) {
+  const render = new THREE.WebGLRenderer({ canvas: tela, alpha: true, antialias: true });
+  render.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  render.toneMapping = THREE.ACESFilmicToneMapping;
+  render.toneMappingExposure = 1.15;
+
+  const cena = new THREE.Scene();
+  // sem mapa de ambiente o corpo metalico da camera sai preto
+  const pmrem = new THREE.PMREMGenerator(render);
+  cena.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+  const olho = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
+  olho.position.set(0, 0.3, 5.4);
+  olho.lookAt(0, 0, 0);
+
+  cena.add(new THREE.AmbientLight(0xffffff, 0.45));
+  const sol = new THREE.DirectionalLight(0xffffff, 2.4);
+  sol.position.set(3.5, 6, 4.5);
+  cena.add(sol);
+  const quente = new THREE.DirectionalLight(0xff5340, 1.1);   // o vermelho da marca
+  quente.position.set(-4.5, 1.2, -2.5);
+  cena.add(quente);
+
+  let grupo = null;
+  // a malha vem comprimida em Draco; o wasm do decodificador so baixa aqui
+  const draco = new DRACOLoader();
+  draco.setDecoderPath('https://unpkg.com/three@0.160.0/examples/jsm/libs/draco/');
+  const leitor = new GLTFLoader();
+  leitor.setDRACOLoader(draco);
+  leitor.load('assets/camera.glb', (g) => {
+    const cx = new THREE.Box3().setFromObject(g.scene);
+    const tam = cx.getSize(new THREE.Vector3());
+    g.scene.position.sub(cx.getCenter(new THREE.Vector3()));
+    g.scene.scale.setScalar(6.4 / Math.max(tam.x, tam.y, tam.z));
+    grupo = new THREE.Group();
+    grupo.add(g.scene);
+    cena.add(grupo);
+  });
+
+  let lado = 0;
+  function medir() {
+    const l = tela.clientWidth;
+    if (!l || l === lado) return;
+    lado = l;
+    render.setSize(l, l, false);
+    olho.aspect = 1;
+    olho.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', () => { lado = 0; });
+
+  // so desenha com a seccao na tela
+  let naTela = false;
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver((es) => {
+      es.forEach((e) => { naTela = e.isIntersecting; });
+    }, { rootMargin: '15% 0px' }).observe(sec);
+  } else { naTela = true; }
+
+  const trava = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);
+  let bateu = 0;
+
+  function quadro(agora) {
+    requestAnimationFrame(quadro);
+    if (!naTela || document.hidden) return;
+    medir();
+    if (!lado) return;
+
+    const t = agora * 0.001;
+    const pg = parseFloat(sec.dataset.acv || 0);
+
+    if (grupo) {
+      // 1. a queda: fica la em cima e desaba, acelerando
+      const q = trava(pg / 0.40);
+      const e = q * q;   // acelera, mas entra no quadro desde cedo
+      // 2. gira no proprio eixo vertical, rapido na queda e lento depois
+      grupo.rotation.y = -e * 17 - Math.max(0, pg - 0.40) * 4 - t * 0.22;
+      grupo.rotation.z = (1 - e) * 0.28;
+
+      // 3. o baque: amassa e volta, amortecido no tempo
+      if (pg >= 0.40 && !bateu) bateu = agora;
+      if (pg < 0.34) bateu = 0;
+      let amassa = 0;
+      if (bateu) {
+        const dt = (agora - bateu) * 0.001;
+        if (dt < 0.7) amassa = Math.exp(-dt * 9) * Math.cos(dt * 34);
+      }
+      grupo.scale.set(1 + amassa * 0.1, 1 - amassa * 0.16, 1 + amassa * 0.1);
+
+      // 4. pousada, ela so respira
+      const parada = trava((pg - 0.42) / 0.12);
+      grupo.position.y = 2.2 * (1 - e) - 0.35 + Math.sin(t * 0.8) * 0.07 * parada
+        + Math.abs(amassa) * -0.12;
+    }
+    render.render(cena, olho);
+  }
+  requestAnimationFrame(quadro);
+}
 </script>
 </body>
 </html>
