@@ -2026,10 +2026,10 @@ if (tela && !reduzido) {
 
     const p = parseFloat(sec.dataset.p || 0);
     const e = p * p * (3 - 2 * p);
-    // de frente para o fundo e so recuando: o angulo nao muda, so a distancia.
-    // 3*PI/2 e a face do fundo — descoberto rodando os quatro lados e olhando.
-    const FRENTE = Math.PI * 1.5;
-    const dist = raio * (0.55 + e * 3.3);   // termina com o set todo no quadro
+    // de frente para o set e so recuando: o angulo nao muda, so a distancia.
+    // PI/2 e o lado de onde se filma; 3*PI/2 mostrava as costas do suporte.
+    const FRENTE = Math.PI * 0.5;
+    const dist = raio * (0.55 + e * 2.35);   // termina com os softboxes emoldurando
     olho.position.set(Math.sin(FRENTE) * dist, raio * 0.04, Math.cos(FRENTE) * dist);
     olho.lookAt(0, 0, 0);
     render.render(cena, olho);
