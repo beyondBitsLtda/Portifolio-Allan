@@ -121,15 +121,9 @@
   }
 
   /* ===== refinamento: variáveis, revelação, entrada, cabeçalho ===== */
-  /* Santa Misa Cyber Pulp: os titulos de display. Subconjunto latino,
-     942 KB de OTF viram 20 KB de WOFF2 */
-  @font-face { font-family: 'Santa Misa'; font-style: normal; font-weight: 400;
-    font-display: swap; src: url('assets/santamisa.woff2') format('woff2'); }
-  @font-face { font-family: 'Santa Misa Outline'; font-style: normal; font-weight: 400;
-    font-display: swap; src: url('assets/santamisa-outline.woff2') format('woff2'); }
   :root { --gx: 40px;
     /* um nome so para a fonte de display: trocar aqui troca em toda a pagina */
-    --display: 'Santa Misa', 'Anton', sans-serif;
+    --display: 'Anton', sans-serif;
     /* o vermelho da marca, um so na pagina inteira. O --claro e o mesmo
        vermelho levantado para ter contraste sobre fundo escuro */
     --vermelho: oklch(0.55 0.22 27);
@@ -198,9 +192,9 @@
     margin-top: -4vh; pointer-events: none; }
   .h1-word { animation: wipeIn 1.3s cubic-bezier(.77,0,.18,1) .45s both;
     margin: 0; font-family: var(--display); font-weight: 400;
-    /* a Santa Misa e ~1,7x mais larga que a Anton: o corpo cai junto, e o
-       letter-spacing negativo sai porque ela ja vem espacada */
-    font-size: clamp(32px, 9.4vw, 176px); line-height: 1; letter-spacing: 0;
+    /* as metricas que a palavra grande tinha antes: Anton foi desenhada
+       para caixa alta, em caixa mista as hastes descasam */
+    font-size: clamp(62px, 14.6vw, 274px); line-height: 0.8; letter-spacing: -0.015em;
     /* vermelho gritante: mais claro e saturado que o painel, e o nome so
        aparece depois que ele entra, ja sobre a camiseta escura */
     color: var(--vermelho); white-space: nowrap; user-select: none;
@@ -806,7 +800,7 @@
     background-size: 9px 9px; }
   .rl-titulo { position: relative; z-index: 2;
     margin: 0; font-family: var(--display); font-weight: 400;
-    font-size: clamp(34px, 6.8vw, 126px); line-height: 1.02; letter-spacing: 0;
+    font-size: clamp(46px, 9.2vw, 172px); line-height: 0.82; letter-spacing: -0.02em;
     color: oklch(0.99 0.008 85); }
   .rl-titulo span { color: var(--vermelho-claro); }
 
@@ -878,7 +872,7 @@
 
   @media (max-width: 899px) {
     .rl-pin { flex-direction: column; gap: 14px; }
-    .rl-titulo { font-size: clamp(24px, 7.4vw, 44px); line-height: 1.02; text-align: center; }
+    .rl-titulo { font-size: clamp(32px, 10vw, 58px); line-height: 0.9; text-align: center; }
     .rl-fone { height: min(68vh, 600px); border-radius: 18px; }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -975,8 +969,8 @@
   /* line-height 1: com 0.86 o acento do A passava do teto da caixa e o
      clip-path do rv-clip cortava a ponta */
   .doc-titulo { margin: 0 0 clamp(34px, 4.6vw, 62px); font-family: var(--display);
-    font-weight: 400; font-size: clamp(25px, 5.3vw, 99px); line-height: 1.04;
-    letter-spacing: 0; color: oklch(0.55 0.22 27); }
+    font-weight: 400; font-size: clamp(44px, 9.4vw, 176px); line-height: 1;
+    letter-spacing: -0.015em; color: oklch(0.55 0.22 27); }
   .doc-grade { display: grid; grid-template-columns: repeat(3, 1fr);
     gap: clamp(12px, 1.4vw, 22px); max-width: 1680px; }
   .doc-card { position: relative; display: block; appearance: none; -webkit-appearance: none;
@@ -1277,7 +1271,7 @@
   <div style="max-width: 1200px; margin: 0 auto;">
     <div class="olho" style="color: var(--marca);"><span class="line" style="background: var(--marca);"></span>Atuação profissional</div>
     <div class="faz-head">
-      <h2 class="rv-clip" style="margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(25px, 3.8vw, 64px); line-height: 1.06; letter-spacing: 0;">NÃO É SÓ <span class="scribble salmon" style="color: var(--marca);">FILMAR<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span></h2>
+      <h2 class="rv-clip" style="margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(40px, 6vw, 104px); line-height: 0.9; letter-spacing: -0.01em;">NÃO É SÓ <span class="scribble salmon" style="color: var(--marca);">FILMAR<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span></h2>
       <p class="rv" style="margin: 0; font-size: clamp(21px, 1.8vw, 28px); line-height: 1.2; color: var(--tinta2); max-width: 46ch;">Da concepção à finalização, atuo em todas as etapas do processo criativo e estratégico. Cada projeto é tratado como uma oportunidade de gerar impacto real e permanente.</p>
     </div>
     <div class="faz-grid">
@@ -1303,7 +1297,7 @@
     <div class="olho" style="color: var(--marca);"><span class="line" style="background: var(--marca);"></span>Sobre</div>
     <div class="visao-grid">
       <div>
-        <h2 class="rv-clip" style="margin: 0 0 34px; font-family: var(--display); font-weight: 400; font-size: clamp(25px, 3.8vw, 64px); line-height: 1.06; letter-spacing: 0;">VISÃO<br><span class="hand" style="color: var(--marca); font-size: 0.78em; letter-spacing: 0;">e propósito</span></h2>
+        <h2 class="rv-clip" style="margin: 0 0 34px; font-family: var(--display); font-weight: 400; font-size: clamp(40px, 6vw, 104px); line-height: 0.9; letter-spacing: -0.01em;">VISÃO<br><span class="hand" style="color: var(--marca); font-size: 0.78em; letter-spacing: 0;">e propósito</span></h2>
         <div class="stats">
         <div class="stat"><b class="count" data-n="3" data-suf="">3</b><span>Pilares criativos</span></div>
         <div class="stat"><b>∞</b><span>Histórias a contar</span></div>
@@ -1330,7 +1324,7 @@
   <canvas class="pnt-campo fundo-campo" data-escala="0.18" aria-hidden="true"></canvas>
   <div style="max-width: 1200px; margin: 0 auto;">
     <div class="olho" style="color: var(--marca);"><span class="line" style="background: var(--marca);"></span>Formação</div>
-    <h2 class="rv-clip" style="margin: 0 0 clamp(40px, 5vw, 68px); font-family: var(--display); font-weight: 400; font-size: clamp(25px, 3.8vw, 64px); line-height: 1.06; letter-spacing: 0;">TRAJETÓRIA<br>E <span class="scribble salmon" style="color: var(--marca);">FORMAÇÃO<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span></h2>
+    <h2 class="rv-clip" style="margin: 0 0 clamp(40px, 5vw, 68px); font-family: var(--display); font-weight: 400; font-size: clamp(40px, 6vw, 104px); line-height: 0.9; letter-spacing: -0.01em;">TRAJETÓRIA<br>&amp; <span class="scribble salmon" style="color: var(--marca);">FORMAÇÃO<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span></h2>
     <div class="traj-grid">
       <div class="traj-linha">
         <div class="traj-item rv" style="--d:0.00s;"><h4>Arte-finalista</h4><p>Início em gráfica de comunicação visual — base técnica em design, composição e produção gráfica.</p></div>
@@ -1354,7 +1348,7 @@
   <div class="stamp light" aria-hidden="true" style="right: var(--gx); top: 110px;"><svg viewBox="0 0 120 120"><defs><path id="stampB" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs><circle cx="60" cy="60" r="56"/><circle cx="60" cy="60" r="32"/><text><textPath href="#stampB">CRIAR COM INTENÇÃO · BIRDVIEW · </textPath></text><circle class="dot" cx="60" cy="60" r="6"/></svg></div>
   <div style="max-width: 1200px; margin: 0 auto; position: relative; z-index: 2;">
     <div class="rv" style="font-family: 'Caveat', cursive; font-size: 20px; font-weight: 600; letter-spacing: 0.01em; text-transform: none; color: oklch(0.97 0.008 85 / 0.8); margin-bottom: 24px;"><span class="hand" style="font-size: 36px; letter-spacing: 0; text-transform: none;">contato</span></div>
-    <h2 class="rv-clip" style="margin: 0 0 40px; font-family: var(--display); font-weight: 400; font-size: clamp(30px, 5.6vw, 104px); line-height: 1.04; letter-spacing: 0;">VAMOS<br><span style="color: oklch(0.18 0.012 60);">CRIAR</span><br><span class="scribble under light">JUNTOS<svg viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M4,22 C40,10 120,30 196,16 M14,32 C70,26 130,36 190,28"/></svg></span></h2>
+    <h2 class="rv-clip" style="margin: 0 0 40px; font-family: var(--display); font-weight: 400; font-size: clamp(48px, 9vw, 168px); line-height: 0.86; letter-spacing: -0.015em;">VAMOS<br><span style="color: oklch(0.18 0.012 60);">CRIAR</span><br><span class="scribble under light">JUNTOS<svg viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M4,22 C40,10 120,30 196,16 M14,32 C70,26 130,36 190,28"/></svg></span></h2>
     <a href="https://wa.me/qr/OBPBCW7RNX5KB1" target="_blank" rel="noopener" class="cta-dark" style="display: inline-flex; align-items: center; gap: 12px; background: oklch(0.18 0.012 60); color: oklch(0.97 0.008 85); padding: 18px 32px; border-radius: 50px; font-family: 'Caveat', cursive; font-size: 24px; font-weight: 600; letter-spacing: 0; text-transform: none;">Falar comigo <span style="font-size:18px;">→</span></a>
     <p class="hand rv" style="margin: 28px 0 0; font-size: 27px; line-height: 1.15; color: oklch(0.97 0.008 85 / 0.92); max-width: 30ch;">Narrativas que conectam cultura, imagem e propósito.</p>
     <div class="canais rv" style="--d:.15s;"><a href="https://www.youtube.com/watch?v=8U4cpeMxG2w" target="_blank" rel="noopener">▶ Ecos do Pantanal — YouTube</a><a href="https://www.instagram.com/birdviewproducoes/" target="_blank" rel="noopener">◉ Instagram — @birdviewproducoes</a><a href="mailto:allan.woch@gmail.com">✉ E-mail</a></div>
