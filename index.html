@@ -7,7 +7,7 @@
 <title>REC. — Videomaker & Estrategista</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Courier+Prime:wght@700&family=Caveat:wght@400..700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Courier+Prime:wght@700&family=Caveat:wght@400..700&family=Satisfy&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
@@ -154,9 +154,9 @@
   /* nome e subtitulo num bloco so: posicionados separados por margin-top
      dentro do flex, eles se sobrepunham */
   .h1-bloco { position: absolute; z-index: 4; left: 0; right: 0; text-align: center;
-    /* o nome mora sobre a camiseta escura: e onde o vermelho gritante
-       tem contraste sem precisar de sombra nem de clarao atras */
-    margin-top: 19vh; pointer-events: none; }
+    /* medido na tela: medido em 1440x900 de verdade: o bloco centraliza aqui,
+       porque a posicao estatica dentro do flex nao centraliza a caixa */
+    margin-top: 8vh; pointer-events: none; }
   .h1-word { animation: wipeIn 1.3s cubic-bezier(.77,0,.18,1) .45s both;
     margin: 0; font-family: 'Anton', sans-serif; font-weight: 400;
     /* as metricas que a palavra grande tinha antes: Anton foi desenhada
@@ -166,9 +166,14 @@
        aparece depois que ele entra, ja sobre a camiseta escura */
     color: oklch(0.64 0.27 25); white-space: nowrap; user-select: none;
     text-shadow: none;
+    /* as fotos entram por dentro das letras antes de assentar no vermelho */
+    background-repeat: no-repeat; background-position: center center;
+    background-size: cover;
+    -webkit-background-clip: text; background-clip: text;
     will-change: transform, opacity; }
-  .h1-sub { margin: 0.1em 0 0; font-family: 'Caveat', cursive; font-weight: 600;
-    font-size: clamp(24px, 3vw, 52px); letter-spacing: 0.01em;
+  /* Satisfy no lugar da Caveat: assinatura, nao anotacao */
+  .h1-sub { margin: 0.16em 0 0; font-family: 'Satisfy', 'Caveat', cursive; font-weight: 400;
+    font-size: clamp(26px, 3.4vw, 60px); letter-spacing: 0.012em;
     color: oklch(0.64 0.27 25); opacity: 0; text-shadow: none;
     will-change: transform, opacity; }
   .h1-fig  { animation: fadeUp 1.2s cubic-bezier(.2,.65,.2,1) .75s both; }
@@ -500,7 +505,7 @@
   /* o observador: ele e quem estava olhando o estudio ate agora */
   #obsv { position: absolute; inset: 0; z-index: 2; pointer-events: none;
     opacity: 0; will-change: transform, opacity; }
-  .obs-q { position: absolute; left: 0; right: 0; bottom: -26%; height: 78%;
+  .obs-q { position: absolute; left: 0; right: 0; bottom: -33%; height: 78%;
     opacity: 0; will-change: opacity;
     background-repeat: no-repeat; background-position: bottom center; background-size: contain;
     -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
@@ -668,7 +673,7 @@
 
   @media (max-width: 899px) {
     .obs-q { bottom: -4%; height: 52%; }
-    .h1-bloco { margin-top: -13vh; }
+    .h1-bloco { margin-top: -6vh; }
     .pnt-acervo { padding: 10vh 16px 5vh; }
     .acv-canvas { width: min(64vh, 88vw); height: min(64vh, 88vw); }
     .acv-palco .gal-item { --lado: min(15vh, 27vw); border-radius: 11px; }
@@ -1187,6 +1192,18 @@
     var batida = 0;   // instante do baque; o tranco toca uma vez e amortece
     var estudio = document.getElementById('estudio');
     var ultimoBlur = -1;
+    // fotos que passam por dentro das letras; trocar por frames do trabalho
+    // dele depois e so mexer nesta lista
+    var FOTOS = [
+      'photo-1478720568477-152d9b164e26', 'photo-1547483238-f400e65ccd56',
+      'photo-1509099836639-18ba1795216d', 'photo-1519892300165-cb5542fb47c7',
+      'photo-1485846234645-a62644f84728', 'photo-1536440136628-849c177e76a1',
+      'photo-1492691527719-9d1e07e534b4', 'photo-1574717024653-61fd2cf4d44d'
+    ].map(function(id){
+      return 'https://images.unsplash.com/' + id + '?auto=format&fit=crop&w=900&h=600&q=70';
+    });
+    FOTOS.forEach(function(u){ new Image().src = u; });   // sem isso a troca pisca
+    var ultimaFoto = -1;
     var poses = Array.prototype.slice.call(sec.querySelectorAll('.obs-q'));
     ['obs1', 'obs2'].forEach(function(n){
       new Image().src = 'assets/' + n + '.jpg';
@@ -1246,6 +1263,19 @@
         }
         bloco.style.transform = 'translateZ(' + (-430 + sn * 530).toFixed(0) + 'px)';
         nome.style.opacity = sn.toFixed(3);
+
+        // as letras se enchem de foto e so no fim assentam no vermelho
+        var qual = nm < 0.86 ? Math.floor(nm * 26) % FOTOS.length : -1;
+        if (qual !== ultimaFoto){
+          if (qual < 0){
+            nome.style.backgroundImage = 'none';
+            nome.style.webkitTextFillColor = '';
+          } else {
+            nome.style.backgroundImage = 'url(' + FOTOS[qual] + ')';
+            nome.style.webkitTextFillColor = 'transparent';
+          }
+          ultimaFoto = qual;
+        }
         sub.style.opacity = clamp((p - 0.82) / 0.14).toFixed(3);
 
         // a coluna da esquerda recua e sai de cena
