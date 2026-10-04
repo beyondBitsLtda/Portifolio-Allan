@@ -772,9 +772,14 @@
   .doc-card:hover .doc-video, .doc-card:focus-visible .doc-video { filter: none; }
   .doc-card:focus-visible { outline: 2px solid oklch(0.55 0.22 27); outline-offset: 3px; }
 
+  /* vermelho da marca no lugar do preto; o fundo escurece um pouco nas
+     bordas para o quadro do video nao encostar num campo chapado */
   .doc-modal { position: fixed; inset: 0; z-index: 800; display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(290px, 27vw);
-    background: oklch(0.08 0.01 60); opacity: 0; transition: opacity .32s ease; }
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 31vw);
+    background: oklch(0.55 0.22 27);
+    background-image: radial-gradient(ellipse 120% 100% at 38% 45%,
+      oklch(0.6 0.225 27) 0%, oklch(0.55 0.22 27) 48%, oklch(0.46 0.2 28) 100%);
+    opacity: 0; transition: opacity .32s ease; }
   .doc-modal.on { opacity: 1; }
   .doc-modal[hidden] { display: none; }
   .doc-m-video { position: relative; display: flex; align-items: center; justify-content: center;
@@ -782,19 +787,24 @@
   /* largura e altura automaticas presas aos maximos: o quadro fica do
      tamanho do maior 16:9 que cabe na coluna, sem tarja sobrando */
   .doc-m-tela { width: auto; height: auto; max-width: 100%; max-height: 100%;
-    aspect-ratio: 16 / 9; object-fit: contain; background: oklch(0.05 0.008 60); }
-  .doc-m-texto { display: flex; flex-direction: column; justify-content: center; gap: 18px;
-    padding: clamp(26px, 4vw, 66px) clamp(22px, 3.4vw, 56px);
-    border-left: 1px solid oklch(0.28 0.012 60); }
+    aspect-ratio: 16 / 9; object-fit: contain; background: oklch(0.3 0.14 28); }
+  .doc-m-texto { display: flex; flex-direction: column; justify-content: center; gap: 16px;
+    padding: clamp(26px, 4vw, 66px) clamp(22px, 3.4vw, 52px);
+    border-left: 1px solid oklch(0.99 0.008 85 / .28);
+    /* a descricao cresceu: em tela baixa a coluna rola em vez de vazar */
+    overflow-y: auto; overscroll-behavior: contain; }
   .doc-m-t { margin: 0; font-family: 'Anton', sans-serif; font-weight: 400;
-    font-size: clamp(32px, 3.6vw, 70px); line-height: 0.92; letter-spacing: -0.01em;
-    color: oklch(0.72 0.16 27); }
-  .doc-m-d { margin: 0; font-size: clamp(18px, 1.5vw, 25px); line-height: 1.3;
-    color: oklch(0.82 0.01 85); }
+    font-size: clamp(30px, 3.1vw, 60px); line-height: 0.94; letter-spacing: -0.01em;
+    color: oklch(0.99 0.008 85); }
+  /* tres frases pedem um corpo menor e mais entrelinha que uma so.
+     Creme cheio, sem alfa: com .93 o contraste sobre o vermelho caia para
+     4,49:1 e o minimo de corpo de texto e 4,5:1 */
+  .doc-m-d { margin: 0; font-size: clamp(17px, 1.22vw, 22px); line-height: 1.36;
+    color: oklch(0.99 0.008 85); }
   .doc-m-fechar { position: absolute; z-index: 2; right: clamp(16px, 2.4vw, 34px);
     top: clamp(16px, 2.4vw, 30px); width: 46px; height: 46px; border-radius: 50%;
-    border: 1px solid oklch(0.97 0.008 85 / .35); background: oklch(0.08 0.01 60 / .55);
-    color: oklch(0.97 0.008 85); font-size: 19px; line-height: 1; cursor: pointer; }
+    border: 1px solid oklch(0.99 0.008 85 / .5); background: oklch(0.3 0.14 28 / .5);
+    color: oklch(0.99 0.008 85); font-size: 19px; line-height: 1; cursor: pointer; }
   @media (max-width: 1099px) { .doc-grade { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 759px) {
     .doc-grade { grid-template-columns: 1fr; }
@@ -802,7 +812,7 @@
     .doc-m-video { padding: 54px 0 0; }
     .doc-m-tela { width: 100%; }
     .doc-m-texto { justify-content: flex-start; border-left: 0;
-      border-top: 1px solid oklch(0.28 0.012 60); }
+      border-top: 1px solid oklch(0.99 0.008 85 / .28); }
   }
   @media (prefers-reduced-motion: reduce) {
     .doc-video, .doc-tinta, .doc-modal { transition: none; }
@@ -875,27 +885,27 @@
   <canvas class="pnt-campo" aria-hidden="true"></canvas>
   <h2 class="doc-titulo rv-clip">DOCUMENTÁRIOS</h2>
   <div class="doc-grade bloco-inteiro">
-    <button class="doc-card" type="button" data-t="Água Doce" data-d="Nas cabeceiras, a mata ainda decide por onde a água passa." aria-label="Abrir Água Doce">
+    <button class="doc-card" type="button" data-t="Água Doce" data-d="Nas cabeceiras, a mata ainda decide por onde a água passa. Acompanhamos uma estiagem inteira até a volta das chuvas, com a mesma queda filmada nos dois extremos do ano. O que o rio perde no caminho não se enxerga de dentro da cidade — só de dentro da mata." aria-label="Abrir Água Doce">
       <video class="doc-video" poster="assets/doc-01.webp" src="https://videos.pexels.com/video-files/2098989/2098989-hd_1920_1080_30fps.mp4" data-cartaz="1.2" muted loop playsinline preload="none" disablepictureinpicture></video>
       <span class="doc-tinta" aria-hidden="true"></span>
     </button>
-    <button class="doc-card" type="button" data-t="Costa Viva" data-d="Um filhote de foca na faixa de areia que a maré devolve todo dia." aria-label="Abrir Costa Viva">
+    <button class="doc-card" type="button" data-t="Costa Viva" data-d="Um filhote de foca na faixa de areia que a maré devolve todo dia. Essa faixa entre a água e a duna muda de tamanho a cada ciclo, e é nela que os filhotes passam as primeiras semanas. Filmado rente ao chão, na altura de quem vive ali, sem cerca e sem isca." aria-label="Abrir Costa Viva">
       <video class="doc-video" poster="assets/doc-02.webp" src="https://videos.pexels.com/video-files/1526909/1526909-hd_1920_1080_24fps.mp4" data-cartaz="0.8" muted loop playsinline preload="none" disablepictureinpicture></video>
       <span class="doc-tinta" aria-hidden="true"></span>
     </button>
-    <button class="doc-card" type="button" data-t="Primeira Luz" data-d="Quem viajou a noite inteira para ver o céu encher de balões." aria-label="Abrir Primeira Luz">
+    <button class="doc-card" type="button" data-t="Primeira Luz" data-d="Quem viajou a noite inteira para ver o céu encher de balões. O filme fica com as pessoas em terra: a espera no escuro, o frio antes do sol nascer, o instante em que todo mundo para de falar ao mesmo tempo. O voo é só o que acontece depois." aria-label="Abrir Primeira Luz">
       <video class="doc-video" poster="assets/doc-03.webp" src="https://videos.pexels.com/video-files/3015510/3015510-hd_1920_1080_24fps.mp4" data-cartaz="1.6" muted loop playsinline preload="none" disablepictureinpicture></video>
       <span class="doc-tinta" aria-hidden="true"></span>
     </button>
-    <button class="doc-card" type="button" data-t="Linha de Neve" data-d="O vale só aparece inteiro quando a câmera sobe acima da nuvem." aria-label="Abrir Linha de Neve">
+    <button class="doc-card" type="button" data-t="Linha de Neve" data-d="O vale só aparece inteiro quando a câmera sobe acima da nuvem. Entre a neve do cume e o verde do fundo cabem poucos quilômetros e várias estações ao mesmo tempo. Uma travessia feita a pé, filmada na hora em que a luz atravessa o vale de lado." aria-label="Abrir Linha de Neve">
       <video class="doc-video" poster="assets/doc-04.webp" src="https://videos.pexels.com/video-files/3214448/3214448-hd_1920_1080_25fps.mp4" data-cartaz="1.0" muted loop playsinline preload="none" disablepictureinpicture></video>
       <span class="doc-tinta" aria-hidden="true"></span>
     </button>
-    <button class="doc-card" type="button" data-t="Maré de Dentro" data-d="O recife quebra a onda e, do outro lado, a vila acorda." aria-label="Abrir Maré de Dentro">
+    <button class="doc-card" type="button" data-t="Maré de Dentro" data-d="O recife quebra a onda e, do outro lado, a vila acorda. A barreira que protege as casas é a mesma que decide onde dá para pescar e onde não dá. Filmado do ar e da água, porque são duas faces do mesmo desenho." aria-label="Abrir Maré de Dentro">
       <video class="doc-video" poster="assets/doc-05.webp" src="https://videos.pexels.com/video-files/2169880/2169880-hd_1920_1080_30fps.mp4" data-cartaz="1.0" muted loop playsinline preload="none" disablepictureinpicture></video>
       <span class="doc-tinta" aria-hidden="true"></span>
     </button>
-    <button class="doc-card" type="button" data-t="Cume" data-d="A crista da serra aparecendo e sumindo no mesmo minuto." aria-label="Abrir Cume">
+    <button class="doc-card" type="button" data-t="Cume" data-d="A crista da serra aparecendo e sumindo no mesmo minuto. A nuvem sobe pela encosta e fecha tudo em segundos, e a janela de luz dura o que dura. Foram três subidas até sobrar um minuto limpo." aria-label="Abrir Cume">
       <video class="doc-video" poster="assets/doc-06.webp" src="https://videos.pexels.com/video-files/4763824/4763824-hd_1920_1080_24fps.mp4" data-cartaz="1.2" muted loop playsinline preload="none" disablepictureinpicture></video>
       <span class="doc-tinta" aria-hidden="true"></span>
     </button>
