@@ -164,14 +164,12 @@
     font-size: clamp(62px, 14.6vw, 274px); line-height: 0.8; letter-spacing: -0.015em;
     /* vermelho gritante: mais claro e saturado que o painel, e o nome so
        aparece depois que ele entra, ja sobre a camiseta escura */
-    /* mais claro e alaranjado que o painel: e o que separa os dois sem
-       sombra nem contorno */
-    color: oklch(0.75 0.19 38); white-space: nowrap; user-select: none;
+    color: oklch(0.64 0.27 25); white-space: nowrap; user-select: none;
     text-shadow: none;
     will-change: transform, opacity; }
   .h1-sub { margin: 0.1em 0 0; font-family: 'Caveat', cursive; font-weight: 600;
     font-size: clamp(24px, 3vw, 52px); letter-spacing: 0.01em;
-    color: oklch(0.75 0.19 38); opacity: 0; text-shadow: none;
+    color: oklch(0.64 0.27 25); opacity: 0; text-shadow: none;
     will-change: transform, opacity; }
   .h1-fig  { animation: fadeUp 1.2s cubic-bezier(.2,.65,.2,1) .75s both; }
   .h1-cue  { animation: fadeIn 1s ease 1.7s both; }
@@ -524,7 +522,7 @@
 
   /* o estudio 3D ocupa a hero inteira, atras de tudo */
   #estudio { position: absolute; inset: 0; z-index: 0; display: block;
-    width: 100%; height: 100%; pointer-events: none; }
+    width: 100%; height: 100%; pointer-events: none; will-change: filter; }
   @media (prefers-reduced-motion: reduce) {
     #abertura { height: 100vh !important; }
     #heroPin { position: relative; }
@@ -670,7 +668,7 @@
 
   @media (max-width: 899px) {
     .obs-q { bottom: -4%; height: 52%; }
-    .h1-bloco { margin-top: 2vh; }
+    .h1-bloco { margin-top: -13vh; }
     .pnt-acervo { padding: 10vh 16px 5vh; }
     .acv-canvas { width: min(64vh, 88vw); height: min(64vh, 88vw); }
     .acv-palco .gal-item { --lado: min(15vh, 27vw); border-radius: 11px; }
@@ -1187,6 +1185,8 @@
     var copia = sec.querySelector('.h1-copy');
     var obsv = document.getElementById('obsv');
     var batida = 0;   // instante do baque; o tranco toca uma vez e amortece
+    var estudio = document.getElementById('estudio');
+    var ultimoBlur = -1;
     var poses = Array.prototype.slice.call(sec.querySelectorAll('.obs-q'));
     ['obs1', 'obs2'].forEach(function(n){
       new Image().src = 'assets/' + n + '.jpg';
@@ -1235,6 +1235,15 @@
         // 3. so entao o nome chega
         var nm = clamp((p - 0.72) / 0.2);
         var sn = nm * nm * (3 - 2 * nm);
+
+        // o cenario sai de foco quando o nome entra: e o que da legibilidade
+        // ao vermelho sobre o painel vermelho, sem mexer na cor do texto.
+        // Em degraus de meio pixel — refazer o blur a cada quadro sai caro.
+        var bl = Math.round(sn * 15 * 2) / 2;
+        if (bl !== ultimoBlur){
+          estudio.style.filter = bl ? 'blur(' + bl + 'px)' : 'none';
+          ultimoBlur = bl;
+        }
         bloco.style.transform = 'translateZ(' + (-430 + sn * 530).toFixed(0) + 'px)';
         nome.style.opacity = sn.toFixed(3);
         sub.style.opacity = clamp((p - 0.82) / 0.14).toFixed(3);
