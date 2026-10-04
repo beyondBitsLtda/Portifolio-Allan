@@ -737,6 +737,95 @@
     .gal-item { clip-path: none !important; }
     .acv-canvas, .acv-onda, .acv-sombra { display: none; }
   }
+  /* ===== REEL 2026: o feed vertical ===== */
+  #reels { position: relative; z-index: 60; height: 500vh;
+    background: oklch(0.13 0.014 55); }
+  .rl-pin { position: sticky; top: 0; height: 100vh; min-height: 620px; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    gap: clamp(24px, 6vw, 110px); }
+  .rl-titulo { margin: 0; font-family: 'Anton', sans-serif; font-weight: 400;
+    font-size: clamp(46px, 9.2vw, 172px); line-height: 0.82; letter-spacing: -0.02em;
+    color: oklch(0.99 0.008 85); }
+  .rl-titulo span { color: oklch(0.64 0.26 26); }
+
+  /* o aparelho: 9:16 com canto redondo, sem moldura de celular — o que
+     identifica o Reels e a interface dentro, nao o desenho do telefone */
+  .rl-fone { position: relative; flex: 0 0 auto;
+    height: min(80vh, 740px); aspect-ratio: 9 / 16;
+    border-radius: 24px; overflow: hidden; background: #000; isolation: isolate;
+    box-shadow: 0 40px 90px oklch(0 0 0 / .6), 0 0 0 1px oklch(0.99 0.008 85 / .1);
+    /* a pagina inteira e Caveat; a interface do Instagram nao pode ser */
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    color: oklch(0.99 0.008 85); }
+  .rl-pilha { position: absolute; inset: 0; will-change: transform; }
+  .rl-item { position: absolute; left: 0; right: 0; height: 100%;
+    overflow: hidden; will-change: transform, filter; }
+  .rl-video { display: block; width: 100%; height: 100%; object-fit: cover;
+    will-change: transform; }
+  .rl-sombra { position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(to bottom, oklch(0 0 0 / .5) 0%, transparent 20%,
+      transparent 46%, oklch(0 0 0 / .78) 100%); }
+
+  .rl-topo { position: absolute; z-index: 6; top: 0; left: 0; right: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 15px 15px 0; pointer-events: none; }
+  .rl-topo b { font-family: 'Anton', sans-serif; font-weight: 400; font-size: 21px;
+    letter-spacing: 0.005em; }
+  .rl-topo svg { width: 23px; height: 23px; }
+
+  .rl-som { position: absolute; z-index: 7; right: 13px; top: 52px;
+    width: 32px; height: 32px; border: 0; border-radius: 50%;
+    background: oklch(0 0 0 / .5); color: inherit; cursor: pointer;
+    display: grid; place-items: center; }
+  .rl-som svg { width: 17px; height: 17px; grid-area: 1 / 1; }
+  .rl-som .rl-x, .rl-som.mudo .rl-alto { display: none; }
+  .rl-som.mudo .rl-x { display: block; }
+
+  .rl-info { position: absolute; z-index: 5; left: 0; right: 62px; bottom: 0;
+    padding: 0 14px 20px; display: flex; flex-direction: column; gap: 9px;
+    opacity: var(--ui, 1); }
+  .rl-perfil { display: flex; align-items: center; gap: 9px; }
+  .rl-av { width: 29px; height: 29px; flex: 0 0 auto; border-radius: 50%;
+    background: oklch(0.55 0.22 27); display: grid; place-items: center;
+    font-family: 'Anton', sans-serif; font-size: 15px; line-height: 1; }
+  .rl-perfil b { font-size: 13.5px; font-weight: 600; }
+  .rl-seguir { font-size: 12px; padding: 3px 11px; border-radius: 8px;
+    border: 1px solid oklch(0.99 0.008 85 / .75); }
+  .rl-legenda { margin: 0; font-size: 13.5px; line-height: 1.34; }
+  .rl-audio { display: flex; align-items: center; gap: 7px; min-width: 0; }
+  .rl-audio > svg { width: 15px; height: 15px; flex: 0 0 auto; }
+  /* o nome do audio corre, como no app */
+  .rl-marq { overflow: hidden; flex: 1 1 auto; font-size: 12px; white-space: nowrap;
+    -webkit-mask-image: linear-gradient(to right, #000 86%, transparent);
+    mask-image: linear-gradient(to right, #000 86%, transparent); }
+  .rl-marq > span { display: inline-block; animation: rlMarq 14s linear infinite; }
+  @keyframes rlMarq { to { transform: translateX(-50%); } }
+
+  .rl-acoes { position: absolute; z-index: 5; right: 9px; bottom: 18px;
+    display: flex; flex-direction: column; align-items: center; gap: 17px;
+    opacity: var(--ui, 1); }
+  .rl-ac svg { width: 25px; height: 25px; display: block; }
+  .rl-disco { width: 26px; height: 26px; border-radius: 7px; margin-top: 2px;
+    background-size: cover; background-position: center;
+    border: 2px solid oklch(0.99 0.008 85 / .9); }
+
+  .rl-barra { position: absolute; z-index: 6; left: 0; right: 0; bottom: 0; height: 3px;
+    background: oklch(0.99 0.008 85 / .24); }
+  .rl-barra i { display: block; height: 100%; width: 0;
+    background: oklch(0.99 0.008 85); will-change: width; }
+
+  @media (max-width: 899px) {
+    .rl-pin { flex-direction: column; gap: 14px; }
+    .rl-titulo { font-size: clamp(32px, 10vw, 58px); line-height: 0.9; text-align: center; }
+    .rl-fone { height: min(68vh, 600px); border-radius: 18px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #reels { height: 100vh !important; }
+    .rl-pin { position: relative; }
+    .rl-item + .rl-item { display: none; }
+    .rl-marq > span { animation: none; }
+  }
+
   /* ===== DOCUMENTARIOS: so a palavra e os videos ===== */
   /* o mesmo creme e o mesmo campo de curvas da hero do Pantanal */
   #documentarios { position: relative; z-index: 60; overflow: hidden;
@@ -922,6 +1011,85 @@
   </aside>
   <button class="doc-m-fechar" type="button" aria-label="Fechar o documentário">&#10005;</button>
 </div>
+
+<!-- ===== REEL 2026 · o feed ===== -->
+<section id="reels" aria-label="Reel 2026">
+  <div class="rl-pin">
+    <h2 class="rl-titulo"><span>REEL</span><br>2026</h2>
+    <div class="rl-fone">
+      <div class="rl-topo" aria-hidden="true"><b>Reels</b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.6h3.1l1.7-2h8.4l1.7 2H21v12.2H3V7.6z"/><circle cx="12" cy="13.5" r="3.4"/></svg></div>
+      <button class="rl-som mudo" type="button" aria-pressed="false" aria-label="Ativar o som do reel"><svg class="rl-alto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.4L12 5.6v12.8L7.4 14.5H4v-5z"/><path class="rl-onda" d="M15.6 9.4a3.6 3.6 0 0 1 0 5.2M18.1 7.2a7 7 0 0 1 0 9.6"/></svg><svg class="rl-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.4L12 5.6v12.8L7.4 14.5H4v-5z"/><path d="m16.2 9.8 4.4 4.4M20.6 9.8l-4.4 4.4"/></svg></button>
+      <div class="rl-pilha">
+      <article class="rl-item" style="top: 0%;">
+        <video class="rl-video" poster="assets/rl-01.webp" src="https://videos.pexels.com/video-files/4434150/4434150-hd_1080_1920_30fps.mp4" muted loop playsinline preload="none" disablepictureinpicture></video>
+        <span class="rl-sombra" aria-hidden="true"></span>
+        <div class="rl-info">
+          <div class="rl-perfil"><span class="rl-av" aria-hidden="true">B</span><b>birdviewproducoes</b><span class="rl-seguir">Seguir</span></div>
+          <p class="rl-legenda">a hora em que o campo para de refletir e começa a brilhar.</p>
+          <div class="rl-audio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17.8V5.4l10-2v12.4"/><ellipse cx="6.6" cy="17.8" rx="2.4" ry="2.1"/><ellipse cx="16.6" cy="15.8" rx="2.4" ry="2.1"/></svg><span class="rl-marq"><span>&Aacute;udio original &middot; birdviewproducoes &nbsp;&middot;&nbsp; &Aacute;udio original &middot; birdviewproducoes &nbsp;&middot;&nbsp; </span></span></div>
+        </div>
+        <div class="rl-acoes" aria-hidden="true">
+          <span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.3C8.6 17.7 3.5 14.2 3.5 9.9A4.4 4.4 0 0 1 12 8a4.4 4.4 0 0 1 8.5 1.9c0 4.3-5.1 7.8-8.5 10.4z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.6a8.1 8.1 0 0 1-8.2 8 8.7 8.7 0 0 1-3.7-.8L3.5 20.5l1.8-4.8a7.8 7.8 0 0 1-1.4-4.1 8.1 8.1 0 0 1 8.2-8 8.1 8.1 0 0 1 8.4 8z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.5 2.6 10.8 13.3M21.5 2.6l-6.8 19-3.9-8.3-8.3-3.9 19-6.8z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.2 3.2h11.6v17.6L12 15.9l-5.8 4.9V3.2z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5.5" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="18.5" r="1.1" fill="currentColor" stroke="none"/></svg></span>
+          <span class="rl-disco" style="background-image: url('assets/rl-01.webp');"></span>
+        </div>
+      </article>
+      <article class="rl-item" style="top: 100%;">
+        <video class="rl-video" poster="assets/rl-02.webp" src="https://videos.pexels.com/video-files/5147455/5147455-hd_1080_1920_30fps.mp4" muted loop playsinline preload="none" disablepictureinpicture></video>
+        <span class="rl-sombra" aria-hidden="true"></span>
+        <div class="rl-info">
+          <div class="rl-perfil"><span class="rl-av" aria-hidden="true">B</span><b>birdviewproducoes</b><span class="rl-seguir">Seguir</span></div>
+          <p class="rl-legenda">maré baixa, quarenta minutos de luz. era tudo o que tinha.</p>
+          <div class="rl-audio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17.8V5.4l10-2v12.4"/><ellipse cx="6.6" cy="17.8" rx="2.4" ry="2.1"/><ellipse cx="16.6" cy="15.8" rx="2.4" ry="2.1"/></svg><span class="rl-marq"><span>&Aacute;udio original &middot; birdviewproducoes &nbsp;&middot;&nbsp; &Aacute;udio original &middot; birdviewproducoes &nbsp;&middot;&nbsp; </span></span></div>
+        </div>
+        <div class="rl-acoes" aria-hidden="true">
+          <span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.3C8.6 17.7 3.5 14.2 3.5 9.9A4.4 4.4 0 0 1 12 8a4.4 4.4 0 0 1 8.5 1.9c0 4.3-5.1 7.8-8.5 10.4z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.6a8.1 8.1 0 0 1-8.2 8 8.7 8.7 0 0 1-3.7-.8L3.5 20.5l1.8-4.8a7.8 7.8 0 0 1-1.4-4.1 8.1 8.1 0 0 1 8.2-8 8.1 8.1 0 0 1 8.4 8z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.5 2.6 10.8 13.3M21.5 2.6l-6.8 19-3.9-8.3-8.3-3.9 19-6.8z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.2 3.2h11.6v17.6L12 15.9l-5.8 4.9V3.2z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5.5" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="18.5" r="1.1" fill="currentColor" stroke="none"/></svg></span>
+          <span class="rl-disco" style="background-image: url('assets/rl-02.webp');"></span>
+        </div>
+      </article>
+      <article class="rl-item" style="top: 200%;">
+        <video class="rl-video" poster="assets/rl-03.webp" src="https://videos.pexels.com/video-files/5896379/5896379-hd_1080_1920_24fps.mp4" muted loop playsinline preload="none" disablepictureinpicture></video>
+        <span class="rl-sombra" aria-hidden="true"></span>
+        <div class="rl-info">
+          <div class="rl-perfil"><span class="rl-av" aria-hidden="true">B</span><b>birdviewproducoes</b><span class="rl-seguir">Seguir</span></div>
+          <p class="rl-legenda">água corrente é o som mais difícil de gravar limpo.</p>
+          <div class="rl-audio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17.8V5.4l10-2v12.4"/><ellipse cx="6.6" cy="17.8" rx="2.4" ry="2.1"/><ellipse cx="16.6" cy="15.8" rx="2.4" ry="2.1"/></svg><span class="rl-marq"><span>&Aacute;udio original &middot; birdviewproducoes &nbsp;&middot;&nbsp; &Aacute;udio original &middot; birdviewproducoes &nbsp;&middot;&nbsp; </span></span></div>
+        </div>
+        <div class="rl-acoes" aria-hidden="true">
+          <span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.3C8.6 17.7 3.5 14.2 3.5 9.9A4.4 4.4 0 0 1 12 8a4.4 4.4 0 0 1 8.5 1.9c0 4.3-5.1 7.8-8.5 10.4z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.6a8.1 8.1 0 0 1-8.2 8 8.7 8.7 0 0 1-3.7-.8L3.5 20.5l1.8-4.8a7.8 7.8 0 0 1-1.4-4.1 8.1 8.1 0 0 1 8.2-8 8.1 8.1 0 0 1 8.4 8z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.5 2.6 10.8 13.3M21.5 2.6l-6.8 19-3.9-8.3-8.3-3.9 19-6.8z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.2 3.2h11.6v17.6L12 15.9l-5.8 4.9V3.2z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5.5" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="18.5" r="1.1" fill="currentColor" stroke="none"/></svg></span>
+          <span class="rl-disco" style="background-image: url('assets/rl-03.webp');"></span>
+        </div>
+      </article>
+      <article class="rl-item" style="top: 300%;">
+        <video class="rl-video" poster="assets/rl-04.webp" src="https://videos.pexels.com/video-files/4434286/4434286-hd_1080_1920_30fps.mp4" muted loop playsinline preload="none" disablepictureinpicture></video>
+        <span class="rl-sombra" aria-hidden="true"></span>
+        <div class="rl-info">
+          <div class="rl-perfil"><span class="rl-av" aria-hidden="true">B</span><b>birdviewproducoes</b><span class="rl-seguir">Seguir</span></div>
+          <p class="rl-legenda">do alto, o outono não é cor: é desenho.</p>
+          <div class="rl-audio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17.8V5.4l10-2v12.4"/><ellipse cx="6.6" cy="17.8" rx="2.4" ry="2.1"/><ellipse cx="16.6" cy="15.8" rx="2.4" ry="2.1"/></svg><span class="rl-marq"><span>&Aacute;udio original &middot; birdviewproducoes &nbsp;&middot;&nbsp; &Aacute;udio original &middot; birdviewproducoes &nbsp;&middot;&nbsp; </span></span></div>
+        </div>
+        <div class="rl-acoes" aria-hidden="true">
+          <span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.3C8.6 17.7 3.5 14.2 3.5 9.9A4.4 4.4 0 0 1 12 8a4.4 4.4 0 0 1 8.5 1.9c0 4.3-5.1 7.8-8.5 10.4z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.6a8.1 8.1 0 0 1-8.2 8 8.7 8.7 0 0 1-3.7-.8L3.5 20.5l1.8-4.8a7.8 7.8 0 0 1-1.4-4.1 8.1 8.1 0 0 1 8.2-8 8.1 8.1 0 0 1 8.4 8z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.5 2.6 10.8 13.3M21.5 2.6l-6.8 19-3.9-8.3-8.3-3.9 19-6.8z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.2 3.2h11.6v17.6L12 15.9l-5.8 4.9V3.2z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5.5" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="18.5" r="1.1" fill="currentColor" stroke="none"/></svg></span>
+          <span class="rl-disco" style="background-image: url('assets/rl-04.webp');"></span>
+        </div>
+      </article>
+      <article class="rl-item" style="top: 400%;">
+        <video class="rl-video" poster="assets/rl-05.webp" src="https://videos.pexels.com/video-files/5438937/5438937-hd_1080_1920_25fps.mp4" muted loop playsinline preload="none" disablepictureinpicture></video>
+        <span class="rl-sombra" aria-hidden="true"></span>
+        <div class="rl-info">
+          <div class="rl-perfil"><span class="rl-av" aria-hidden="true">B</span><b>birdviewproducoes</b><span class="rl-seguir">Seguir</span></div>
+          <p class="rl-legenda">institucional não precisa ser frio.</p>
+          <div class="rl-audio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17.8V5.4l10-2v12.4"/><ellipse cx="6.6" cy="17.8" rx="2.4" ry="2.1"/><ellipse cx="16.6" cy="15.8" rx="2.4" ry="2.1"/></svg><span class="rl-marq"><span>&Aacute;udio original &middot; birdviewproducoes &nbsp;&middot;&nbsp; &Aacute;udio original &middot; birdviewproducoes &nbsp;&middot;&nbsp; </span></span></div>
+        </div>
+        <div class="rl-acoes" aria-hidden="true">
+          <span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.3C8.6 17.7 3.5 14.2 3.5 9.9A4.4 4.4 0 0 1 12 8a4.4 4.4 0 0 1 8.5 1.9c0 4.3-5.1 7.8-8.5 10.4z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.6a8.1 8.1 0 0 1-8.2 8 8.7 8.7 0 0 1-3.7-.8L3.5 20.5l1.8-4.8a7.8 7.8 0 0 1-1.4-4.1 8.1 8.1 0 0 1 8.2-8 8.1 8.1 0 0 1 8.4 8z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.5 2.6 10.8 13.3M21.5 2.6l-6.8 19-3.9-8.3-8.3-3.9 19-6.8z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.2 3.2h11.6v17.6L12 15.9l-5.8 4.9V3.2z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5.5" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="18.5" r="1.1" fill="currentColor" stroke="none"/></svg></span>
+          <span class="rl-disco" style="background-image: url('assets/rl-05.webp');"></span>
+        </div>
+      </article>
+      </div>
+      <div class="rl-barra" aria-hidden="true"><i></i></div>
+    </div>
+  </div>
+</section>
 
 <!-- ===== PROJETOS · dois atos no mesmo pino ===== -->
 <section id="pantanal">
@@ -1284,7 +1452,7 @@
 
   /* cabeçalho: claro sobre as seções escuras e sobre o vermelho */
   var topbar = document.querySelector('.topbar');
-  var escuras = ['reelSection','servicos','trajetoria','contato'].map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  var escuras = ['reels','reelSection','servicos','trajetoria','contato'].map(function(id){ return document.getElementById(id); }).filter(Boolean);
   if (topbar && escuras.length){
     var estado = false;
     (function loop(){
@@ -1871,6 +2039,123 @@
     })();
   })();
 
+
+  /* REEL 2026: a rolagem da pagina vira o gesto do polegar. O Instagram nao
+     desliza junto com o dedo — segura o reel e estala no fim do gesto. Por
+     isso a posicao da pilha nao e linear no scroll, e um degrau suavizado. */
+  (function reels(){
+    var sec = document.getElementById('reels');
+    if (!sec) return;
+    var pilha = sec.querySelector('.rl-pilha');
+    var itens = Array.prototype.slice.call(sec.querySelectorAll('.rl-item'));
+    var barra = sec.querySelector('.rl-barra i');
+    var som = sec.querySelector('.rl-som');
+    var N = itens.length;
+    if (!pilha || !N) return;
+    function clamp(v){ return v < 0 ? 0 : (v > 1 ? 1 : v); }
+
+    var mudo = true, ativo = -1, naTela = false;
+
+    function acorda(v){
+      if (v && v.preload === 'none'){ v.preload = 'auto'; v.load(); }
+      return v;
+    }
+    function liga(i){
+      if (i === ativo) return;
+      ativo = i;
+      itens.forEach(function(el, j){
+        var v = el.querySelector('.rl-video');
+        if (!v) return;
+        if (j === i){
+          acorda(v);
+          v.muted = mudo;
+          var pr = v.play();
+          if (pr && pr.catch) pr.catch(function(){});
+        } else if (!v.paused){ v.pause(); }
+      });
+    }
+
+    if (som) som.addEventListener('click', function(){
+      mudo = !mudo;
+      som.classList.toggle('mudo', mudo);
+      som.setAttribute('aria-pressed', String(!mudo));
+      som.setAttribute('aria-label', mudo ? 'Ativar o som do reel' : 'Desativar o som do reel');
+      var v = itens[ativo] && itens[ativo].querySelector('.rl-video');
+      if (!v) return;
+      v.muted = mudo;
+      if (!mudo){
+        var pr = v.play();
+        // com som o navegador ainda pode recusar; ai volta a ficar mudo
+        if (pr && pr.catch) pr.catch(function(){
+          mudo = true; v.muted = true; som.classList.add('mudo');
+          som.setAttribute('aria-pressed', 'false');
+        });
+      }
+    });
+
+    if (REDUZIDO){ liga(0); return; }
+
+    if ('IntersectionObserver' in window){
+      new IntersectionObserver(function(es){
+        es.forEach(function(e){
+          naTela = e.isIntersecting;
+          if (naTela) acorda(itens[0].querySelector('.rl-video'));
+          else itens.forEach(function(el){
+            var v = el.querySelector('.rl-video');
+            if (v && !v.paused) v.pause();
+          });
+        });
+      }, { rootMargin: '60% 0px' }).observe(sec);
+    } else { naTela = true; }
+
+    (function laco(){
+      requestAnimationFrame(laco);
+      var r = sec.getBoundingClientRect();
+      if (r.bottom < -240 || r.top > window.innerHeight + 240) return;
+
+      var total = r.height - window.innerHeight;
+      var p = clamp(total > 0 ? (-r.top) / total : 0);
+      var t = p * (N - 1);
+      var i = Math.max(0, Math.min(N - 2, Math.floor(t)));
+      var f = N > 1 ? clamp(t - i) : 0;
+      // o dedo segura e so no fim estala: o degrau suavizado
+      var k = clamp((f - 0.58) / 0.42);
+      var e = k * k * (3 - 2 * k);
+      var pos = N > 1 ? i + e : 0;
+      // o quique: a pilha encolhe no meio do estalo e volta
+      var q = e * (1 - e) * 4;
+      pilha.style.transform = 'translate3d(0,' + (-pos * 100).toFixed(3) + '%,0) scale('
+        + (1 - q * 0.045).toFixed(4) + ')';
+
+      // quem sai escurece e encolhe; quem entra chega maior e escuro e assenta.
+      // A escala vai no video, nao no item: o item e quem recorta, e um
+      // elemento escalado nao e cortado pelo proprio overflow
+      itens.forEach(function(el, j){
+        var esc = 1, bri = 0.5;
+        if (j === i){ esc = 1 - e * 0.05; bri = 1 - e * 0.5; }
+        else if (j === i + 1){ esc = 1.05 - e * 0.05; bri = 0.5 + e * 0.5; }
+        var v = el.querySelector('.rl-video');
+        if (v) v.style.transform = 'scale(' + esc.toFixed(4) + ')';
+        el.style.filter = 'brightness(' + bri.toFixed(3) + ')';
+
+        // a interface nao viaja com o video: a de quem sai apaga na primeira
+        // metade do estalo, a de quem entra acende na segunda. Deslizando,
+        // a legenda de saida subia por cima do cabecalho "Reels"
+        var op = 0;
+        if (j === i) op = 1 - clamp(e / 0.5);
+        else if (j === i + 1) op = clamp((e - 0.5) / 0.5);
+        el.style.setProperty('--ui', op.toFixed(3));
+      });
+
+      if (naTela) liga(e > 0.5 ? i + 1 : i);
+
+      if (barra){
+        var va = itens[ativo] && itens[ativo].querySelector('.rl-video');
+        barra.style.width = (va && va.duration
+          ? (va.currentTime / va.duration * 100) : 0).toFixed(2) + '%';
+      }
+    })();
+  })();
 
   /* DOCUMENTARIOS: o vermelho sai quando o mouse chega e o video roda.
      No clique ele abre grande e divide a tela com o titulo e a descricao. */
