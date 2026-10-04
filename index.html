@@ -738,10 +738,16 @@
     .acv-canvas, .acv-onda, .acv-sombra { display: none; }
   }
   /* ===== DOCUMENTARIOS: so a palavra e os videos ===== */
-  #documentarios { position: relative; z-index: 60; background: oklch(0.97 0.008 85);
+  /* o mesmo creme e o mesmo campo de curvas da hero do Pantanal */
+  #documentarios { position: relative; z-index: 60; overflow: hidden;
+    background: oklch(0.985 0.006 85);
     padding: clamp(96px, 12vw, 150px) var(--gx); }
+  #documentarios > .doc-titulo, #documentarios > .doc-grade {
+    position: relative; z-index: 2; }
+  /* line-height 1: com 0.86 o acento do A passava do teto da caixa e o
+     clip-path do rv-clip cortava a ponta */
   .doc-titulo { margin: 0 0 clamp(34px, 4.6vw, 62px); font-family: 'Anton', sans-serif;
-    font-weight: 400; font-size: clamp(44px, 9.4vw, 176px); line-height: 0.86;
+    font-weight: 400; font-size: clamp(44px, 9.4vw, 176px); line-height: 1;
     letter-spacing: -0.015em; color: oklch(0.55 0.22 27); }
   .doc-grade { display: grid; grid-template-columns: repeat(3, 1fr);
     gap: clamp(12px, 1.4vw, 22px); max-width: 1680px; }
@@ -864,6 +870,48 @@
   </div>
 </section>
 
+<!-- ===== DOCUMENTÁRIOS ===== -->
+<section id="documentarios" data-curva="0.35">
+  <canvas class="pnt-campo" aria-hidden="true"></canvas>
+  <h2 class="doc-titulo rv-clip">DOCUMENTÁRIOS</h2>
+  <div class="doc-grade bloco-inteiro">
+    <button class="doc-card" type="button" data-t="Água Doce" data-d="Nas cabeceiras, a mata ainda decide por onde a água passa." aria-label="Abrir Água Doce">
+      <video class="doc-video" poster="assets/doc-01.webp" src="https://videos.pexels.com/video-files/2098989/2098989-hd_1920_1080_30fps.mp4" data-cartaz="1.2" muted loop playsinline preload="none" disablepictureinpicture></video>
+      <span class="doc-tinta" aria-hidden="true"></span>
+    </button>
+    <button class="doc-card" type="button" data-t="Costa Viva" data-d="Um filhote de foca na faixa de areia que a maré devolve todo dia." aria-label="Abrir Costa Viva">
+      <video class="doc-video" poster="assets/doc-02.webp" src="https://videos.pexels.com/video-files/1526909/1526909-hd_1920_1080_24fps.mp4" data-cartaz="0.8" muted loop playsinline preload="none" disablepictureinpicture></video>
+      <span class="doc-tinta" aria-hidden="true"></span>
+    </button>
+    <button class="doc-card" type="button" data-t="Primeira Luz" data-d="Quem viajou a noite inteira para ver o céu encher de balões." aria-label="Abrir Primeira Luz">
+      <video class="doc-video" poster="assets/doc-03.webp" src="https://videos.pexels.com/video-files/3015510/3015510-hd_1920_1080_24fps.mp4" data-cartaz="1.6" muted loop playsinline preload="none" disablepictureinpicture></video>
+      <span class="doc-tinta" aria-hidden="true"></span>
+    </button>
+    <button class="doc-card" type="button" data-t="Linha de Neve" data-d="O vale só aparece inteiro quando a câmera sobe acima da nuvem." aria-label="Abrir Linha de Neve">
+      <video class="doc-video" poster="assets/doc-04.webp" src="https://videos.pexels.com/video-files/3214448/3214448-hd_1920_1080_25fps.mp4" data-cartaz="1.0" muted loop playsinline preload="none" disablepictureinpicture></video>
+      <span class="doc-tinta" aria-hidden="true"></span>
+    </button>
+    <button class="doc-card" type="button" data-t="Maré de Dentro" data-d="O recife quebra a onda e, do outro lado, a vila acorda." aria-label="Abrir Maré de Dentro">
+      <video class="doc-video" poster="assets/doc-05.webp" src="https://videos.pexels.com/video-files/2169880/2169880-hd_1920_1080_30fps.mp4" data-cartaz="1.0" muted loop playsinline preload="none" disablepictureinpicture></video>
+      <span class="doc-tinta" aria-hidden="true"></span>
+    </button>
+    <button class="doc-card" type="button" data-t="Cume" data-d="A crista da serra aparecendo e sumindo no mesmo minuto." aria-label="Abrir Cume">
+      <video class="doc-video" poster="assets/doc-06.webp" src="https://videos.pexels.com/video-files/4763824/4763824-hd_1920_1080_24fps.mp4" data-cartaz="1.2" muted loop playsinline preload="none" disablepictureinpicture></video>
+      <span class="doc-tinta" aria-hidden="true"></span>
+    </button>
+  </div>
+</section>
+
+<div id="docModal" class="doc-modal" role="dialog" aria-modal="true" aria-labelledby="docModalT" hidden>
+  <div class="doc-m-video">
+    <video class="doc-m-tela" controls playsinline preload="metadata"></video>
+  </div>
+  <aside class="doc-m-texto">
+    <h3 class="doc-m-t" id="docModalT"></h3>
+    <p class="doc-m-d"></p>
+  </aside>
+  <button class="doc-m-fechar" type="button" aria-label="Fechar o documentário">&#10005;</button>
+</div>
 
 <!-- ===== PROJETOS · dois atos no mesmo pino ===== -->
 <section id="pantanal">
@@ -969,47 +1017,6 @@
   <button class="pm-fechar" type="button" aria-label="Fechar o projeto">&#10005;</button>
 </div>
 
-<!-- ===== DOCUMENTÁRIOS ===== -->
-<section id="documentarios">
-  <h2 class="doc-titulo rv-clip">DOCUMENTÁRIOS</h2>
-  <div class="doc-grade bloco-inteiro">
-    <button class="doc-card" type="button" data-t="Água Doce" data-d="Nas cabeceiras, a mata ainda decide por onde a água passa." aria-label="Abrir Água Doce">
-      <video class="doc-video" poster="assets/doc-01.webp" src="https://videos.pexels.com/video-files/2098989/2098989-hd_1920_1080_30fps.mp4" data-cartaz="1.2" muted loop playsinline preload="none" disablepictureinpicture></video>
-      <span class="doc-tinta" aria-hidden="true"></span>
-    </button>
-    <button class="doc-card" type="button" data-t="Costa Viva" data-d="Um filhote de foca na faixa de areia que a maré devolve todo dia." aria-label="Abrir Costa Viva">
-      <video class="doc-video" poster="assets/doc-02.webp" src="https://videos.pexels.com/video-files/1526909/1526909-hd_1920_1080_24fps.mp4" data-cartaz="0.8" muted loop playsinline preload="none" disablepictureinpicture></video>
-      <span class="doc-tinta" aria-hidden="true"></span>
-    </button>
-    <button class="doc-card" type="button" data-t="Primeira Luz" data-d="Quem viajou a noite inteira para ver o céu encher de balões." aria-label="Abrir Primeira Luz">
-      <video class="doc-video" poster="assets/doc-03.webp" src="https://videos.pexels.com/video-files/3015510/3015510-hd_1920_1080_24fps.mp4" data-cartaz="1.6" muted loop playsinline preload="none" disablepictureinpicture></video>
-      <span class="doc-tinta" aria-hidden="true"></span>
-    </button>
-    <button class="doc-card" type="button" data-t="Linha de Neve" data-d="O vale só aparece inteiro quando a câmera sobe acima da nuvem." aria-label="Abrir Linha de Neve">
-      <video class="doc-video" poster="assets/doc-04.webp" src="https://videos.pexels.com/video-files/3214448/3214448-hd_1920_1080_25fps.mp4" data-cartaz="1.0" muted loop playsinline preload="none" disablepictureinpicture></video>
-      <span class="doc-tinta" aria-hidden="true"></span>
-    </button>
-    <button class="doc-card" type="button" data-t="Maré de Dentro" data-d="O recife quebra a onda e, do outro lado, a vila acorda." aria-label="Abrir Maré de Dentro">
-      <video class="doc-video" poster="assets/doc-05.webp" src="https://videos.pexels.com/video-files/2169880/2169880-hd_1920_1080_30fps.mp4" data-cartaz="1.0" muted loop playsinline preload="none" disablepictureinpicture></video>
-      <span class="doc-tinta" aria-hidden="true"></span>
-    </button>
-    <button class="doc-card" type="button" data-t="Cume" data-d="A crista da serra aparecendo e sumindo no mesmo minuto." aria-label="Abrir Cume">
-      <video class="doc-video" poster="assets/doc-06.webp" src="https://videos.pexels.com/video-files/4763824/4763824-hd_1920_1080_24fps.mp4" data-cartaz="1.2" muted loop playsinline preload="none" disablepictureinpicture></video>
-      <span class="doc-tinta" aria-hidden="true"></span>
-    </button>
-  </div>
-</section>
-
-<div id="docModal" class="doc-modal" role="dialog" aria-modal="true" aria-labelledby="docModalT" hidden>
-  <div class="doc-m-video">
-    <video class="doc-m-tela" controls playsinline preload="metadata"></video>
-  </div>
-  <aside class="doc-m-texto">
-    <h3 class="doc-m-t" id="docModalT"></h3>
-    <p class="doc-m-d"></p>
-  </aside>
-  <button class="doc-m-fechar" type="button" aria-label="Fechar o documentário">&#10005;</button>
-</div>
 
 <!-- ===== CLAQUETE · intro do reel ===== -->
 <section id="claquete">
@@ -1391,11 +1398,10 @@
     })();
   })();
 
-  /* fundo da seccao de projetos: curvas de nivel irregulares + particulas */
-  (function campo(){
-    var sec = document.getElementById('pantanal');
-    var tela = sec && sec.querySelector('.pnt-campo');
-    if (!tela) return;
+  /* fundo em curvas de nivel + particulas. Serve a hero dos documentarios
+     e a dos projetos: uma funcao, dois canvas, um shader so. */
+  function campo(sec, tela){
+    if (!sec || !tela) return;
     var gl = tela.getContext('webgl', { alpha: false, antialias: false });
     if (!gl) return;   // sem WebGL a seccao fica no creme do CSS
 
@@ -1509,15 +1515,22 @@
     // resolucao cheia (o dobro em tela retina). Se a maquina nao aguentar,
     // o laco abaixo derruba a escala sozinho em vez de engasgar.
     var escala = Math.min(window.devicePixelRatio || 1, 2), refazer = true;
+    // teto de pixels: o canvas cobre a seccao, e uma seccao alta levaria o
+    // shader a milhoes de pixels por quadro. O fundo e difuso, perde nada em
+    // resolucao — mas u_dens tem de cair junto, senao a varredura muda de passo
+    var TETO = 1900000;
     function medir(){
       refazer = false;
-      var w = Math.max(1, Math.round(tela.clientWidth * escala));
-      var h = Math.max(1, Math.round(tela.clientHeight * escala));
+      var cw = tela.clientWidth, ch = tela.clientHeight;
+      var e = escala;
+      if (cw * ch * e * e > TETO) e = Math.sqrt(TETO / Math.max(1, cw * ch));
+      var w = Math.max(1, Math.round(cw * e));
+      var h = Math.max(1, Math.round(ch * e));
       if (tela.width !== w || tela.height !== h){
         tela.width = w; tela.height = h;
         gl.viewport(0, 0, w, h);
         gl.uniform2f(uRes, w, h);
-        gl.uniform1f(uDens, escala);
+        gl.uniform1f(uDens, e);
       }
     }
     window.addEventListener('resize', function(){ refazer = true; });
@@ -1546,6 +1559,15 @@
       soma = 0; amostras = 0;
     }
 
+    // o Pantanal publica o proprio progresso em dataset.p; as outras
+    // seccoes medem a passagem pela tela, que da o mesmo 0..1
+    function progresso(){
+      if (sec.dataset.p !== undefined) return parseFloat(sec.dataset.p) || 0;
+      var r = sec.getBoundingClientRect(), h = window.innerHeight;
+      var v = (h - r.top) / (h + r.height);
+      return v < 0 ? 0 : (v > 1 ? 1 : v);
+    }
+
     var ultimo = -999;
     (function desenha(agora){
       requestAnimationFrame(desenha);
@@ -1556,10 +1578,14 @@
       ultimo = agora;
       if (refazer) medir();
       gl.uniform1f(uTime, REDUZIDO ? 0 : agora * 0.001);
-      gl.uniform1f(uScroll, parseFloat(sec.dataset.p || 0));
+      gl.uniform1f(uScroll, progresso());
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     })(0);
-  })();
+  }
+  ['documentarios', 'pantanal'].forEach(function(id){
+    var sec = document.getElementById(id);
+    campo(sec, sec && sec.querySelector('.pnt-campo'));
+  });
 
   /* projetos: dois atos no mesmo pino. O giro nao reinicia entre eles —
      e o mesmo tombo continuando de um video para o outro. */
@@ -1959,12 +1985,22 @@
       return saida.filter(function(el){ return !anima(el); });
     }
 
+    // data-curva num ancestral afrouxa a curva daquele trecho: a galeria
+    // de documentarios quer o efeito, mas discreto
+    function marca(lista){
+      lista.forEach(function(el){
+        el.classList.add('curva');
+        var a = el.closest ? el.closest('[data-curva]') : null;
+        el._curva = a ? (parseFloat(a.dataset.curva) || 1) : 1;
+      });
+    }
+
     var alvos = [];
     secoes.forEach(function(sec){
       var l = linhas(sec);
       alvos = alvos.concat(l.length ? l : [sec]);
     });
-    alvos.forEach(function(el){ el.classList.add('curva'); });
+    marca(alvos);
     // um bloco pode nascer depois (reveal, video): remede de vez em quando
     var espera;
     window.addEventListener('resize', function(){
@@ -1976,7 +2012,7 @@
           var l = linhas(sec);
           alvos = alvos.concat(l.length ? l : [sec]);
         });
-        alvos.forEach(function(el){ el.classList.add('curva'); });
+        marca(alvos);
       }, 250);
     });
 
@@ -1988,13 +2024,17 @@
       alvos.forEach(function(el){
         var r = el.getBoundingClientRect();
         if (r.bottom < -240 || r.top > alt + 240) return;   // fora de vista, nao mexe
+        // o recuo parte do centro do bloco; num bloco mais alto que a tela o
+        // centro fica fora de vista e o topo desce sozinho, abrindo um rombo
+        if (r.height > alt * 1.3){ if (el.style.transform) el.style.transform = ''; return; }
         // quanto o centro do bloco esta longe do centro da tela, de -1 a 1
         var d = ((r.top + r.height / 2) - meio) / (alt * 0.58);
         d = d < -1 ? -1 : (d > 1 ? 1 : d);
         // o recuo cresce com o quadrado da distancia: e o que transforma uma
         // sequencia de planos inclinados na parede de um cilindro
-        el.style.transform = 'perspective(900px) translateZ(' + (-(d * d) * 760).toFixed(0)
-          + 'px) rotateX(' + (d * 34).toFixed(2) + 'deg)';
+        var f = el._curva || 1;
+        el.style.transform = 'perspective(900px) translateZ(' + (-(d * d) * 760 * f).toFixed(0)
+          + 'px) rotateX(' + (d * 34 * f).toFixed(2) + 'deg)';
       });
 
       // o tubo so acende depois da primeira hero
