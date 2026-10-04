@@ -160,12 +160,15 @@
     /* as metricas que a palavra grande tinha antes: Anton foi desenhada
        para caixa alta, em caixa mista as hastes descasam */
     font-size: clamp(58px, 13.6vw, 256px); line-height: 0.8; letter-spacing: -0.015em;
-    color: oklch(0.55 0.22 27); white-space: nowrap; user-select: none;
-    text-shadow: 0 14px 54px oklch(0.97 0.008 85 / .8); will-change: transform, opacity; }
+    /* creme, nao vermelho: sem o veu o painel e vermelho cheio e letra
+       vermelha sobre ele nao le nem com contorno */
+    color: oklch(0.985 0.008 85); white-space: nowrap; user-select: none;
+    text-shadow: 0 4px 30px oklch(0.2 0.04 28 / .5), 0 1px 3px oklch(0.2 0.04 28 / .35);
+    will-change: transform, opacity; }
   .h1-sub { margin: 0.1em 0 0; font-family: 'Caveat', cursive; font-weight: 600;
     font-size: clamp(24px, 3vw, 52px); letter-spacing: 0.01em;
-    color: oklch(0.25 0.012 60); opacity: 0;
-    text-shadow: 0 2px 14px oklch(0.97 0.008 85 / .95), 0 0 36px oklch(0.97 0.008 85 / .8);
+    color: oklch(0.99 0.008 85); opacity: 0;
+    text-shadow: 0 2px 12px oklch(0.2 0.03 30 / .6), 0 0 26px oklch(0.2 0.03 30 / .4);
     will-change: transform, opacity; }
   .h1-fig  { animation: fadeUp 1.2s cubic-bezier(.2,.65,.2,1) .75s both; }
   .h1-cue  { animation: fadeIn 1s ease 1.7s both; }
@@ -497,21 +500,20 @@
     display: flex; align-items: center; justify-content: center;
     transform-style: preserve-3d; }
   #heroStage > * { will-change: transform; }
+  /* a coluna foi escrita para fundo creme; sobre o painel vermelho inverte.
+     !important porque as cores dela vem de style inline no markup. */
+  #heroStage .h1-copy, #heroStage .h1-copy * { color: oklch(0.99 0.008 85) !important; }
+  #heroStage .h1-copy .line { background: oklch(0.99 0.008 85) !important; }
+  #heroStage .h1-copy .chips span { border-color: oklch(0.99 0.008 85 / .55) !important; }
+  #heroStage .h1-copy { text-shadow: 0 2px 14px oklch(0.2 0.04 28 / .45); }
+
   /* o estudio 3D ocupa a hero inteira, atras de tudo */
   #estudio { position: absolute; inset: 0; z-index: 0; display: block;
     width: 100%; height: 100%; pointer-events: none; }
-  /* nome vermelho sobre painel vermelho nao le: um veu creme forte no miolo
-     da cama para o texto e deixa o estudio aparecer nas bordas */
-  #heroVeu { position: absolute; inset: 0; z-index: 1; pointer-events: none;
-    will-change: opacity;
-    background: radial-gradient(ellipse 64% 50% at 50% 48%,
-      oklch(0.97 0.008 85 / .96) 0%, oklch(0.97 0.008 85 / .88) 42%,
-      oklch(0.97 0.008 85 / .42) 72%, transparent 100%); }
   @media (prefers-reduced-motion: reduce) {
     #abertura { height: 100vh !important; }
     #heroPin { position: relative; }
     #estudio { display: none; }
-    #heroVeu { opacity: .35; }
     .h1-sub { opacity: 1 !important; }
   }
 
@@ -760,7 +762,6 @@
 <section id="abertura" style="position: relative; height: 240vh;">
   <div id="heroPin">
     <canvas id="estudio" aria-hidden="true"></canvas>
-    <div id="heroVeu" aria-hidden="true"></div>
     <div id="heroStage">
   <div class="h1-copy" style="position: absolute; left: var(--gx); top: 100px; z-index: 5; max-width: min(430px, calc(100vw - 2 * var(--gx)));">
     <div style="display: flex; align-items: center; gap: 10px; font-family: 'Caveat', cursive; font-size: 20px; font-weight: 600; letter-spacing: 0.01em; text-transform: none; color: oklch(0.55 0.22 27);">
@@ -1161,7 +1162,6 @@
     var nome = sec.querySelector('.h1-word');
     var sub = sec.querySelector('.h1-sub');
     var copia = sec.querySelector('.h1-copy');
-    var veu = document.getElementById('heroVeu');
 
     (function laco(){
       var r = sec.getBoundingClientRect();
@@ -1183,8 +1183,6 @@
           copia.style.setProperty('opacity', (1 - fuga).toFixed(3), 'important');
           copia.style.setProperty('transform', 'translateZ(' + (-fuga * 360).toFixed(0) + 'px)', 'important');
         }
-        // o veu abre conforme a camera se afasta: o estudio aparece
-        veu.style.opacity = (1 - e * 0.22).toFixed(3);
       }
       requestAnimationFrame(laco);
     })();
