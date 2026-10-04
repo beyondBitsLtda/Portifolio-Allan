@@ -154,12 +154,12 @@
   /* nome e subtitulo num bloco so: posicionados separados por margin-top
      dentro do flex, eles se sobrepunham */
   .h1-bloco { position: absolute; z-index: 4; left: 0; right: 0; text-align: center;
-    margin-top: -21vh; pointer-events: none; }
+    margin-top: -16.5vh; pointer-events: none; }
   .h1-word { animation: wipeIn 1.3s cubic-bezier(.77,0,.18,1) .45s both;
     margin: 0; font-family: 'Anton', sans-serif; font-weight: 400;
     /* as metricas que a palavra grande tinha antes: Anton foi desenhada
        para caixa alta, em caixa mista as hastes descasam */
-    font-size: clamp(50px, 11.8vw, 222px); line-height: 0.8; letter-spacing: -0.015em;
+    font-size: clamp(62px, 14.6vw, 274px); line-height: 0.8; letter-spacing: -0.015em;
     /* vermelho gritante: mais claro e saturado que o painel, e o nome so
        aparece depois que ele entra, ja sobre a camiseta escura */
     color: oklch(0.64 0.27 25); white-space: nowrap; user-select: none;
@@ -499,7 +499,7 @@
   /* o observador: ele e quem estava olhando o estudio ate agora */
   #obsv { position: absolute; inset: 0; z-index: 2; pointer-events: none;
     opacity: 0; will-change: transform, opacity; }
-  .obs-q { position: absolute; left: 0; right: 0; bottom: -2%; height: 60%;
+  .obs-q { position: absolute; left: 0; right: 0; bottom: -2%; height: 44%;
     opacity: 0; will-change: opacity;
     background-repeat: no-repeat; background-position: bottom center; background-size: contain;
     -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
@@ -1181,6 +1181,7 @@
     var sub = sec.querySelector('.h1-sub');
     var copia = sec.querySelector('.h1-copy');
     var obsv = document.getElementById('obsv');
+    var batida = 0;   // instante do baque; o tranco toca uma vez e amortece
     var poses = Array.prototype.slice.call(sec.querySelectorAll('.obs-q'));
     ['obs1', 'obs2'].forEach(function(n){
       new Image().src = 'assets/' + n + '.jpg';
@@ -1195,24 +1196,43 @@
         sec.dataset.p = p.toFixed(4);          // o modulo do estudio le daqui
         var e = p * p * (3 - 2 * p);
 
-        // 1. ele entra em quadro: ate aqui o estudio era o que ELE via
-        var ent = clamp((p - 0.2) / 0.26);
-        var se = ent * ent * (3 - 2 * ent);
-        obsv.style.opacity = se.toFixed(3);
-        obsv.style.transform = 'translateY(' + ((1 - se) * 24).toFixed(2) + 'vh) scale('
-          + (1.1 - se * 0.1).toFixed(4) + ')';
+        // 1. ele so chega no fim, e chega batendo: vem grande e rapido,
+        // desacelerando de uma vez — ease-out forte, nao suave dos dois lados
+        var ent = clamp((p - 0.52) / 0.09);
+        var se = 1 - Math.pow(1 - ent, 3);
+        obsv.style.opacity = clamp(ent / 0.35).toFixed(3);
+        obsv.style.transform = 'translateY(' + ((1 - se) * 34).toFixed(2) + 'vh) scale('
+          + (1.55 - se * 0.55).toFixed(4) + ')';
+
+        // o tranco do impacto: dispara ao encostar e amortece no tempo, nao
+        // no scroll — preso ao scroll congelaria torto se voce parasse no meio
+        if (ent >= 1 && !batida) batida = performance.now();
+        if (ent < 0.6) batida = 0;
+        var soco = 0, socoY = 0;
+        if (batida){
+          var dt = (performance.now() - batida) / 1000;
+          if (dt < 0.9){
+            var amort = Math.exp(-dt * 7.5);
+            soco = amort * Math.cos(dt * 40);
+            socoY = amort * Math.sin(dt * 31) * 12;
+          }
+        }
+        pin.style.transform = soco
+          ? 'translate3d(' + (soco * 17).toFixed(2) + 'px,' + socoY.toFixed(2) + 'px,0) scale('
+            + (1 + Math.abs(soco) * 0.032).toFixed(4) + ')'
+          : 'none';
 
         // 2. ele vira o rosto para nos
-        var vira = clamp((p - 0.5) / 0.09);
+        var vira = clamp((p - 0.64) / 0.08);
         poses[0].style.opacity = (1 - vira).toFixed(3);
         poses[1].style.opacity = vira.toFixed(3);
 
         // 3. so entao o nome chega
-        var nm = clamp((p - 0.58) / 0.24);
+        var nm = clamp((p - 0.72) / 0.2);
         var sn = nm * nm * (3 - 2 * nm);
         bloco.style.transform = 'translateZ(' + (-430 + sn * 530).toFixed(0) + 'px)';
         nome.style.opacity = sn.toFixed(3);
-        sub.style.opacity = clamp((p - 0.7) / 0.2).toFixed(3);
+        sub.style.opacity = clamp((p - 0.82) / 0.14).toFixed(3);
 
         // a coluna da esquerda recua e sai de cena
         if (copia){
