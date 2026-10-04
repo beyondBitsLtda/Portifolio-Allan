@@ -156,7 +156,7 @@
   .h1-bloco { position: absolute; z-index: 4; left: 0; right: 0; text-align: center;
     /* medido na tela: medido em 1440x900 de verdade: o bloco centraliza aqui,
        porque a posicao estatica dentro do flex nao centraliza a caixa */
-    margin-top: 8vh; pointer-events: none; }
+    margin-top: -4vh; pointer-events: none; }
   .h1-word { animation: wipeIn 1.3s cubic-bezier(.77,0,.18,1) .45s both;
     margin: 0; font-family: 'Anton', sans-serif; font-weight: 400;
     /* as metricas que a palavra grande tinha antes: Anton foi desenhada
@@ -505,7 +505,7 @@
   /* o observador: ele e quem estava olhando o estudio ate agora */
   #obsv { position: absolute; inset: 0; z-index: 2; pointer-events: none;
     opacity: 0; will-change: transform, opacity; }
-  .obs-q { position: absolute; left: 0; right: 0; bottom: -33%; height: 78%;
+  .obs-q { position: absolute; left: 0; right: 0; bottom: -30%; height: 92%;
     opacity: 0; will-change: opacity;
     background-repeat: no-repeat; background-position: bottom center; background-size: contain;
     -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
