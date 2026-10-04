@@ -157,7 +157,9 @@
     pointer-events: none; }
   .h1-word { animation: wipeIn 1.3s cubic-bezier(.77,0,.18,1) .45s both;
     margin: 0; font-family: 'Anton', sans-serif; font-weight: 400;
-    font-size: clamp(60px, 14.5vw, 272px); line-height: 0.9; letter-spacing: -0.025em;
+    /* as metricas que a palavra grande tinha antes: Anton foi desenhada
+       para caixa alta, em caixa mista as hastes descasam */
+    font-size: clamp(58px, 13.6vw, 256px); line-height: 0.8; letter-spacing: -0.015em;
     color: oklch(0.55 0.22 27); white-space: nowrap; user-select: none;
     text-shadow: 0 14px 54px oklch(0.97 0.008 85 / .8); will-change: transform, opacity; }
   .h1-sub { margin: 0.1em 0 0; font-family: 'Caveat', cursive; font-weight: 600;
@@ -503,8 +505,8 @@
   #heroVeu { position: absolute; inset: 0; z-index: 1; pointer-events: none;
     will-change: opacity;
     background: radial-gradient(ellipse 64% 50% at 50% 48%,
-      oklch(0.97 0.008 85 / .93) 0%, oklch(0.97 0.008 85 / .78) 48%,
-      oklch(0.97 0.008 85 / .3) 78%, transparent 100%); }
+      oklch(0.97 0.008 85 / .96) 0%, oklch(0.97 0.008 85 / .88) 42%,
+      oklch(0.97 0.008 85 / .42) 72%, transparent 100%); }
   @media (prefers-reduced-motion: reduce) {
     #abertura { height: 100vh !important; }
     #heroPin { position: relative; }
@@ -769,7 +771,7 @@
     <div class="chips"><span>Birdview Produções</span><span>Direção criativa</span><span>Marketing estratégico</span></div>
   </div>
   <div class="h1-bloco">
-    <h1 class="h1-word">Allan Kevin</h1>
+    <h1 class="h1-word">ALLAN KEVIN</h1>
     <p class="h1-sub">Produ&ccedil;&otilde;es Audiovisuais</p>
   </div>
     </div>
@@ -1182,7 +1184,7 @@
           copia.style.setProperty('transform', 'translateZ(' + (-fuga * 360).toFixed(0) + 'px)', 'important');
         }
         // o veu abre conforme a camera se afasta: o estudio aparece
-        veu.style.opacity = (1 - e * 0.52).toFixed(3);
+        veu.style.opacity = (1 - e * 0.22).toFixed(3);
       }
       requestAnimationFrame(laco);
     })();
@@ -1976,10 +1978,21 @@ if (tela && !reduzido) {
   const leitor = new GLTFLoader();
   leitor.setDRACOLoader(draco);
   leitor.load('assets/studio.glb', (g) => {
-    const cx = new THREE.Box3().setFromObject(g.scene);
+    g.scene.updateMatrixWorld(true);
+    // enquadrar pela caixa geral nao serve: um equipamento distante puxa o
+    // centro. O alvo e o fundo de gravacao, as duas pecas dele.
+    const pecas = [];
+    g.scene.traverse((o) => {
+      if (!o.isMesh) return;
+      const ms = [].concat(o.material);
+      if (ms.some((m) => m && m.name === 'Studio_Setup_Mtl_1.001')) pecas.push(o);
+    });
+    const cx = new THREE.Box3();
+    if (pecas.length) pecas.forEach((o) => cx.expandByObject(o));
+    else cx.setFromObject(g.scene);
     const tam = cx.getSize(new THREE.Vector3());
     g.scene.position.sub(cx.getCenter(new THREE.Vector3()));
-    raio = Math.max(tam.x, tam.y, tam.z);
+    raio = Math.max(tam.x, tam.y);
     cena.add(g.scene);
     pronto = true;
   });
@@ -2013,11 +2026,12 @@ if (tela && !reduzido) {
 
     const p = parseFloat(sec.dataset.p || 0);
     const e = p * p * (3 - 2 * p);
-    // o recuo: comeca colada no painel e termina com o set inteiro no quadro
-    const dist = raio * (0.1 + e * 0.56);
-    const giro = 0.78 + e * 0.5;
-    olho.position.set(Math.sin(giro) * dist, raio * (-0.01 + e * 0.12), Math.cos(giro) * dist);
-    olho.lookAt(0, raio * 0.02, 0);
+    // de frente para o fundo e so recuando: o angulo nao muda, so a distancia.
+    // 3*PI/2 e a face do fundo — descoberto rodando os quatro lados e olhando.
+    const FRENTE = Math.PI * 1.5;
+    const dist = raio * (0.55 + e * 3.3);   // termina com o set todo no quadro
+    olho.position.set(Math.sin(FRENTE) * dist, raio * 0.04, Math.cos(FRENTE) * dist);
+    olho.lookAt(0, 0, 0);
     render.render(cena, olho);
   })(0);
 }
