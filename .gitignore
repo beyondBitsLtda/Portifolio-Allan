@@ -3,3 +3,5 @@ Portifólio Allan Kevin - Antigo.pdf
 assets/vidro.html
 # o GLB cru do cliente (45 MB); o site usa assets/studio.glb otimizado
 assets/Novo Models/
+# os OTF originais da fonte; o site usa os WOFF2 subconjunto em assets/
+fontes/

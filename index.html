@@ -121,7 +121,46 @@
   }
 
   /* ===== refinamento: variáveis, revelação, entrada, cabeçalho ===== */
-  :root { --gx: 40px; }
+  /* Santa Misa Cyber Pulp: os titulos de display. Subconjunto latino,
+     942 KB de OTF viram 20 KB de WOFF2 */
+  @font-face { font-family: 'Santa Misa'; font-style: normal; font-weight: 400;
+    font-display: swap; src: url('assets/santamisa.woff2') format('woff2'); }
+  @font-face { font-family: 'Santa Misa Outline'; font-style: normal; font-weight: 400;
+    font-display: swap; src: url('assets/santamisa-outline.woff2') format('woff2'); }
+  :root { --gx: 40px;
+    /* um nome so para a fonte de display: trocar aqui troca em toda a pagina */
+    --display: 'Santa Misa', 'Anton', sans-serif;
+    /* o vermelho da marca, um so na pagina inteira. O --claro e o mesmo
+       vermelho levantado para ter contraste sobre fundo escuro */
+    --vermelho: oklch(0.55 0.22 27);
+    --vermelho-claro: oklch(0.72 0.16 27); }
+
+  /* os dois temas das seccoes de texto: a cor vem do token, nunca do estilo
+     embutido, senao alternar claro/escuro vira caca a hexadecimal */
+  .tema-claro { --bg: oklch(0.97 0.008 85); --tinta: oklch(0.18 0.012 60);
+    --tinta2: oklch(0.38 0.012 60); --tinta3: oklch(0.5 0.012 60);
+    --marca: var(--vermelho); --cartao: oklch(0.995 0.004 85);
+    --cartaoLinha: oklch(0.86 0.006 80); --caixa: oklch(0.93 0.006 82); }
+  .tema-escuro { --bg: oklch(0.18 0.012 60); --tinta: oklch(0.97 0.008 85);
+    --tinta2: oklch(0.82 0.01 85); --tinta3: oklch(0.74 0.01 85);
+    --marca: var(--vermelho-claro); --cartao: oklch(0.21 0.012 60);
+    --cartaoLinha: oklch(0.3 0.01 60); --caixa: oklch(0.22 0.014 60); }
+  .tema-claro, .tema-escuro { background: var(--bg); color: var(--tinta); }
+
+  /* o campo por tras das seccoes de texto: desfoque pesado e cor por filtro */
+  .fundo-campo { position: absolute; inset: -80px; z-index: 0; display: block;
+    width: calc(100% + 160px); height: calc(100% + 160px);
+    pointer-events: none; opacity: .72; }
+  /* no creme a linha e quase branca: sem saturar forte o desfoque come tudo */
+  .tema-claro > .fundo-campo { filter: blur(28px) saturate(5) brightness(0.97) contrast(1.12);
+    opacity: .95; }
+  /* invert joga o creme para escuro e as linhas para ciano; o hue-rotate
+     devolve o vermelho */
+  .tema-escuro > .fundo-campo { filter: blur(30px) invert(1) hue-rotate(180deg)
+    saturate(2.4) brightness(1.15); opacity: .85; }
+  .com-campo { overflow: hidden; }
+  .com-campo > *:not(.fundo-campo) { position: relative; z-index: 2; }
+  @media (prefers-reduced-motion: reduce) { .fundo-campo { display: none; } }
   @media (max-width: 759px) { :root { --gx: 20px; } }
   html { scroll-behavior: smooth; }
 
@@ -158,13 +197,13 @@
        porque a posicao estatica dentro do flex nao centraliza a caixa */
     margin-top: -4vh; pointer-events: none; }
   .h1-word { animation: wipeIn 1.3s cubic-bezier(.77,0,.18,1) .45s both;
-    margin: 0; font-family: 'Anton', sans-serif; font-weight: 400;
-    /* as metricas que a palavra grande tinha antes: Anton foi desenhada
-       para caixa alta, em caixa mista as hastes descasam */
-    font-size: clamp(62px, 14.6vw, 274px); line-height: 0.8; letter-spacing: -0.015em;
+    margin: 0; font-family: var(--display); font-weight: 400;
+    /* a Santa Misa e ~1,7x mais larga que a Anton: o corpo cai junto, e o
+       letter-spacing negativo sai porque ela ja vem espacada */
+    font-size: clamp(32px, 9.4vw, 176px); line-height: 1; letter-spacing: 0;
     /* vermelho gritante: mais claro e saturado que o painel, e o nome so
        aparece depois que ele entra, ja sobre a camiseta escura */
-    color: oklch(0.64 0.27 25); white-space: nowrap; user-select: none;
+    color: var(--vermelho); white-space: nowrap; user-select: none;
     text-shadow: none;
     /* as fotos entram por dentro das letras antes de assentar no vermelho */
     background-repeat: no-repeat; background-position: center center;
@@ -174,7 +213,7 @@
   /* Satisfy no lugar da Caveat: assinatura, nao anotacao */
   .h1-sub { margin: 0.16em 0 0; font-family: 'Satisfy', 'Caveat', cursive; font-weight: 400;
     font-size: clamp(26px, 3.4vw, 60px); letter-spacing: 0.012em;
-    color: oklch(0.64 0.27 25); opacity: 0; text-shadow: none;
+    color: var(--vermelho); opacity: 0; text-shadow: none;
     will-change: transform, opacity; }
   .h1-fig  { animation: fadeUp 1.2s cubic-bezier(.2,.65,.2,1) .75s both; }
   .h1-cue  { animation: fadeIn 1s ease 1.7s both; }
@@ -266,7 +305,7 @@
 
   .scribble.under svg { top: 58%; height: 64%; left: -2%; width: 104%; }
   .scribble.light svg path { stroke: oklch(0.97 0.008 85); }
-  .scribble.salmon svg path { stroke: oklch(0.72 0.16 27); }
+  .scribble.salmon svg path { stroke: var(--marca, oklch(0.72 0.16 27)); }
   .js .hand-note.rv.in svg path, .js .rv.in .hand-note svg path { animation: draw 1s cubic-bezier(.6,0,.2,1) .5s both; }
 
   /* tira: três fotos de fora a fora, sem moldura */
@@ -411,29 +450,29 @@
   /* ===== O que faço ===== */
   .faz-head { display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: clamp(40px, 5vw, 68px); }
   @media (min-width: 900px) { .faz-head { grid-template-columns: 1fr 1fr; gap: 56px; align-items: end; } }
-  .faz-grid { display: grid; grid-template-columns: 1fr; gap: 1px; background: oklch(0.3 0.01 60); }
+  .faz-grid { display: grid; grid-template-columns: 1fr; gap: 1px; background: var(--cartaoLinha); }
   @media (min-width: 900px) { .faz-grid { grid-template-columns: repeat(3, 1fr); } }
-  .faz-card { background: oklch(0.18 0.012 60); padding: 40px 34px; }
-  .faz-n { font-family: 'Caveat', cursive; font-size: 24px; font-weight: 700; color: oklch(0.72 0.16 27); }
+  .faz-card { background: var(--cartao); padding: 40px 34px; }
+  .faz-n { font-family: 'Caveat', cursive; font-size: 24px; font-weight: 700; color: var(--marca); }
   .faz-card h3 { margin: 12px 0 8px; font-family: 'Anton', sans-serif; font-weight: 400; font-size: clamp(24px, 2.2vw, 32px);
     line-height: 1.02; letter-spacing: 0.005em; }
-  .faz-sub { font-family: 'Caveat', cursive; font-size: 20px; font-weight: 600; color: oklch(0.72 0.16 27); margin-bottom: 14px; }
-  .faz-card p { margin: 0; font-size: 20px; line-height: 1.22; color: oklch(0.8 0.01 85); }
+  .faz-sub { font-family: 'Caveat', cursive; font-size: 20px; font-weight: 600; color: var(--marca); margin-bottom: 14px; }
+  .faz-card p { margin: 0; font-size: 20px; line-height: 1.22; color: var(--tinta2); }
 
   /* ===== Visão e propósito ===== */
   .visao-grid { display: grid; grid-template-columns: 1fr; gap: 44px; }
   @media (min-width: 900px) { .visao-grid { grid-template-columns: minmax(0,.85fr) minmax(0,1.15fr); gap: 64px; } }
-  .visao-txt p { margin: 0 0 18px; font-size: clamp(20px, 1.6vw, 25px); line-height: 1.24; color: oklch(0.34 0.012 60); }
+  .visao-txt p { margin: 0 0 18px; font-size: clamp(20px, 1.6vw, 25px); line-height: 1.24; color: var(--tinta2); }
   .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 26px 20px; margin-top: 8px; }
-  .stat { border-left: 2px solid oklch(0.55 0.22 27 / .5); padding-left: 16px; }
+  .stat { border-left: 2px solid var(--marca); padding-left: 16px; }
   .stat b { display: block; font-family: 'Anton', sans-serif; font-weight: 400; font-size: clamp(38px, 4.2vw, 62px);
-    line-height: 0.9; color: oklch(0.55 0.22 27); }
-  .stat span { display: block; margin-top: 8px; font-family: 'Caveat', cursive; font-size: 19px; font-weight: 600; color: oklch(0.4 0.012 60); }
-  .pilares { margin-top: 34px; display: grid; gap: 1px; background: oklch(0.86 0.006 80); border: 1px solid oklch(0.86 0.006 80); }
-  .pilar { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: start; background: oklch(0.97 0.008 85); padding: 22px 24px; }
-  .pilar-n { font-family: 'Anton', sans-serif; font-size: 26px; line-height: 1; color: oklch(0.55 0.22 27 / .45); }
-  .pilar h4 { margin: 0 0 4px; font-family: 'Anton', sans-serif; font-weight: 400; font-size: 21px; letter-spacing: 0.01em; color: oklch(0.18 0.012 60); }
-  .pilar p { margin: 0; font-size: 19px; line-height: 1.2; color: oklch(0.42 0.012 60); }
+    line-height: 0.9; color: var(--marca); }
+  .stat span { display: block; margin-top: 8px; font-family: 'Caveat', cursive; font-size: 19px; font-weight: 600; color: var(--tinta3); }
+  .pilares { margin-top: 34px; display: grid; gap: 1px; background: var(--cartaoLinha); border: 1px solid var(--cartaoLinha); }
+  .pilar { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: start; background: var(--cartao); padding: 22px 24px; }
+  .pilar-n { font-family: 'Anton', sans-serif; font-size: 26px; line-height: 1; color: var(--marca); opacity: .55; }
+  .pilar h4 { margin: 0 0 4px; font-family: 'Anton', sans-serif; font-weight: 400; font-size: 21px; letter-spacing: 0.01em; color: var(--tinta); }
+  .pilar p { margin: 0; font-size: 19px; line-height: 1.2; color: var(--tinta2); }
 
   /* ===== Obras & acervos ===== */
   .obras { display: grid; gap: 0; border-top: 1px solid oklch(0.86 0.006 80); }
@@ -460,16 +499,16 @@
   .traj-linha { display: grid; gap: 30px; }
   .traj-item { position: relative; padding-left: 30px; }
   .traj-item::before { content: ''; position: absolute; left: 0; top: 7px; width: 11px; height: 11px; border-radius: 50%;
-    background: oklch(0.72 0.16 27); }
+    background: var(--marca); }
   .traj-item::after { content: ''; position: absolute; left: 5px; top: 22px; bottom: -30px; width: 1px;
-    background: oklch(0.72 0.16 27 / .35); }
+    background: var(--marca); opacity: .4; }
   .traj-linha .traj-item:last-child::after { display: none; }
   .traj-item h4 { margin: 0 0 6px; font-family: 'Anton', sans-serif; font-weight: 400; font-size: 22px; letter-spacing: 0.01em; }
-  .traj-item p { margin: 0; font-size: 19px; line-height: 1.2; color: oklch(0.78 0.01 85); }
-  .traj-txt p { margin: 0 0 18px; font-size: clamp(20px, 1.6vw, 25px); line-height: 1.24; color: oklch(0.82 0.01 85); }
-  .traj-txt blockquote { margin: 28px 0 0; padding: 22px 26px; border-left: 3px solid oklch(0.72 0.16 27);
-    background: oklch(0.22 0.014 60); font-family: 'Caveat', cursive; font-size: clamp(24px, 2vw, 32px);
-    line-height: 1.16; color: oklch(0.95 0.008 85); }
+  .traj-item p { margin: 0; font-size: 19px; line-height: 1.2; color: var(--tinta2); }
+  .traj-txt p { margin: 0 0 18px; font-size: clamp(20px, 1.6vw, 25px); line-height: 1.24; color: var(--tinta2); }
+  .traj-txt blockquote { margin: 28px 0 0; padding: 22px 26px; border-left: 3px solid var(--marca);
+    background: var(--caixa); font-family: 'Caveat', cursive; font-size: clamp(24px, 2vw, 32px);
+    line-height: 1.16; color: var(--tinta); }
 
   /* ===== Contato: canais ===== */
   .canais { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
@@ -753,18 +792,23 @@
     mask-image: radial-gradient(circle, #000 38%, transparent 70%); }
   /* a textura leva o transform contrario do circulo: fica presa ao palco
      em vez de escorregar junto com o cursor */
+  /* a mesma textura do hero VAMOS CRIAR JUNTOS: o vermelho da marca, o
+     realce radial do .spot e a reticula do .halftone */
   .rl-luz i { position: absolute; left: 0; top: 0; display: block;
     width: 100vw; height: 100vh; will-change: transform;
-    background:
-      repeating-linear-gradient(118deg, oklch(0 0 0 / .24) 0 2px, transparent 2px 7px),
-      repeating-linear-gradient(28deg, oklch(0.78 0.15 32 / .16) 0 1px, transparent 1px 11px),
-      radial-gradient(62% 56% at 38% 32%, oklch(0.64 0.25 27) 0%,
-        oklch(0.47 0.2 28) 55%, oklch(0.29 0.13 29) 100%); }
+    background-color: var(--vermelho);
+    background-image: radial-gradient(40% 44% at 42% 38%,
+      oklch(0.68 0.23 27 / .9) 0%, transparent 70%); }
+  /* a reticula mora num pseudo proprio: no #contato ela e uma camada com
+     opacity .16, e duas camadas de background nao repartem alfa */
+  .rl-luz i::after { content: ''; position: absolute; inset: 0; opacity: .16;
+    background-image: radial-gradient(oklch(0.28 0.1 27) 1px, transparent 1.5px);
+    background-size: 9px 9px; }
   .rl-titulo { position: relative; z-index: 2;
-    margin: 0; font-family: 'Anton', sans-serif; font-weight: 400;
-    font-size: clamp(46px, 9.2vw, 172px); line-height: 0.82; letter-spacing: -0.02em;
+    margin: 0; font-family: var(--display); font-weight: 400;
+    font-size: clamp(34px, 6.8vw, 126px); line-height: 1.02; letter-spacing: 0;
     color: oklch(0.99 0.008 85); }
-  .rl-titulo span { color: oklch(0.64 0.26 26); }
+  .rl-titulo span { color: var(--vermelho-claro); }
 
   /* o aparelho: 9:16 com canto redondo, sem moldura de celular — o que
      identifica o Reels e a interface dentro, nao o desenho do telefone */
@@ -834,7 +878,7 @@
 
   @media (max-width: 899px) {
     .rl-pin { flex-direction: column; gap: 14px; }
-    .rl-titulo { font-size: clamp(32px, 10vw, 58px); line-height: 0.9; text-align: center; }
+    .rl-titulo { font-size: clamp(24px, 7.4vw, 44px); line-height: 1.02; text-align: center; }
     .rl-fone { height: min(68vh, 600px); border-radius: 18px; }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -877,7 +921,7 @@
   .rl-cel:hover img, .rl-cel:focus-visible img { transform: scale(1.05); filter: brightness(1); }
   .rl-cel-play { position: absolute; left: 10px; bottom: 10px; width: 19px; height: 19px;
     color: oklch(0.99 0.008 85); filter: drop-shadow(0 1px 3px oklch(0 0 0 / .7)); }
-  .rl-cel:focus-visible { outline: 2px solid oklch(0.64 0.26 26); outline-offset: -2px; }
+  .rl-cel:focus-visible { outline: 2px solid var(--vermelho-claro); outline-offset: -2px; }
 
   /* o reel grande: o mesmo desenho do modal dos documentarios, de pe */
   /* grid-template-rows: 100% nao e enfeite: sem uma altura definida na
@@ -930,9 +974,9 @@
     position: relative; z-index: 2; }
   /* line-height 1: com 0.86 o acento do A passava do teto da caixa e o
      clip-path do rv-clip cortava a ponta */
-  .doc-titulo { margin: 0 0 clamp(34px, 4.6vw, 62px); font-family: 'Anton', sans-serif;
-    font-weight: 400; font-size: clamp(44px, 9.4vw, 176px); line-height: 1;
-    letter-spacing: -0.015em; color: oklch(0.55 0.22 27); }
+  .doc-titulo { margin: 0 0 clamp(34px, 4.6vw, 62px); font-family: var(--display);
+    font-weight: 400; font-size: clamp(25px, 5.3vw, 99px); line-height: 1.04;
+    letter-spacing: 0; color: oklch(0.55 0.22 27); }
   .doc-grade { display: grid; grid-template-columns: repeat(3, 1fr);
     gap: clamp(12px, 1.4vw, 22px); max-width: 1680px; }
   .doc-card { position: relative; display: block; appearance: none; -webkit-appearance: none;
@@ -1067,7 +1111,6 @@
 
 <!-- ===== DOCUMENTÁRIOS ===== -->
 <section id="documentarios" data-curva="0.35">
-  <canvas class="pnt-campo" aria-hidden="true"></canvas>
   <h2 class="doc-titulo rv-clip">DOCUMENTÁRIOS</h2>
   <div class="doc-grade bloco-inteiro">
     <button class="doc-card" type="button" data-t="Água Doce" data-d="Nas cabeceiras, a mata ainda decide por onde a água passa. Acompanhamos uma estiagem inteira até a volta das chuvas, com a mesma queda filmada nos dois extremos do ano. O que o rio perde no caminho não se enxerga de dentro da cidade — só de dentro da mata." aria-label="Abrir Água Doce">
@@ -1229,12 +1272,13 @@
 </div>
 
 <!-- ===== O QUE FAÇO ===== -->
-<section id="servicos" style="position: relative; z-index: 60; background: oklch(0.18 0.012 60); color: oklch(0.97 0.008 85); padding: clamp(96px, 12vw, 150px) var(--gx);">
+<section id="servicos" class="tema-claro com-campo" style="position: relative; z-index: 60; padding: clamp(96px, 12vw, 150px) var(--gx);">
+  <canvas class="pnt-campo fundo-campo" data-escala="0.18" aria-hidden="true"></canvas>
   <div style="max-width: 1200px; margin: 0 auto;">
-    <div class="olho" style="color: oklch(0.72 0.16 27);"><span class="line" style="background: oklch(0.72 0.16 27);"></span>Atuação profissional</div>
+    <div class="olho" style="color: var(--marca);"><span class="line" style="background: var(--marca);"></span>Atuação profissional</div>
     <div class="faz-head">
-      <h2 class="rv-clip" style="margin: 0; font-family: 'Anton', sans-serif; font-weight: 400; font-size: clamp(40px, 6vw, 104px); line-height: 0.9; letter-spacing: -0.01em;">O QUE <span class="scribble salmon" style="color: oklch(0.72 0.16 27);">FAÇO<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span></h2>
-      <p class="rv" style="margin: 0; font-size: clamp(21px, 1.8vw, 28px); line-height: 1.2; color: oklch(0.82 0.01 85); max-width: 46ch;">Da concepção à finalização, atuo em todas as etapas do processo criativo e estratégico. Cada projeto é tratado como uma oportunidade de gerar impacto real e permanente.</p>
+      <h2 class="rv-clip" style="margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(25px, 3.8vw, 64px); line-height: 1.06; letter-spacing: 0;">NÃO É SÓ <span class="scribble salmon" style="color: var(--marca);">FILMAR<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span></h2>
+      <p class="rv" style="margin: 0; font-size: clamp(21px, 1.8vw, 28px); line-height: 1.2; color: var(--tinta2); max-width: 46ch;">Da concepção à finalização, atuo em todas as etapas do processo criativo e estratégico. Cada projeto é tratado como uma oportunidade de gerar impacto real e permanente.</p>
     </div>
     <div class="faz-grid">
       <div class="rv faz-card" style="--d:0.00s;"><div class="faz-n">01</div><h3>DIREÇÃO DE CRIAÇÃO</h3><div class="faz-sub">Birdview Produções</div><p>Responsável pela concepção criativa, direção e execução de projetos audiovisuais, desde o desenvolvimento de ideias até a finalização. Cada frame carrega intenção.</p></div>
@@ -1253,12 +1297,13 @@
 </div>
 
 <!-- ===== VISÃO E PROPÓSITO ===== -->
-<section id="sobre" style="position: relative; z-index: 60; background: oklch(0.97 0.008 85); padding: clamp(96px, 12vw, 150px) var(--gx) clamp(80px, 10vw, 120px);">
+<section id="sobre" class="tema-escuro com-campo" style="position: relative; z-index: 60; padding: clamp(96px, 12vw, 150px) var(--gx) clamp(80px, 10vw, 120px);">
+  <canvas class="pnt-campo fundo-campo" data-escala="0.18" aria-hidden="true"></canvas>
   <div style="max-width: 1200px; margin: 0 auto;">
-    <div class="olho" style="color: oklch(0.55 0.22 27);"><span class="line" style="background: oklch(0.55 0.22 27);"></span>Sobre</div>
+    <div class="olho" style="color: var(--marca);"><span class="line" style="background: var(--marca);"></span>Sobre</div>
     <div class="visao-grid">
       <div>
-        <h2 class="rv-clip" style="margin: 0 0 34px; font-family: 'Anton', sans-serif; font-weight: 400; font-size: clamp(40px, 6vw, 104px); line-height: 0.88; letter-spacing: -0.01em; color: oklch(0.18 0.012 60);">VISÃO<br><span class="hand" style="color: oklch(0.55 0.22 27); font-size: 0.78em; letter-spacing: 0;">e propósito</span></h2>
+        <h2 class="rv-clip" style="margin: 0 0 34px; font-family: var(--display); font-weight: 400; font-size: clamp(25px, 3.8vw, 64px); line-height: 1.06; letter-spacing: 0;">VISÃO<br><span class="hand" style="color: var(--marca); font-size: 0.78em; letter-spacing: 0;">e propósito</span></h2>
         <div class="stats">
         <div class="stat"><b class="count" data-n="3" data-suf="">3</b><span>Pilares criativos</span></div>
         <div class="stat"><b>∞</b><span>Histórias a contar</span></div>
@@ -1281,10 +1326,11 @@
 </section>
 
 <!-- ===== TRAJETÓRIA & FORMAÇÃO ===== -->
-<section id="trajetoria" style="position: relative; z-index: 60; background: oklch(0.18 0.012 60); color: oklch(0.97 0.008 85); padding: clamp(96px, 12vw, 150px) var(--gx);">
+<section id="trajetoria" class="tema-claro com-campo" style="position: relative; z-index: 60; padding: clamp(96px, 12vw, 150px) var(--gx);">
+  <canvas class="pnt-campo fundo-campo" data-escala="0.18" aria-hidden="true"></canvas>
   <div style="max-width: 1200px; margin: 0 auto;">
-    <div class="olho" style="color: oklch(0.72 0.16 27);"><span class="line" style="background: oklch(0.72 0.16 27);"></span>Formação</div>
-    <h2 class="rv-clip" style="margin: 0 0 clamp(40px, 5vw, 68px); font-family: 'Anton', sans-serif; font-weight: 400; font-size: clamp(40px, 6vw, 104px); line-height: 0.9; letter-spacing: -0.01em;">TRAJETÓRIA<br>&amp; <span class="scribble salmon" style="color: oklch(0.72 0.16 27);">FORMAÇÃO<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span></h2>
+    <div class="olho" style="color: var(--marca);"><span class="line" style="background: var(--marca);"></span>Formação</div>
+    <h2 class="rv-clip" style="margin: 0 0 clamp(40px, 5vw, 68px); font-family: var(--display); font-weight: 400; font-size: clamp(25px, 3.8vw, 64px); line-height: 1.06; letter-spacing: 0;">TRAJETÓRIA<br>E <span class="scribble salmon" style="color: var(--marca);">FORMAÇÃO<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span></h2>
     <div class="traj-grid">
       <div class="traj-linha">
         <div class="traj-item rv" style="--d:0.00s;"><h4>Arte-finalista</h4><p>Início em gráfica de comunicação visual — base técnica em design, composição e produção gráfica.</p></div>
@@ -1308,7 +1354,7 @@
   <div class="stamp light" aria-hidden="true" style="right: var(--gx); top: 110px;"><svg viewBox="0 0 120 120"><defs><path id="stampB" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs><circle cx="60" cy="60" r="56"/><circle cx="60" cy="60" r="32"/><text><textPath href="#stampB">CRIAR COM INTENÇÃO · BIRDVIEW · </textPath></text><circle class="dot" cx="60" cy="60" r="6"/></svg></div>
   <div style="max-width: 1200px; margin: 0 auto; position: relative; z-index: 2;">
     <div class="rv" style="font-family: 'Caveat', cursive; font-size: 20px; font-weight: 600; letter-spacing: 0.01em; text-transform: none; color: oklch(0.97 0.008 85 / 0.8); margin-bottom: 24px;"><span class="hand" style="font-size: 36px; letter-spacing: 0; text-transform: none;">contato</span></div>
-    <h2 class="rv-clip" style="margin: 0 0 40px; font-family: 'Anton', sans-serif; font-weight: 400; font-size: clamp(48px, 9vw, 168px); line-height: 0.86; letter-spacing: -0.015em;">VAMOS<br><span style="color: oklch(0.18 0.012 60);">CRIAR</span><br><span class="scribble under light">JUNTOS<svg viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M4,22 C40,10 120,30 196,16 M14,32 C70,26 130,36 190,28"/></svg></span></h2>
+    <h2 class="rv-clip" style="margin: 0 0 40px; font-family: var(--display); font-weight: 400; font-size: clamp(30px, 5.6vw, 104px); line-height: 1.04; letter-spacing: 0;">VAMOS<br><span style="color: oklch(0.18 0.012 60);">CRIAR</span><br><span class="scribble under light">JUNTOS<svg viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M4,22 C40,10 120,30 196,16 M14,32 C70,26 130,36 190,28"/></svg></span></h2>
     <a href="https://wa.me/qr/OBPBCW7RNX5KB1" target="_blank" rel="noopener" class="cta-dark" style="display: inline-flex; align-items: center; gap: 12px; background: oklch(0.18 0.012 60); color: oklch(0.97 0.008 85); padding: 18px 32px; border-radius: 50px; font-family: 'Caveat', cursive; font-size: 24px; font-weight: 600; letter-spacing: 0; text-transform: none;">Falar comigo <span style="font-size:18px;">→</span></a>
     <p class="hand rv" style="margin: 28px 0 0; font-size: 27px; line-height: 1.15; color: oklch(0.97 0.008 85 / 0.92); max-width: 30ch;">Narrativas que conectam cultura, imagem e propósito.</p>
     <div class="canais rv" style="--d:.15s;"><a href="https://www.youtube.com/watch?v=8U4cpeMxG2w" target="_blank" rel="noopener">▶ Ecos do Pantanal — YouTube</a><a href="https://www.instagram.com/birdviewproducoes/" target="_blank" rel="noopener">◉ Instagram — @birdviewproducoes</a><a href="mailto:allan.woch@gmail.com">✉ E-mail</a></div>
@@ -1396,7 +1442,7 @@
 
   /* cabeçalho: claro sobre as seções escuras e sobre o vermelho */
   var topbar = document.querySelector('.topbar');
-  var escuras = ['reels','servicos','trajetoria','contato'].map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  var escuras = ['reels','sobre','contato'].map(function(id){ return document.getElementById(id); }).filter(Boolean);
   if (topbar && escuras.length){
     var estado = false;
     (function loop(){
@@ -1636,7 +1682,11 @@
 
     // resolucao cheia (o dobro em tela retina). Se a maquina nao aguentar,
     // o laco abaixo derruba a escala sozinho em vez de engasgar.
-    var escala = Math.min(window.devicePixelRatio || 1, 2), refazer = true;
+    // desfocado, resolucao nao importa: o atributo derruba a escala e o
+    // shader passa a pintar um punhado de pixels
+    var fator = parseFloat(tela.dataset.escala || 1) || 1;
+    var escala = Math.min(window.devicePixelRatio || 1, 2) * fator, refazer = true;
+    var escalaBase = escala;   // o piso da reducao e relativo a ela
     // teto de pixels: o canvas cobre a seccao, e uma seccao alta levaria o
     // shader a milhoes de pixels por quadro. O fundo e difuso, perde nada em
     // resolucao — mas u_dens tem de cair junto, senao a varredura muda de passo
@@ -1675,7 +1725,7 @@
       anterior = agora;
       if (amostras < 70) return;
       if (soma / amostras > 24){
-        escala = Math.max(0.5, escala * 0.62);
+        escala = Math.max(escalaBase * 0.34, escala * 0.62);
         refazer = true; quedas++;
       } else { quedas = 2; }
       soma = 0; amostras = 0;
@@ -1704,7 +1754,7 @@
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     })(0);
   }
-  ['documentarios'].forEach(function(id){
+  ['servicos', 'sobre', 'trajetoria'].forEach(function(id){
     var sec = document.getElementById(id);
     campo(sec, sec && sec.querySelector('.pnt-campo'));
   });
