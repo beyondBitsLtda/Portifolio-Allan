@@ -1,0 +1,279 @@
+================================================================================
+PORTFOLIO ALLAN KEVIN - BIRDVIEW PRODUCOES
+Descricao do projeto
+Atualizado em 12/10/2026
+================================================================================
+
+
+1. O QUE E
+--------------------------------------------------------------------------------
+
+Site de portfolio de Allan Kevin Ricaldes da Rocha Castro, produtor
+audiovisual e diretor de criacao, a frente da Birdview Producoes
+(@birdviewproducoes).
+
+E uma pagina unica, estatica, sem framework, sem build de producao e sem
+dependencia de servidor. Todo o HTML, CSS e JavaScript vivem num arquivo so:
+
+    index.html    ~304 KB, 2.311 linhas, 4 blocos <script>
+
+As unicas coisas que vem de fora sao as fontes do Google Fonts, a biblioteca
+three.js via CDN e os videos de demonstracao (ver item 6).
+
+
+2. ONDE ESTA NO AR
+--------------------------------------------------------------------------------
+
+Endereco:   https://beyondbitsltda.github.io/Portifolio-Allan/
+Repositorio: https://github.com/beyondBitsLtda/Portifolio-Allan
+Branch:     main
+
+Publicacao: GitHub Pages, servindo a raiz do branch main. Nao ha pipeline,
+nao ha etapa de build no servidor. Dar push no main E o deploy.
+
+O Pages leva de um a dois minutos para trocar a versao. Depois de publicar,
+vale conferir o conteudo servido de verdade (curl na pagina, procurando um
+marcador que so exista na versao nova) em vez de confiar no push. Ja
+aconteceu de reportar algo como feito e o CDN ainda estar servindo o
+anterior.
+
+
+3. COMO A PAGINA ESTA MONTADA
+--------------------------------------------------------------------------------
+
+Sete secoes, nesta ordem:
+
+  1. #abertura       Hero. Primeira pessoa: voce ve um estudio 3D (GLB do
+                     cliente, painel repintado de vermelho). Ao rolar, a
+                     camera se afasta, o observador entra em quadro de
+                     costas, vira o rosto, e so entao o nome ALLAN KEVIN
+                     chega - com fotos passando por dentro das letras ate
+                     assentar no vermelho. O cenario desfoca quando o nome
+                     entra, que foi a solucao para ler vermelho sobre
+                     vermelho.
+
+  2. #documentarios  Galeria. A palavra DOCUMENTARIOS em vermelho e seis
+                     videos em grade 3x2, todos com um duotone vermelho.
+                     O mouse tira o vermelho e roda o video; o clique abre
+                     o video grande dividindo a tela com titulo e descricao.
+                     Fundo liso, sem efeito animado.
+
+  3. #reels          REEL 2026. Fundo preto; o mouse abre um furo e revela
+                     uma textura vermelha por baixo. Ao lado, um aparelho
+                     9:16 com a interface do Instagram Reels. A rolagem da
+                     pagina vira o gesto do polegar: segura no reel e estala
+                     para o proximo. Clicar no aparelho abre a galeria em
+                     tela cheia (aba Reels do perfil); clicar num reel abre
+                     o video grande com titulo e descricao.
+
+  4. #servicos       "NAO E SO FILMAR". Tema claro.
+  5. #sobre          "VISAO e proposito". Tema escuro.
+  6. #trajetoria     "TRAJETORIA & FORMACAO". Tema claro.
+  7. #contato        "VAMOS CRIAR JUNTOS". Fundo vermelho da marca.
+
+As secoes 4, 5 e 6 alternam claro/escuro de proposito, e cada uma carrega o
+mesmo campo de curvas de nivel ao fundo, desfocado em 28px.
+
+
+4. DECISOES TECNICAS E PORQUES
+--------------------------------------------------------------------------------
+
+4.1 Cor
+    Dois tokens em :root resolvem o vermelho da pagina inteira:
+
+        --vermelho        oklch(0.55 0.22 27)   sobre fundo claro
+        --vermelho-claro  oklch(0.72 0.16 27)   sobre fundo escuro
+
+    Sao a mesma cor, a segunda levantada para ter contraste. Nao da para
+    usar um tom so: o vermelho de 0.55 sobre o escuro de 0.18 fica em
+    2,6:1, longe dos 4,5:1 que texto exige.
+
+    As secoes de texto nao tem cor embutida no HTML: elas vestem .tema-claro
+    ou .tema-escuro, e esses vestem tokens (--bg, --tinta, --tinta2, --marca,
+    --cartao, --cartaoLinha, --caixa). Os componentes (.faz-card, .pilar,
+    .traj-item, .stat, blockquote) leem os tokens. Por isso inverter uma
+    secao e trocar uma classe, nao cacar hexadecimal.
+
+4.2 Tipografia
+        Anton     titulos (via o token --display, em :root)
+        Caveat    corpo de texto - e a voz da pagina
+        Satisfy   a assinatura "Producoes Audiovisuais" na hero
+        Courier Prime  so o carimbo giratorio
+
+    O token --display existe para trocar a fonte de display numa linha so.
+    Ja testamos a Santa Misa Cyber Pulp ali; foi revertido (ver item 7).
+
+4.3 O campo de curvas de nivel
+    Um shader WebGL (funcao campo(sec, tela) no segundo <script>) desenha
+    curvas de nivel irregulares e particulas. Uma funcao, tres canvas: as
+    secoes 4, 5 e 6 passam pela mesma chamada.
+
+    A cor nao vem de outro shader: vem de filtro CSS. No tema claro so
+    satura; no escuro leva invert(1) seguido de hue-rotate(180deg) - o
+    invert joga o vermelho para o ciano e o hue-rotate devolve.
+
+    Como e desfocado, resolucao nao importa: o canvas carrega
+    data-escala="0.18" e os tres juntos pintam 0,06 megapixel por quadro.
+
+4.4 Recortes de pessoa sobre o fundo
+    As fotos do observador nao sao PNG com transparencia. Sao duas imagens:
+    a cor em JPEG (com as bordas "sangradas" para fora do recorte) e o alfa
+    num PNG em tons de cinza. O CSS compoe com background-image +
+    mask-image, com contain/position iguais nos dois.
+
+    Motivo: um PNG com alfa dessas fotos passava de 1 MB cada; o par
+    JPEG+mascara fica em ~150 KB com a mesma qualidade de borda.
+
+4.5 Quadros parados dos videos
+    Todo <video> da pagina carrega preload="none" e um poster WebP tirado
+    do proprio arquivo (extraido pelo navegador, desenhando um frame num
+    canvas). Nenhum byte de video viaja antes do mouse chegar.
+
+    Isso foi medido, nao estimado. A primeira versao pedia o quadro ao
+    proprio mp4 (preload="metadata" + seek): custava 23,6 MB so para pintar
+    seis miniaturas, porque o navegador nao para no quadro pedido - segue
+    enchendo o buffer. Com os posters, sao 796 KB.
+
+4.6 Peso da pagina
+    Antes do feed de reels: ~4,1 MB.
+    Rolar o feed inteiro puxa mais ~37 MB, que e o custo inerente de cinco
+    videos tocando. Cada um so carrega quando entra em cena.
+
+4.7 Modelo 3D
+    assets/studio.glb, 2,31 MB. Veio do cliente com 44,2 MB. A reducao de
+    19x saiu de: remover tudo que nao e equipamento de filmagem nem fundo de
+    gravacao, repintar o painel de vermelho no proprio material, comprimir
+    as texturas para WebP 1024px e aplicar Draco (edgebreaker). Carregado
+    com three.js 0.160 + DRACOLoader.
+
+    A camera do modelo olha o set pelo lado de quem filma (angulo PI/2). O
+    outro lado parece frontal mas e o fundo do cenario.
+
+4.8 Finais de linha
+    O arquivo e CRLF do comeco ao fim, sem excecao. Se editar, preserve.
+
+
+5. COMO O ARQUIVO ERA CONSTRUIDO (IMPORTANTE)
+--------------------------------------------------------------------------------
+
+Durante o desenvolvimento, o index.html nao era editado a mao. Existia uma
+cadeia de scripts Python (refine01.py ... refine110.py), cada um lendo a
+versao anterior do HTML, aplicando substituicoes com assercao de contagem, e
+escrevendo a proxima. Um script final (build3.py) injetava os binarios em
+base64 e normalizava para CRLF.
+
+Isso vivia numa pasta temporaria de sessao, QUE NAO EXISTE MAIS.
+
+Ou seja: a partir de agora, o index.html E a fonte. Edite-o direto.
+
+O que vale guardar daquele metodo, se voltar a mexer bastante:
+  - toda substituicao conferia quantas ocorrencias esperava encontrar e
+    falhava se nao batesse. Foi o que impediu de trocar a coisa errada num
+    arquivo de 300 KB;
+  - depois de cada build, rodar node --check em cada bloco <script> e
+    conferir se as tags abrem e fecham na mesma contagem;
+  - verificar na tela, nao no codigo. Boa parte dos defeitos desta pagina so
+    apareceu em captura de tela ou em medicao de pixel.
+
+
+6. ASSETS
+--------------------------------------------------------------------------------
+
+Em uso (assets/):
+    studio.glb              2,3 MB   o estudio 3D da hero
+    obs1/obs2 .jpg+.png     315 KB   o observador, par cor+mascara
+    doc-01..06.webp         796 KB   cartazes dos documentarios (1280x720)
+    rl-01..05.webp          470 KB   cartazes dos reels (720x1280)
+
+Videos: TODOS vem do CDN do Pexels (videos.pexels.com), por URL direta no
+HTML. Sao material de demonstracao. Seis horizontais nos documentarios,
+cinco verticais nos reels.
+
+Sem uso, ainda no repositorio:
+    assets/ecos-pantanal.mp4        64 MB   sobrou da secao de projetos
+    assets/camera.glb, camFall.png, cam.jpg/-mask.png, fall-*, q*, qFinal*
+    claquete.png, obra-1/2/3.jpg, hero-frame-*, "proximo hero frame *"
+
+    Nenhum desses e baixado por quem visita - o HTML nao os referencia. Sao
+    peso de repositorio, nao de pagina. Dao para apagar quando tiver certeza
+    de que nao voltam.
+
+Ignorados pelo git (.gitignore):
+    "Portifolio Allan Kevin - Antigo.pdf"   referencia do cliente
+    assets/Novo Models/                     o GLB cru de 45 MB
+    assets/vidro.html                       shader de teste
+    fontes/                                 os OTF da Santa Misa
+
+
+7. O QUE E PROVISORIO
+--------------------------------------------------------------------------------
+
+Isto aqui e o que precisa de material do Allan para virar definitivo:
+
+  - TODOS os videos sao de banco (Pexels). Nenhum e trabalho dele.
+  - Os titulos e descricoes dos seis documentarios e dos cinco reels foram
+    escritos por nos, descrevendo o que aparece em quadro. Nao inventam
+    numero, data nem nome de pessoa, de proposito - num site de
+    documentarista isso viraria informacao falsa. Trocar junto com os
+    arquivos.
+  - Nao ha contagem de curtida nem de comentario na interface dos reels.
+    Seria metrica inventada sobre o trabalho dele. Os icones estao la; e so
+    passar os numeros reais se quiser.
+  - As fotos que passam por dentro das letras de ALLAN KEVIN sao do
+    Unsplash. A lista fica numa variavel FOTOS no segundo <script>; trocar e
+    so mexer nela.
+
+Fonte Santa Misa Cyber Pulp: foi testada nos titulos e revertida. A licenca
+que veio com ela diz "Free For Personal Use Only", com licenca comercial
+sob contato (odiadme@hotmail.com, woodcutter.es). Os OTF estao em fontes/,
+fora do git. Se comprarem a licenca, o caminho e: subset para WOFF2 (942 KB
+viram 20 KB), @font-face, e apontar --display para ela. Lembrando que ela e
+~1,7x mais larga que a Anton - todo corpo de titulo precisa cair junto - e
+que o "&" dela e ilegivel em tamanho grande.
+
+
+8. PENDENCIAS TECNICAS
+--------------------------------------------------------------------------------
+
+  - CSS orfao. Ficaram regras de secoes que ja sairam (#seqSection, .pnt-*,
+    .obra-*, .claq-*, .pm-*, .gal-*, .acv-*, #camCanvas, .reelBar...). Nao
+    atrapalham o funcionamento, mas inflam o arquivo. Para achar: listar as
+    classes que aparecem no CSS e nao aparecem na marcacao.
+  - Indexacao no Google. Nunca foi feita: faltam meta description,
+    Open Graph, sitemap.xml e robots.txt.
+  - O rodape e a secao de contato ainda repetem a frase "Narrativas que
+    conectam cultura, imagem e proposito", que saiu da hero.
+
+
+9. ARMADILHAS JA ENCONTRADAS
+--------------------------------------------------------------------------------
+
+Vale ler antes de mexer, porque cada uma custou tempo:
+
+  - clip-path, filter, opacity<1 e mask achatam transform-style: preserve-3d.
+    Se um efeito 3D parar de funcionar, procure uma dessas no ancestral.
+  - Num contexto preserve-3d, o proprio fundo do elemento e um plano em z=0.
+    Filho em z negativo some atras dele.
+  - Animacao CSS vence estilo inline normal. Escrever el.style.opacity num
+    elemento com "animation: ... both" nao faz nada. Use setProperty com
+    'important'.
+  - overflow:hidden recorta os filhos, nao o proprio elemento escalado. Se
+    algo vaza da borda, escale o filho, nao a caixa.
+  - max-height:100% so resolve contra altura definida. Em grid, isso quer
+    dizer grid-template-rows explicito - com "auto" o percentual e ignorado
+    e um video abre no tamanho nativo.
+  - Porcentagem em grid-template-columns resolve contra largura; em
+    grid-template-rows, contra altura. A mesma variavel da dois valores.
+  - Impacto disparado pelo scroll precisa amortecer no TEMPO, nao no scroll.
+    Preso ao scroll, congela torto se a pessoa parar de rolar.
+  - Piso de auto-reducao de resolucao tem que ser relativo a escala inicial.
+    Um piso absoluto de 0.5 aumentava a resolucao dos fundos que partem de
+    0.18, em vez de reduzir. Custava 20x mais pixels e derrubava o feed para
+    11 fps.
+  - --window-size nao e respeitado no Edge headless. Para medir num tamanho
+    de tela especifico, use Emulation.setDeviceMetricsOverride.
+
+
+================================================================================
+Desenvolvimento: Brayan Rodrigues  |  Cliente: Allan Kevin / Birdview Producoes
+================================================================================
