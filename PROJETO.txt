@@ -59,12 +59,15 @@ Sete secoes, nesta ordem:
                      Fundo liso, sem efeito animado.
 
   3. #reels          REEL 2026. Fundo preto; o mouse abre um furo e revela
-                     uma textura vermelha por baixo. Ao lado, um aparelho
-                     9:16 com a interface do Instagram Reels. A rolagem da
-                     pagina vira o gesto do polegar: segura no reel e estala
-                     para o proximo. Clicar no aparelho abre a galeria em
-                     tela cheia (aba Reels do perfil); clicar num reel abre
-                     o video grande com titulo e descricao.
+                     uma textura vermelha por baixo. O aparelho 9:16 entra
+                     maior que a hero (116vh), cortado em cima, com a
+                     interface do Instagram Reels. Ao entrar em cena o feed
+                     da UMA passada rapida por todos os reels e para no
+                     ultimo - nao e mais puxado pelo scroll. REEL passa na
+                     frente do aparelho e 2026 some por tras. Clicar no
+                     aparelho abre a galeria em tela cheia (aba Reels do
+                     perfil); clicar num reel abre o video grande com
+                     titulo e descricao.
 
   4. #servicos       "NAO E SO FILMAR". Tema claro.
   5. #sobre          "VISAO e proposito". Tema escuro.
@@ -81,12 +84,20 @@ mesmo campo de curvas de nivel ao fundo, desfocado em 28px.
 4.1 Cor
     Dois tokens em :root resolvem o vermelho da pagina inteira:
 
-        --vermelho        oklch(0.55 0.22 27)   sobre fundo claro
-        --vermelho-claro  oklch(0.72 0.16 27)   sobre fundo escuro
+        --vermelho        oklch(0.56 0.24 27)   sobre fundo claro
+        --vermelho-claro  oklch(0.64 0.24 27)   sobre fundo escuro
 
     Sao a mesma cor, a segunda levantada para ter contraste. Nao da para
-    usar um tom so: o vermelho de 0.55 sobre o escuro de 0.18 fica em
+    usar um tom so: o vermelho claro sobre o escuro de 0.18 ficaria em
     2,6:1, longe dos 4,5:1 que texto exige.
+
+    Os dois valores saem de medicao, nao de gosto: 0.56/0.24 e o vermelho
+    mais vivo que ainda fecha 4,65:1 sobre o creme (0.57/0.245 ja cai para
+    4,44 e reprova). Nele os canais verde e azul vao a zero - e vermelho
+    puro. O de fundo escuro fecha 4,99:1.
+
+    Nenhum vermelho fica escrito a mao no arquivo: sao 55 usos do token,
+    incluindo os com transparencia, que viram color-mix sobre ele.
 
     As secoes de texto nao tem cor embutida no HTML: elas vestem .tema-claro
     ou .tema-escuro, e esses vestem tokens (--bg, --tinta, --tinta2, --marca,

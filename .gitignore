@@ -5,3 +5,6 @@ assets/vidro.html
 assets/Novo Models/
 # os OTF originais da fonte; o site usa os WOFF2 subconjunto em assets/
 fontes/
+# os originais do recorte do Allan; o site usa o par obs2.jpg + obs2-mask.png
+assets/obs2.png
+assets/d.jpg
