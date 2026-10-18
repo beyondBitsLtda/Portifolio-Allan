@@ -825,15 +825,15 @@
   /* a sombra no chao: e ela, mais que a inclinacao, que poe o aparelho
      num espaco em vez de colado no fundo */
   .rl-sombra { position: absolute; z-index: 1; left: 50%; top: 50%;
-    width: 46vh; height: 11vh; margin-top: 40vh;
+    width: 52vh; height: 12vh; margin-top: 47vh;
     transform: translate(-50%, -50%); pointer-events: none; opacity: 0;
     border-radius: 50%; filter: blur(34px);
     background: radial-gradient(ellipse at center, oklch(0 0 0 / .85) 0%, transparent 72%); }
   /* o verso acompanha o corpo com 180deg a mais: um dos dois sempre esta
      de frente, entao o giro nunca mostra a interface espelhada */
-  .rl-verso { position: absolute; z-index: 2; left: 50%; top: 50%;
+  .rl-verso { position: absolute; z-index: 2; left: 50%; top: 52%;
     transform: translate(-50%, -50%); pointer-events: none; opacity: 0;
-    height: 80vh; aspect-ratio: 9 / 19.5; border-radius: 46px;
+    height: 92vh; aspect-ratio: 9 / 19.5; border-radius: 46px;
     backface-visibility: hidden; -webkit-backface-visibility: hidden;
     background: linear-gradient(145deg, oklch(0.3 0.012 55) 0%,
       oklch(0.16 0.01 55) 48%, oklch(0.26 0.012 55) 100%);
@@ -841,11 +841,11 @@
 
   /* o .rl-fone e o CORPO, nao a tela: o padding e a moldura, e quem
      recorta o conteudo e o .rl-tela la dentro */
-  .rl-fone { position: absolute; z-index: 3; left: 50%; top: 50%;
+  .rl-fone { position: absolute; z-index: 3; left: 50%; top: 52%;
     transform: translate(-50%, -50%); cursor: pointer;
     opacity: 0;                      /* o JS acende quando ele chega */
     backface-visibility: hidden; -webkit-backface-visibility: hidden;
-    height: 80vh; aspect-ratio: 9 / 19.5; padding: 9px;
+    height: 92vh; aspect-ratio: 9 / 19.5; padding: 9px;
     border-radius: 46px;
     background: linear-gradient(152deg, oklch(0.42 0.006 60) 0%, oklch(0.2 0.006 60) 22%,
       oklch(0.13 0.006 60) 50%, oklch(0.2 0.006 60) 78%, oklch(0.46 0.006 60) 100%);
@@ -937,7 +937,7 @@
     .rl-t2 { left: 34vw; top: 15%; }
     /* na vertical quem manda e a largura: 108vh dava um aparelho de
        522px numa tela de 414 e cortava a barra de acoes */
-    .rl-fone, .rl-verso { left: 50%; top: 63%; height: 70vh; width: auto;
+    .rl-fone, .rl-verso { left: 50%; top: 60%; height: 78vh; width: auto;
       border-radius: 38px; }
     .rl-fone { padding: 7px; }
     .rl-tela { border-radius: 31px; }
