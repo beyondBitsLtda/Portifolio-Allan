@@ -779,7 +779,9 @@
      seccao nao precisa mais dos 500vh que davam curso ao arrasto */
   #reels { position: relative; z-index: 60; height: 100vh; min-height: 660px;
     overflow: hidden; background: oklch(0.13 0.014 55); }
-  .rl-pin { position: absolute; inset: 0; overflow: hidden; }
+  /* a perspectiva fica aqui: e o que faz o translateZ do aparelho virar
+     distancia de verdade em vez de nada */
+  .rl-pin { position: absolute; inset: 0; overflow: hidden; perspective: 1500px; }
   /* a textura por baixo do preto. O circulo tem tamanho fixo e mascara
      parada: so o transform muda, entao nada e repintado */
   .rl-luz { position: absolute; z-index: 0; left: 0; top: 0;
@@ -806,24 +808,36 @@
      contexto de empilhamento e as duas linhas ficariam presas no mesmo
      plano, impossibilitando uma passar atras e a outra na frente do
      aparelho */
-  .rl-titulo { position: absolute; z-index: auto; left: var(--gx); top: 50%;
-    transform: translateY(-50%); margin: 0; pointer-events: none;
+  /* z-index auto nao e descuido: com z-index proprio a .rl-titulo criaria
+     contexto de empilhamento e prenderia as duas linhas no mesmo plano */
+  .rl-titulo { position: absolute; z-index: auto; left: 0; right: 0; top: 16%;
+    margin: 0; pointer-events: none;
     font-family: var(--display); font-weight: 400;
-    font-size: clamp(58px, 26vw, 460px); line-height: 0.78; letter-spacing: -0.03em; }
-  .rl-t1, .rl-t2 { display: block; position: relative; }
-  .rl-t1 { z-index: 3; color: var(--vermelho-claro); }   /* passa NA FRENTE */
-  .rl-t2 { z-index: 1; color: oklch(0.99 0.008 85); }    /* some POR TRAS */
+    font-size: clamp(50px, 25vw, 450px); line-height: 0.8; letter-spacing: -0.03em; }
+  /* deslocadas uma da outra: centradas e alinhadas, uma cobriria o
+     aparelho inteiro e a outra sumiria toda — nao se leria trama nenhuma */
+  .rl-t1, .rl-t2 { display: block; position: relative; width: max-content; }
+  .rl-t1 { z-index: 3; margin-left: 4vw;  color: var(--vermelho-claro); }  /* NA FRENTE */
+  .rl-t2 { z-index: 1; margin-left: 54vw; color: oklch(0.99 0.008 85); }   /* POR TRAS */
 
   /* o aparelho: 9:16 com canto redondo, sem moldura de celular — o que
      identifica o Reels e a interface dentro, nao o desenho do telefone */
-  /* maior que a hero de proposito: cortado em cima e embaixo, e o corte e
-     o que coloca o observador perto do aparelho */
-  .rl-fone { position: absolute; z-index: 2; left: 57%; top: 42%;
+  /* perto da tela: 160vh com o centro em 85% deixa so a metade de cima
+     a mostra e manda o resto para fora pela borda de baixo */
+  /* o verso acompanha o aparelho com 180deg a mais: um dos dois sempre
+     esta de frente, entao o giro nunca mostra a interface espelhada */
+  .rl-verso { position: absolute; z-index: 2; left: 50%; top: 85%;
+    transform: translate(-50%, -50%); pointer-events: none; opacity: 0;
+    height: 160vh; aspect-ratio: 9 / 16; border-radius: 24px;
+    backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    background: linear-gradient(145deg, oklch(0.26 0.014 55) 0%,
+      oklch(0.17 0.012 55) 46%, oklch(0.23 0.014 55) 100%);
+    box-shadow: 0 40px 90px oklch(0 0 0 / .6), 0 0 0 1px oklch(0.99 0.008 85 / .12); }
+  .rl-fone { position: absolute; z-index: 2; left: 50%; top: 85%;
     transform: translate(-50%, -50%); cursor: pointer;
-    /* 116vh com o centro em 42%: 0.42H + 0.58H = H, entao o rodape do
-       aparelho cai na borda de baixo em qualquer altura de tela e o
-       corte fica so em cima — a legenda do Instagram nunca some */
-    height: 116vh; aspect-ratio: 9 / 16;
+    opacity: 0;                      /* o JS acende quando ele chega */
+    backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    height: 160vh; aspect-ratio: 9 / 16;
     border-radius: 24px; overflow: hidden; background: #000; isolation: isolate;
     box-shadow: 0 40px 90px oklch(0 0 0 / .6), 0 0 0 1px oklch(0.99 0.008 85 / .1);
     /* a pagina inteira e Caveat; a interface do Instagram nao pode ser */
@@ -889,11 +903,14 @@
   @media (max-width: 899px) {
     /* na vertical nao cabe a sobreposicao lateral: o titulo sobe para o
        topo e so encosta no aparelho */
-    .rl-titulo { left: 0; right: 0; top: 15%; transform: none; text-align: center;
-      font-size: clamp(44px, 16vw, 104px); line-height: 0.84; }
+    /* numa tela de 414px a trama nao cabe: o aparelho cortava o 2026 ao
+       meio, que le como defeito. Aqui a separacao e limpa */
+    .rl-titulo { top: 10%; font-size: clamp(40px, 15vw, 100px); line-height: 0.86; }
+    .rl-t1 { margin-left: 5vw; }
+    .rl-t2 { margin-left: 34vw; }
     /* na vertical quem manda e a largura: 108vh dava um aparelho de
        522px numa tela de 414 e cortava a barra de acoes */
-    .rl-fone { left: 50%; top: 54%; width: min(94vw, 52vh); height: auto;
+    .rl-fone, .rl-verso { left: 50%; top: 70%; width: 104vw; height: auto;
       border-radius: 18px; }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -1170,6 +1187,7 @@
 <section id="reels" aria-label="Reel 2026">
   <div class="rl-pin">
     <div class="rl-luz" aria-hidden="true"><i></i></div>
+    <div class="rl-verso" aria-hidden="true"></div>
     <h2 class="rl-titulo" aria-label="Reel 2026"><span class="rl-t1">REEL</span><span class="rl-t2">2026</span></h2>
     <div class="rl-fone" role="button" tabindex="0" aria-label="Abrir a galeria de reels">
       <div class="rl-topo" aria-hidden="true"><b>Reels</b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.6h3.1l1.7-2h8.4l1.7 2H21v12.2H3V7.6z"/><circle cx="12" cy="13.5" r="3.4"/></svg></div>
@@ -1965,8 +1983,29 @@
     // uma rolada so: ao entrar em cena o feed passa rapido por todos os
     // reels e para no ultimo. Desaceleracao forte (quinta potencia) para
     // parecer polegar com atrito, nao transicao com duracao
-    var PASSADA = 1900;
+    var fone = sec.querySelector('.rl-fone');
+    var verso = sec.querySelector('.rl-verso');
+    var CHEGADA = 1800;    // o aparelho vem de longe girando
+    var PASSADA = 1700;    // e so entao o feed da a passada
     var inicio = 0, passou = false;
+
+    // de longe e girando ate assentar. O giro passa de uma volta: no meio
+    // dele ve-se o verso espelhado, mas a desaceleracao e tao forte que
+    // isso acontece nos primeiros 200ms, como borrao de movimento
+    function chega(k){
+      var e = 1 - Math.pow(1 - k, 3);
+      var op = Math.min(1, k * 5).toFixed(3);
+      var base = 'translate(-50%, -50%) translateZ(' + (-1400 * (1 - e)).toFixed(0)
+        + 'px) rotateZ(' + (-14 * (1 - e)).toFixed(2) + 'deg) rotateY(';
+      var gy = -390 * (1 - e);
+      fone.style.opacity = op;
+      fone.style.transform = base + gy.toFixed(1) + 'deg)';
+      if (verso){
+        verso.style.opacity = op;
+        verso.style.transform = base + (gy + 180).toFixed(1) + 'deg)';
+      }
+    }
+    chega(0);
 
     function pinta(pos){
       var i = Math.max(0, Math.min(N - 2, Math.floor(pos)));
@@ -1996,7 +2035,9 @@
 
       if (!passou){
         if (!inicio) inicio = performance.now();
-        var k = clamp((performance.now() - inicio) / PASSADA);
+        var dt = performance.now() - inicio;
+        chega(clamp(dt / CHEGADA));
+        var k = clamp((dt - CHEGADA) / PASSADA);
         pinta((1 - Math.pow(1 - k, 5)) * (N - 1));
         if (k >= 1){
           passou = true;

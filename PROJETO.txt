@@ -59,15 +59,15 @@ Sete secoes, nesta ordem:
                      Fundo liso, sem efeito animado.
 
   3. #reels          REEL 2026. Fundo preto; o mouse abre um furo e revela
-                     uma textura vermelha por baixo. O aparelho 9:16 entra
-                     maior que a hero (116vh), cortado em cima, com a
-                     interface do Instagram Reels. Ao entrar em cena o feed
-                     da UMA passada rapida por todos os reels e para no
-                     ultimo - nao e mais puxado pelo scroll. REEL passa na
-                     frente do aparelho e 2026 some por tras. Clicar no
-                     aparelho abre a galeria em tela cheia (aba Reels do
-                     perfil); clicar num reel abre o video grande com
-                     titulo e descricao.
+                     uma textura vermelha por baixo. O aparelho 9:16 fica
+                     perto da tela (160vh, centro em 85%): so a metade de
+                     cima aparece. Ele chega de longe girando em 3D e
+                     assenta, e so entao o feed da UMA passada rapida por
+                     todos os reels e para no ultimo - nada disso e puxado
+                     pelo scroll. REEL cruza o aparelho por cima e 2026
+                     some por tras dele. Clicar abre a galeria em tela
+                     cheia (aba Reels do perfil); clicar num reel abre o
+                     video grande com titulo e descricao.
 
   4. #servicos       "NAO E SO FILMAR". Tema claro.
   5. #sobre          "VISAO e proposito". Tema escuro.
