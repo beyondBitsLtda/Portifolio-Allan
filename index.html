@@ -810,39 +810,66 @@
      aparelho */
   /* z-index auto nao e descuido: com z-index proprio a .rl-titulo criaria
      contexto de empilhamento e prenderia as duas linhas no mesmo plano */
-  .rl-titulo { position: absolute; z-index: auto; left: 0; right: 0; top: 16%;
-    margin: 0; pointer-events: none;
-    font-family: var(--display); font-weight: 400;
-    font-size: clamp(50px, 25vw, 450px); line-height: 0.8; letter-spacing: -0.03em; }
-  /* deslocadas uma da outra: centradas e alinhadas, uma cobriria o
-     aparelho inteiro e a outra sumiria toda — nao se leria trama nenhuma */
-  .rl-t1, .rl-t2 { display: block; position: relative; width: max-content; }
-  .rl-t1 { z-index: 3; margin-left: 4vw;  color: var(--vermelho-claro); }  /* NA FRENTE */
-  .rl-t2 { z-index: 1; margin-left: 54vw; color: oklch(0.99 0.008 85); }   /* POR TRAS */
+  /* o aparelho encaixa ENTRE as duas palavras: cada uma entra so uns 15%
+     na sobreposicao, o bastante para ler trama sem picar a leitura */
+  .rl-titulo { position: absolute; z-index: auto; inset: 0; margin: 0;
+    pointer-events: none; font-family: var(--display); font-weight: 400;
+    font-size: clamp(42px, 12.5vw, 232px); line-height: 0.84; letter-spacing: -0.025em; }
+  .rl-t1, .rl-t2 { position: absolute; width: max-content; }
+  .rl-t1 { z-index: 2; right: 55%; top: 23%; color: var(--vermelho-claro); } /* POR TRAS */
+  .rl-t2 { z-index: 4; left: 55%;  top: 48%; color: oklch(0.99 0.008 85); }  /* NA FRENTE */
 
   /* o aparelho: 9:16 com canto redondo, sem moldura de celular — o que
      identifica o Reels e a interface dentro, nao o desenho do telefone */
-  /* perto da tela: 160vh com o centro em 85% deixa so a metade de cima
-     a mostra e manda o resto para fora pela borda de baixo */
-  /* o verso acompanha o aparelho com 180deg a mais: um dos dois sempre
-     esta de frente, entao o giro nunca mostra a interface espelhada */
-  .rl-verso { position: absolute; z-index: 2; left: 50%; top: 85%;
+  /* ---- o aparelho ---- */
+  /* a sombra no chao: e ela, mais que a inclinacao, que poe o aparelho
+     num espaco em vez de colado no fundo */
+  .rl-sombra { position: absolute; z-index: 1; left: 50%; top: 50%;
+    width: 46vh; height: 11vh; margin-top: 40vh;
     transform: translate(-50%, -50%); pointer-events: none; opacity: 0;
-    height: 160vh; aspect-ratio: 9 / 16; border-radius: 24px;
+    border-radius: 50%; filter: blur(34px);
+    background: radial-gradient(ellipse at center, oklch(0 0 0 / .85) 0%, transparent 72%); }
+  /* o verso acompanha o corpo com 180deg a mais: um dos dois sempre esta
+     de frente, entao o giro nunca mostra a interface espelhada */
+  .rl-verso { position: absolute; z-index: 2; left: 50%; top: 50%;
+    transform: translate(-50%, -50%); pointer-events: none; opacity: 0;
+    height: 80vh; aspect-ratio: 9 / 19.5; border-radius: 46px;
     backface-visibility: hidden; -webkit-backface-visibility: hidden;
-    background: linear-gradient(145deg, oklch(0.26 0.014 55) 0%,
-      oklch(0.17 0.012 55) 46%, oklch(0.23 0.014 55) 100%);
-    box-shadow: 0 40px 90px oklch(0 0 0 / .6), 0 0 0 1px oklch(0.99 0.008 85 / .12); }
-  .rl-fone { position: absolute; z-index: 2; left: 50%; top: 85%;
+    background: linear-gradient(145deg, oklch(0.3 0.012 55) 0%,
+      oklch(0.16 0.01 55) 48%, oklch(0.26 0.012 55) 100%);
+    box-shadow: 0 0 0 1px oklch(0.99 0.008 85 / .14); }
+
+  /* o .rl-fone e o CORPO, nao a tela: o padding e a moldura, e quem
+     recorta o conteudo e o .rl-tela la dentro */
+  .rl-fone { position: absolute; z-index: 3; left: 50%; top: 50%;
     transform: translate(-50%, -50%); cursor: pointer;
     opacity: 0;                      /* o JS acende quando ele chega */
     backface-visibility: hidden; -webkit-backface-visibility: hidden;
-    height: 160vh; aspect-ratio: 9 / 16;
-    border-radius: 24px; overflow: hidden; background: #000; isolation: isolate;
-    box-shadow: 0 40px 90px oklch(0 0 0 / .6), 0 0 0 1px oklch(0.99 0.008 85 / .1);
+    height: 80vh; aspect-ratio: 9 / 19.5; padding: 9px;
+    border-radius: 46px;
+    background: linear-gradient(152deg, oklch(0.42 0.006 60) 0%, oklch(0.2 0.006 60) 22%,
+      oklch(0.13 0.006 60) 50%, oklch(0.2 0.006 60) 78%, oklch(0.46 0.006 60) 100%);
+    box-shadow: 0 46px 90px oklch(0 0 0 / .62), 0 6px 18px oklch(0 0 0 / .5),
+      0 0 0 1px oklch(0.99 0.008 85 / .1);
     /* a pagina inteira e Caveat; a interface do Instagram nao pode ser */
     font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     color: oklch(0.99 0.008 85); }
+  .rl-tela { position: relative; width: 100%; height: 100%;
+    border-radius: 38px; overflow: hidden; background: #000; isolation: isolate; }
+
+  /* botoes: dois tracos na lateral bastam para o olho fechar a forma */
+  .rl-bt { position: absolute; width: 3px; border-radius: 3px; pointer-events: none;
+    background: linear-gradient(90deg, oklch(0.16 0.006 60), oklch(0.5 0.006 60)); }
+  .rl-bt-vol { left: -3px; top: 21%; height: 11%; }
+  .rl-bt-pw  { right: -3px; top: 27%; height: 8%;
+    background: linear-gradient(270deg, oklch(0.16 0.006 60), oklch(0.5 0.006 60)); }
+  /* a ilha e o reflexo ficam acima do video, abaixo do botao de som */
+  .rl-ilha { position: absolute; z-index: 7; left: 50%; top: 11px;
+    width: 27%; height: 22px; border-radius: 999px;
+    transform: translateX(-50%); background: #000; pointer-events: none; }
+  .rl-brilho { position: absolute; z-index: 7; inset: 0; pointer-events: none;
+    background: linear-gradient(118deg, oklch(1 0 0 / .17) 0%, oklch(1 0 0 / .05) 18%,
+      transparent 38%, transparent 70%, oklch(1 0 0 / .05) 100%); }
   .rl-pilha { position: absolute; inset: 0; will-change: transform; }
   .rl-item { position: absolute; left: 0; right: 0; height: 100%;
     overflow: hidden; will-change: transform, filter; }
@@ -854,12 +881,12 @@
 
   .rl-topo { position: absolute; z-index: 6; top: 0; left: 0; right: 0;
     display: flex; align-items: center; justify-content: space-between;
-    padding: 15px 15px 0; pointer-events: none; }
+    padding: 42px 15px 0; pointer-events: none; }
   .rl-topo b { font-family: 'Anton', sans-serif; font-weight: 400; font-size: 21px;
     letter-spacing: 0.005em; }
   .rl-topo svg { width: 23px; height: 23px; }
 
-  .rl-som { position: absolute; z-index: 7; right: 13px; top: 52px;
+  .rl-som { position: absolute; z-index: 8; right: 13px; top: 80px;
     width: 32px; height: 32px; border: 0; border-radius: 50%;
     background: oklch(0 0 0 / .5); color: inherit; cursor: pointer;
     display: grid; place-items: center; }
@@ -903,15 +930,18 @@
   @media (max-width: 899px) {
     /* na vertical nao cabe a sobreposicao lateral: o titulo sobe para o
        topo e so encosta no aparelho */
-    /* numa tela de 414px a trama nao cabe: o aparelho cortava o 2026 ao
-       meio, que le como defeito. Aqui a separacao e limpa */
-    .rl-titulo { top: 10%; font-size: clamp(40px, 15vw, 100px); line-height: 0.86; }
-    .rl-t1 { margin-left: 5vw; }
-    .rl-t2 { margin-left: 34vw; }
+    /* numa tela estreita o aparelho nao cabe entre as palavras: elas
+       sobem para o topo, escalonadas, e ele fica inteiro embaixo */
+    .rl-titulo { font-size: clamp(38px, 14vw, 94px); line-height: 0.86; }
+    .rl-t1 { right: auto; left: 5vw;  top: 8%; }
+    .rl-t2 { left: 34vw; top: 15%; }
     /* na vertical quem manda e a largura: 108vh dava um aparelho de
        522px numa tela de 414 e cortava a barra de acoes */
-    .rl-fone, .rl-verso { left: 50%; top: 70%; width: 104vw; height: auto;
-      border-radius: 18px; }
+    .rl-fone, .rl-verso { left: 50%; top: 63%; height: 70vh; width: auto;
+      border-radius: 38px; }
+    .rl-fone { padding: 7px; }
+    .rl-tela { border-radius: 31px; }
+    .rl-sombra { margin-top: 30vh; width: 38vh; }
   }
   @media (prefers-reduced-motion: reduce) {
     #reels { height: 100vh !important; }
@@ -1187,9 +1217,13 @@
 <section id="reels" aria-label="Reel 2026">
   <div class="rl-pin">
     <div class="rl-luz" aria-hidden="true"><i></i></div>
+    <div class="rl-sombra" aria-hidden="true"></div>
     <div class="rl-verso" aria-hidden="true"></div>
     <h2 class="rl-titulo" aria-label="Reel 2026"><span class="rl-t1">REEL</span><span class="rl-t2">2026</span></h2>
     <div class="rl-fone" role="button" tabindex="0" aria-label="Abrir a galeria de reels">
+      <span class="rl-bt rl-bt-vol" aria-hidden="true"></span>
+      <span class="rl-bt rl-bt-pw" aria-hidden="true"></span>
+      <div class="rl-tela">
       <div class="rl-topo" aria-hidden="true"><b>Reels</b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.6h3.1l1.7-2h8.4l1.7 2H21v12.2H3V7.6z"/><circle cx="12" cy="13.5" r="3.4"/></svg></div>
       <button class="rl-som mudo" type="button" aria-pressed="false" aria-label="Ativar o som do reel"><svg class="rl-alto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.4L12 5.6v12.8L7.4 14.5H4v-5z"/><path class="rl-onda" d="M15.6 9.4a3.6 3.6 0 0 1 0 5.2M18.1 7.2a7 7 0 0 1 0 9.6"/></svg><svg class="rl-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.4L12 5.6v12.8L7.4 14.5H4v-5z"/><path d="m16.2 9.8 4.4 4.4M20.6 9.8l-4.4 4.4"/></svg></button>
       <div class="rl-pilha">
@@ -1260,6 +1294,9 @@
       </article>
       </div>
       <div class="rl-barra" aria-hidden="true"><i></i></div>
+      <span class="rl-ilha" aria-hidden="true"></span>
+      <span class="rl-brilho" aria-hidden="true"></span>
+      </div>
     </div>
   </div>
 </section>
@@ -1985,27 +2022,49 @@
     // parecer polegar com atrito, nao transicao com duracao
     var fone = sec.querySelector('.rl-fone');
     var verso = sec.querySelector('.rl-verso');
+    var sombra = sec.querySelector('.rl-sombra');
     var CHEGADA = 1800;    // o aparelho vem de longe girando
+    // a inclinacao de repouso: o aparelho fica de tres quartos, nao de
+    // frente chapada. E o que o faz parecer objeto e nao retangulo
+    var REPY = -15, REPX = 3;
+    var incY = 0, incX = 0, alvoY = 0, alvoX = 0, pronto = false;
     var PASSADA = 1700;    // e so entao o feed da a passada
     var inicio = 0, passou = false;
 
     // de longe e girando ate assentar. O giro passa de uma volta: no meio
     // dele ve-se o verso espelhado, mas a desaceleracao e tao forte que
     // isso acontece nos primeiros 200ms, como borrao de movimento
-    function chega(k){
-      var e = 1 - Math.pow(1 - k, 3);
-      var op = Math.min(1, k * 5).toFixed(3);
-      var base = 'translate(-50%, -50%) translateZ(' + (-1400 * (1 - e)).toFixed(0)
-        + 'px) rotateZ(' + (-14 * (1 - e)).toFixed(2) + 'deg) rotateY(';
-      var gy = -390 * (1 - e);
+    function poe(z, gz, gy, gx, op){
+      var base = 'translate(-50%, -50%) translateZ(' + z.toFixed(0) + 'px) rotateZ('
+        + gz.toFixed(2) + 'deg) rotateX(' + gx.toFixed(2) + 'deg) rotateY(';
       fone.style.opacity = op;
-      fone.style.transform = base + gy.toFixed(1) + 'deg)';
+      fone.style.transform = base + gy.toFixed(2) + 'deg)';
       if (verso){
         verso.style.opacity = op;
-        verso.style.transform = base + (gy + 180).toFixed(1) + 'deg)';
+        verso.style.transform = base + (gy + 180).toFixed(2) + 'deg)';
       }
+      if (sombra) sombra.style.opacity = op;
+    }
+    // vem de longe girando e assenta JA na inclinacao de repouso: parar
+    // de frente chapada jogaria fora o 3D que a entrada acabou de montar
+    function chega(k){
+      var e = 1 - Math.pow(1 - k, 3);
+      poe(-1400 * (1 - e), -12 * (1 - e), REPY + (-390 - REPY) * (1 - e),
+          REPX * e, Math.min(1, k * 5).toFixed(3));
+      if (k >= 1) pronto = true;
     }
     chega(0);
+
+    // o mouse inclina de leve: so depois que ele assentou, senao briga
+    // com a animacao de chegada
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches && !REDUZIDO){
+      sec.addEventListener('mousemove', function(ev){
+        var r = sec.getBoundingClientRect();
+        alvoY = ((ev.clientX - r.left) / r.width - 0.5) * 13;
+        alvoX = (0.5 - (ev.clientY - r.top) / r.height) * 8;
+      });
+      sec.addEventListener('mouseleave', function(){ alvoY = 0; alvoX = 0; });
+    }
 
     function pinta(pos){
       var i = Math.max(0, Math.min(N - 2, Math.floor(pos)));
@@ -2043,6 +2102,12 @@
           passou = true;
           liga(N - 1);   // so no fim: ligar no caminho carregaria os cinco
         }
+      }
+
+      if (pronto){
+        incY += (alvoY - incY) * 0.07;
+        incX += (alvoX - incX) * 0.07;
+        poe(0, 0, REPY + incY, REPX + incX, '1');
       }
 
       if (barra){
