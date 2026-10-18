@@ -58,16 +58,12 @@ Sete secoes, nesta ordem:
                      o video grande dividindo a tela com titulo e descricao.
                      Fundo liso, sem efeito animado.
 
-  3. #reels          REEL 2026. Fundo preto; o mouse abre um furo e revela
-                     uma textura vermelha por baixo. O aparelho 9:16 fica
-                     perto da tela (160vh, centro em 85%): so a metade de
-                     cima aparece. Ele chega de longe girando em 3D e
-                     assenta, e so entao o feed da UMA passada rapida por
-                     todos os reels e para no ultimo - nada disso e puxado
-                     pelo scroll. REEL cruza o aparelho por cima e 2026
-                     some por tras dele. Clicar abre a galeria em tela
-                     cheia (aba Reels do perfil); clicar num reel abre o
-                     video grande com titulo e descricao.
+  3. #reels          REEL 2026. Fundo preto. Um painel vertical no meio
+                     pisca doze quadros em sequencia, rapido no comeco e
+                     desacelerando, e assenta na foto do Allan. REEL passa
+                     na frente do painel e 2026 por tras. Clicar abre a
+                     galeria em tela cheia; clicar num reel abre o video
+                     grande com titulo e descricao.
 
   4. #servicos       "NAO E SO FILMAR". Tema claro.
   5. #sobre          "VISAO e proposito". Tema escuro.
@@ -106,13 +102,15 @@ mesmo campo de curvas de nivel ao fundo, desfocado em 28px.
     secao e trocar uma classe, nao cacar hexadecimal.
 
 4.2 Tipografia
-        Anton     titulos (via o token --display, em :root)
-        Caveat    corpo de texto - e a voz da pagina
-        Satisfy   a assinatura "Producoes Audiovisuais" na hero
+        Archivo Black  titulos de display (via o token --display)
+        Inter          todo o resto (via o token --texto)
         Courier Prime  so o carimbo giratorio
 
-    O token --display existe para trocar a fonte de display numa linha so.
-    Ja testamos a Santa Misa Cyber Pulp ali; foi revertido (ver item 7).
+    Trocar a familia nao bastava: a Caveat, que havia antes, tem altura-x
+    pequena e desenho leve — 20px dela aparentam uns 15px de Inter. Cada
+    regra que a usava teve o corpo reduzido a 75% e o peso baixado um
+    degrau. Os titulos de display tambem cairam, porque a Archivo Black e
+    bem mais larga que a Anton.
 
 4.3 O campo de curvas de nivel
     Um shader WebGL (funcao campo(sec, tela) no segundo <script>) desenha

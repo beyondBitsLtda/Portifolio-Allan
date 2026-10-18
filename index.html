@@ -7,7 +7,7 @@
 <title>REC. — Videomaker & Estrategista</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Courier+Prime:wght@700&family=Caveat:wght@400..700&family=Satisfy&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=Courier+Prime:wght@700&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
@@ -85,7 +85,7 @@
     background: var(--vermelho); color: oklch(0.97 0.008 85);
     font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
   .work-title { position: absolute; z-index: 2; left: 16px; right: 16px; bottom: 14px;
-    font-family: 'Anton', sans-serif; font-size: clamp(18px, 1.7vw, 30px); line-height: .98; color: oklch(0.97 0.008 85); }
+    font-family: var(--display); font-size: clamp(18px, 1.7vw, 30px); line-height: .98; color: oklch(0.97 0.008 85); }
 
   /* Em tela estreita não cabe figura ao centro e texto nas laterais:
      o texto sobe para o topo e a figura ocupa a metade de baixo.
@@ -123,7 +123,8 @@
   /* ===== refinamento: variáveis, revelação, entrada, cabeçalho ===== */
   :root { --gx: 40px;
     /* um nome so para a fonte de display: trocar aqui troca em toda a pagina */
-    --display: 'Anton', sans-serif;
+    --display: 'Archivo Black', 'Arial Black', sans-serif;
+    --texto: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
     /* o vermelho da marca, um so na pagina inteira. O --claro e o mesmo
        vermelho levantado para ter contraste sobre fundo escuro */
     /* medido no navegador: 0.56/0.24 e o vermelho mais vivo que ainda
@@ -198,7 +199,7 @@
     margin: 0; font-family: var(--display); font-weight: 400;
     /* as metricas que a palavra grande tinha antes: Anton foi desenhada
        para caixa alta, em caixa mista as hastes descasam */
-    font-size: clamp(62px, 14.6vw, 274px); line-height: 0.8; letter-spacing: -0.015em;
+    font-size: clamp(38px, 8.6vw, 162px); line-height: 0.8; letter-spacing: -0.015em;
     /* vermelho gritante: mais claro e saturado que o painel, e o nome so
        aparece depois que ele entra, ja sobre a camiseta escura */
     color: var(--vermelho); white-space: nowrap; user-select: none;
@@ -208,9 +209,8 @@
     background-size: cover;
     -webkit-background-clip: text; background-clip: text;
     will-change: transform, opacity; }
-  /* Satisfy no lugar da Caveat: assinatura, nao anotacao */
-  .h1-sub { margin: 0.16em 0 0; font-family: 'Satisfy', 'Caveat', cursive; font-weight: 400;
-    font-size: clamp(26px, 3.4vw, 60px); letter-spacing: 0.012em;
+  .h1-sub { margin: 0.16em 0 0; font-family: var(--texto); font-weight: 400;
+    font-size: clamp(20px, 2.55vw, 45px); letter-spacing: 0.012em;
     color: var(--vermelho); opacity: 0; text-shadow: none;
     will-change: transform, opacity; }
   .h1-fig  { animation: fadeUp 1.2s cubic-bezier(.2,.65,.2,1) .75s both; }
@@ -231,9 +231,9 @@
   }
 
   /* ===== personalidade: manuscrito, rabisco, carimbo, cursor, holofote ===== */
-  .hand { font-family: 'Caveat', cursive; font-weight: 600; }
-  .hand-note { position: absolute; z-index: 6; font-family: 'Caveat', cursive; font-weight: 600;
-    font-size: clamp(22px, 2vw, 30px); line-height: 1.05; color: var(--vermelho);
+  .hand { font-family: var(--texto); font-weight: 500; }
+  .hand-note { position: absolute; z-index: 6; font-family: var(--texto); font-weight: 500;
+    font-size: clamp(16px, 1.5vw, 22px); line-height: 1.05; color: var(--vermelho);
     transform: rotate(-6deg); pointer-events: none; }
   .hand-note svg { display: block; width: 70px; height: 40px; margin: 6px 0 0 48px; overflow: visible; }
   .hand-note svg path { fill: none; stroke: var(--vermelho); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
@@ -352,11 +352,13 @@
     .foto .bg { transform: none !important; }
   }
 
-  /* ===== manuscrito em tudo que não é Anton ===== */
-  body { font-family: 'Caveat', cursive; font-size: 20px; }
+  /* ===== grotesca limpa em tudo que nao e display ===== */
+  /* 16px e nao 20: a Caveat rendia pequeno e precisava do corpo grande */
+  body { font-family: var(--texto); font-size: 16px; letter-spacing: -0.011em;
+    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
   .mono, .slate, .cell-slate, .spec-k, .serv-n, .work-tag, .seq-meta, .reel-hud, .cam-read, .foot, .soundBtn, .eyebrow, nav a
-    { font-family: 'Caveat', cursive !important; letter-spacing: .01em !important; text-transform: none !important; font-weight: 600 !important; }
-  .slate, .cell-slate, .seq-meta, .reel-hud, .cam-read, .foot, .spec-k { font-size: 20px !important; }
+    { font-family: var(--texto) !important; letter-spacing: .005em !important; text-transform: none !important; font-weight: 500 !important; }
+  .slate, .cell-slate, .seq-meta, .reel-hud, .cam-read, .foot, .spec-k { font-size: 15px !important; }
   .work-tag { font-size: 19px; padding: 4px 11px; }
   .serv-n { font-size: 22px; }
   .spec-v { font-size: 20px; line-height: 1.2; }
@@ -408,7 +410,7 @@
     padding: clamp(80px, 10vw, 140px) var(--gx); }
   /* largura em vw, não em ch: ch usa o corpo de 20px e deixava a coluna com ~370px */
   .claq-copy { position: relative; z-index: 2; max-width: min(38vw, 760px); display: flex; flex-direction: column; gap: 24px; }
-  .claq-copy h2 { font-family: 'Anton', sans-serif; font-weight: 400; margin: 0; font-size: clamp(50px, 9vw, 158px); line-height: .88; letter-spacing: -.012em; color: oklch(0.18 0.012 60); }
+  .claq-copy h2 { font-family: var(--display); font-weight: 400; margin: 0; font-size: clamp(50px, 9vw, 158px); line-height: .88; letter-spacing: -.012em; color: oklch(0.18 0.012 60); }
   .claq-copy h2 em { font-style: normal; color: var(--vermelho); }
   .claq-copy .hand { font-size: clamp(26px, 3vw, 46px); line-height: 1.14; color: oklch(0.3 0.012 60); max-width: none; }
   .claq-copy .take { font-size: clamp(20px, 1.6vw, 28px); color: var(--vermelho); }
@@ -437,13 +439,21 @@
 
   /* ===== abertura: chips do portfólio antigo ===== */
   .chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 16px; }
-  .chips span { border: 1px solid color-mix(in oklch, var(--vermelho) 45%, transparent); padding: 4px 10px; font-family: 'Caveat', cursive;
-    font-size: 17px; font-weight: 600; color: oklch(0.34 0.012 60); white-space: nowrap; }
+  .chips span { border: 1px solid color-mix(in oklch, var(--vermelho) 45%, transparent); padding: 4px 10px; font-family: var(--texto);
+    font-size: 13px; font-weight: 500; color: oklch(0.34 0.012 60); white-space: nowrap; }
 
   /* ===== rótulo de seção com traço ===== */
-  .olho { display: flex; align-items: center; gap: 10px; font-family: 'Caveat', cursive; font-size: 21px;
-    font-weight: 600; margin-bottom: 20px; }
-  .olho .line { width: 30px; height: 1px; display: inline-block; }
+  /* o rotulo some do fluxo e vira coluna propria a esquerda, como nas
+     referencias; abaixo de 1100px ele volta a ser uma linha no topo */
+  .olho { display: flex; align-items: center; gap: 10px; font-family: var(--texto);
+    font-size: 12px; font-weight: 500; letter-spacing: .09em; text-transform: uppercase;
+    margin-bottom: 20px; }
+  .olho .line { width: 26px; height: 1px; display: inline-block; }
+  @media (min-width: 1100px) {
+    .editorial { display: grid; grid-template-columns: 210px minmax(0, 1fr);
+      gap: clamp(32px, 5vw, 96px); align-items: start; }
+    .editorial > .olho { margin: 6px 0 0; position: sticky; top: 120px; }
+  }
 
   /* ===== O que faço ===== */
   .faz-head { display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: clamp(40px, 5vw, 68px); }
@@ -451,10 +461,10 @@
   .faz-grid { display: grid; grid-template-columns: 1fr; gap: 1px; background: var(--cartaoLinha); }
   @media (min-width: 900px) { .faz-grid { grid-template-columns: repeat(3, 1fr); } }
   .faz-card { background: var(--cartao); padding: 40px 34px; }
-  .faz-n { font-family: 'Caveat', cursive; font-size: 24px; font-weight: 700; color: var(--marca); }
-  .faz-card h3 { margin: 12px 0 8px; font-family: 'Anton', sans-serif; font-weight: 400; font-size: clamp(24px, 2.2vw, 32px);
+  .faz-n { font-family: var(--texto); font-size: 18px; font-weight: 600; color: var(--marca); }
+  .faz-card h3 { margin: 12px 0 8px; font-family: var(--display); font-weight: 400; font-size: clamp(24px, 2.2vw, 32px);
     line-height: 1.02; letter-spacing: 0.005em; }
-  .faz-sub { font-family: 'Caveat', cursive; font-size: 20px; font-weight: 600; color: var(--marca); margin-bottom: 14px; }
+  .faz-sub { font-family: var(--texto); font-size: 15px; font-weight: 500; color: var(--marca); margin-bottom: 14px; }
   .faz-card p { margin: 0; font-size: 20px; line-height: 1.22; color: var(--tinta2); }
 
   /* ===== Visão e propósito ===== */
@@ -463,13 +473,13 @@
   .visao-txt p { margin: 0 0 18px; font-size: clamp(20px, 1.6vw, 25px); line-height: 1.24; color: var(--tinta2); }
   .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 26px 20px; margin-top: 8px; }
   .stat { border-left: 2px solid var(--marca); padding-left: 16px; }
-  .stat b { display: block; font-family: 'Anton', sans-serif; font-weight: 400; font-size: clamp(38px, 4.2vw, 62px);
+  .stat b { display: block; font-family: var(--display); font-weight: 400; font-size: clamp(38px, 4.2vw, 62px);
     line-height: 0.9; color: var(--marca); }
-  .stat span { display: block; margin-top: 8px; font-family: 'Caveat', cursive; font-size: 19px; font-weight: 600; color: var(--tinta3); }
+  .stat span { display: block; margin-top: 8px; font-family: var(--texto); font-size: 14px; font-weight: 500; color: var(--tinta3); }
   .pilares { margin-top: 34px; display: grid; gap: 1px; background: var(--cartaoLinha); border: 1px solid var(--cartaoLinha); }
   .pilar { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: start; background: var(--cartao); padding: 22px 24px; }
-  .pilar-n { font-family: 'Anton', sans-serif; font-size: 26px; line-height: 1; color: var(--marca); opacity: .55; }
-  .pilar h4 { margin: 0 0 4px; font-family: 'Anton', sans-serif; font-weight: 400; font-size: 21px; letter-spacing: 0.01em; color: var(--tinta); }
+  .pilar-n { font-family: var(--display); font-size: 26px; line-height: 1; color: var(--marca); opacity: .55; }
+  .pilar h4 { margin: 0 0 4px; font-family: var(--display); font-weight: 400; font-size: 21px; letter-spacing: 0.01em; color: var(--tinta); }
   .pilar p { margin: 0; font-size: 19px; line-height: 1.2; color: var(--tinta2); }
 
   /* ===== Obras & acervos ===== */
@@ -481,13 +491,13 @@
   .obra-img img { width: 100%; height: 100%; object-fit: cover; display: block;
     transition: transform .7s cubic-bezier(.2,.7,.2,1), filter .55s ease; }
   .obra:hover .obra-img img { transform: scale(1.04); }
-  .obra-tag { display: inline-block; font-family: 'Caveat', cursive; font-size: 19px; font-weight: 600;
+  .obra-tag { display: inline-block; font-family: var(--texto); font-size: 14px; font-weight: 500;
     color: var(--vermelho); border: 1px solid color-mix(in oklch, var(--vermelho) 40%, transparent); padding: 3px 11px; margin-bottom: 14px; }
-  .obra-txt h3 { margin: 0 0 6px; font-family: 'Anton', sans-serif; font-weight: 400;
+  .obra-txt h3 { margin: 0 0 6px; font-family: var(--display); font-weight: 400;
     font-size: clamp(26px, 2.6vw, 40px); line-height: 1.0; letter-spacing: -0.005em; color: oklch(0.18 0.012 60); }
-  .obra-sub { margin: 0 0 14px !important; font-family: 'Caveat', cursive; font-size: 21px; color: oklch(0.5 0.012 60) !important; }
+  .obra-sub { margin: 0 0 14px !important; font-family: var(--texto); font-size: 16px; color: oklch(0.5 0.012 60) !important; }
   .obra-txt p { margin: 0; font-size: 20px; line-height: 1.22; color: oklch(0.38 0.012 60); max-width: 62ch; }
-  .obra-link { display: inline-block; margin-top: 16px; font-family: 'Caveat', cursive; font-size: 22px; font-weight: 600;
+  .obra-link { display: inline-block; margin-top: 16px; font-family: var(--texto); font-size: 16px; font-weight: 500;
     color: var(--vermelho); border-bottom: 1px solid color-mix(in oklch, var(--vermelho) 50%, transparent); padding-bottom: 2px; }
   .obra-link:hover { color: oklch(0.18 0.012 60); border-color: oklch(0.18 0.012 60); }
 
@@ -501,17 +511,17 @@
   .traj-item::after { content: ''; position: absolute; left: 5px; top: 22px; bottom: -30px; width: 1px;
     background: var(--marca); opacity: .4; }
   .traj-linha .traj-item:last-child::after { display: none; }
-  .traj-item h4 { margin: 0 0 6px; font-family: 'Anton', sans-serif; font-weight: 400; font-size: 22px; letter-spacing: 0.01em; }
+  .traj-item h4 { margin: 0 0 6px; font-family: var(--display); font-weight: 400; font-size: 22px; letter-spacing: 0.01em; }
   .traj-item p { margin: 0; font-size: 19px; line-height: 1.2; color: var(--tinta2); }
   .traj-txt p { margin: 0 0 18px; font-size: clamp(20px, 1.6vw, 25px); line-height: 1.24; color: var(--tinta2); }
   .traj-txt blockquote { margin: 28px 0 0; padding: 22px 26px; border-left: 3px solid var(--marca);
-    background: var(--caixa); font-family: 'Caveat', cursive; font-size: clamp(24px, 2vw, 32px);
+    background: var(--caixa); font-family: var(--texto); font-size: clamp(18px, 1.5vw, 24px);
     line-height: 1.16; color: var(--tinta); }
 
   /* ===== Contato: canais ===== */
   .canais { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
-  .canais a { border: 1px solid oklch(0.97 0.008 85 / .55); padding: 11px 18px; font-family: 'Caveat', cursive;
-    font-size: 21px; font-weight: 600; color: oklch(0.97 0.008 85); transition: background .2s ease, color .2s ease; }
+  .canais a { border: 1px solid oklch(0.97 0.008 85 / .55); padding: 11px 18px; font-family: var(--texto);
+    font-size: 16px; font-weight: 500; color: oklch(0.97 0.008 85); transition: background .2s ease, color .2s ease; }
   .canais a:hover { background: oklch(0.18 0.012 60); border-color: oklch(0.18 0.012 60); color: oklch(0.97 0.008 85); }
 
   @media (max-width: 899px) {
@@ -542,7 +552,7 @@
   /* o observador: ele e quem estava olhando o estudio ate agora */
   #obsv { position: absolute; inset: 0; z-index: 2; pointer-events: none;
     opacity: 0; will-change: transform, opacity; }
-  .obs-q { position: absolute; left: 0; right: 0; bottom: -30%; height: 92%;
+  .obs-q { position: absolute; left: 0; right: 0; bottom: -34%; height: 124%;
     opacity: 0; will-change: opacity;
     background-repeat: no-repeat; background-position: bottom center; background-size: contain;
     -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
@@ -581,8 +591,8 @@
 
   .pnt-titulo { position: absolute; z-index: 6; inset: 0; margin: 0;
     display: flex; align-items: center; justify-content: center;
-    font-family: 'Caveat', cursive; font-weight: 700;
-    font-size: clamp(62px, 13.4vw, 214px); line-height: 1; letter-spacing: 0.005em;
+    font-family: var(--texto); font-weight: 600;
+    font-size: clamp(46px, 10.05vw, 160px); line-height: 1; letter-spacing: 0.005em;
     color: var(--vermelho); pointer-events: none; will-change: transform, opacity; }
   .pnt-titulo .pt-bloco { position: relative; display: inline-block;
     transform: rotate(-2.4deg);
@@ -613,7 +623,7 @@
 
   /* o nome passa atras do widget e desfoca nas pontas */
   .pnt-nome { position: absolute; z-index: 2; left: 0; right: 0; top: 50%;
-    font-family: 'Anton', sans-serif; font-weight: 400; font-size: clamp(44px, 9.4vw, 158px);
+    font-family: var(--display); font-weight: 400; font-size: clamp(44px, 9.4vw, 158px);
     line-height: 0.82; letter-spacing: -0.02em; white-space: nowrap; text-align: center;
     color: var(--vermelho); opacity: 0; transform: translateY(-50%);
     pointer-events: none; user-select: none; will-change: transform, filter; }
@@ -635,7 +645,7 @@
   .pnt-widget video { display: block; width: 100%; height: 100%; object-fit: cover; }
   .pnt-tag { position: absolute; left: 14px; bottom: 12px; padding: 4px 11px; border-radius: 999px;
     background: var(--vermelho); color: oklch(0.99 0.006 85);
-    font-family: 'Caveat', cursive; font-size: 19px; font-weight: 600; }
+    font-family: var(--texto); font-size: 14px; font-weight: 500; }
   .pnt-toque { position: absolute; right: 16px; bottom: 12px;
     font-size: 21px; color: oklch(0.99 0.006 85); text-shadow: 0 2px 10px oklch(0.15 0.02 60 / .8); }
 
@@ -700,7 +710,7 @@
       oklch(0.15 0.02 40 / .2) 30%, transparent 56%); }
   .gal-nome { position: absolute; z-index: 2;
     left: clamp(12px, 1.2vw, 20px); bottom: clamp(10px, 1vw, 16px);
-    font-family: 'Anton', sans-serif; font-weight: 400;
+    font-family: var(--display); font-weight: 400;
     font-size: clamp(15px, 1.5vw, 26px); line-height: 0.98; letter-spacing: -0.015em;
     color: oklch(0.99 0.006 85); text-shadow: 0 4px 18px oklch(0.14 0.02 40 / .6); }
   .acv-palco:hover .gal-item { filter: saturate(0.5) brightness(0.88); }
@@ -709,7 +719,7 @@
   .gal-item:hover img, .gal-item:focus-visible img { transform: scale(1.07); }
 
   @media (max-width: 899px) {
-    .obs-q { bottom: -4%; height: 52%; }
+    .obs-q { bottom: -6%; height: 72%; }
     .h1-bloco { margin-top: -6vh; }
     .pnt-acervo { padding: 10vh 16px 5vh; }
     .acv-canvas { width: min(64vh, 88vw); height: min(64vh, 88vw); }
@@ -734,19 +744,19 @@
     padding: 8vh clamp(22px, 3.4vw, 54px); color: oklch(0.96 0.008 85);
     transform: translateX(26px); opacity: 0; transition: transform .42s .1s ease, opacity .42s .1s ease; }
   .pnt-modal.on .pm-texto { transform: none; opacity: 1; }
-  .pm-tag { font-family: 'Caveat', cursive; font-size: 21px; color: oklch(0.72 0.18 27); }
-  .pm-texto h3 { margin: 0; font-family: 'Anton', sans-serif; font-weight: 400;
+  .pm-tag { font-family: var(--texto); font-size: 16px; color: oklch(0.72 0.18 27); }
+  .pm-texto h3 { margin: 0; font-family: var(--display); font-weight: 400;
     font-size: clamp(38px, 4.6vw, 68px); line-height: 0.92; letter-spacing: -0.015em; }
   .pm-sub { margin: 0; font-size: 25px; color: oklch(0.78 0.01 85); }
   .pm-texto p { margin: 0; font-size: 19px; line-height: 1.42; color: oklch(0.85 0.01 85); }
   .pm-link { align-self: flex-start; margin-top: 8px; padding: 10px 18px; border-radius: 999px;
     border: 1px solid oklch(0.96 0.008 85 / .45); color: oklch(0.96 0.008 85);
-    text-decoration: none; font-family: 'Caveat', cursive; font-size: 22px;
+    text-decoration: none; font-family: var(--texto); font-size: 16px;
     transition: background .2s ease, border-color .2s ease; }
   .pm-link:hover { background: var(--vermelho); border-color: var(--vermelho); }
   .pm-som, .pm-fechar { position: absolute; z-index: 2; cursor: pointer;
     border: 1px solid oklch(0.96 0.008 85 / .4); background: oklch(0.08 0.01 60 / .55);
-    color: oklch(0.96 0.008 85); font-family: 'Caveat', cursive; }
+    color: oklch(0.96 0.008 85); font-family: var(--texto); }
   .pm-som { left: clamp(18px, 3vw, 44px); bottom: 5vh; padding: 9px 18px; border-radius: 999px; font-size: 21px; }
   .pm-fechar { right: clamp(18px, 3vw, 44px); top: 4vh; width: 46px; height: 46px; border-radius: 50%; font-size: 19px; }
   .pm-som:hover, .pm-fechar:hover { background: var(--vermelho); border-color: var(--vermelho); }
@@ -774,14 +784,11 @@
     .gal-item { clip-path: none !important; }
     .acv-canvas, .acv-onda, .acv-sombra { display: none; }
   }
-  /* ===== REEL 2026: o feed vertical ===== */
-  /* uma hero de uma tela: o feed nao e mais puxado pelo scroll, entao a
-     seccao nao precisa mais dos 500vh que davam curso ao arrasto */
-  #reels { position: relative; z-index: 60; height: 100vh; min-height: 660px;
-    overflow: hidden; background: oklch(0.13 0.014 55); }
-  /* a perspectiva fica aqui: e o que faz o translateZ do aparelho virar
-     distancia de verdade em vez de nada */
-  .rl-pin { position: absolute; inset: 0; overflow: hidden; perspective: 1500px; }
+  /* ===== REEL 2026: a passada de imagens ===== */
+  #reels { position: relative; z-index: 60; height: 100vh; min-height: 640px;
+    overflow: hidden; background: oklch(0.11 0.012 55); }
+  .rl-pin { position: absolute; inset: 0; overflow: hidden; }
+
   /* a textura por baixo do preto. O circulo tem tamanho fixo e mascara
      parada: so o transform muda, entao nada e repintado */
   .rl-luz { position: absolute; z-index: 0; left: 0; top: 0;
@@ -790,8 +797,6 @@
     opacity: 0; will-change: transform, opacity;
     -webkit-mask-image: radial-gradient(circle, #000 38%, transparent 70%);
     mask-image: radial-gradient(circle, #000 38%, transparent 70%); }
-  /* a textura leva o transform contrario do circulo: fica presa ao palco
-     em vez de escorregar junto com o cursor */
   /* a mesma textura do hero VAMOS CRIAR JUNTOS: o vermelho da marca, o
      realce radial do .spot e a reticula do .halftone */
   .rl-luz i { position: absolute; left: 0; top: 0; display: block;
@@ -799,157 +804,55 @@
     background-color: var(--vermelho);
     background-image: radial-gradient(40% 44% at 42% 38%,
       oklch(0.68 0.23 27 / .9) 0%, transparent 70%); }
-  /* a reticula mora num pseudo proprio: no #contato ela e uma camada com
-     opacity .16, e duas camadas de background nao repartem alfa */
   .rl-luz i::after { content: ''; position: absolute; inset: 0; opacity: .16;
     background-image: radial-gradient(oklch(0.28 0.1 27) 1px, transparent 1.5px);
     background-size: 9px 9px; }
+
+  /* o painel: um quadro vertical, sem moldura de aparelho. O que conta
+     aqui e a passada das imagens, nao o desenho de um telefone */
+  .rl-painel { position: absolute; z-index: 2; left: 50%; top: 50%;
+    transform: translate(-50%, -50%); cursor: pointer;
+    height: 78vh; aspect-ratio: 9 / 15; overflow: hidden; border-radius: 4px;
+    background: oklch(0.11 0.012 55); opacity: 0;
+    box-shadow: 0 50px 110px oklch(0 0 0 / .7); }
+  .rl-painel:focus-visible { outline: 2px solid var(--vermelho-claro); outline-offset: 6px; }
+  .rl-q { position: absolute; inset: 0; opacity: 0;
+    background-size: cover; background-position: center; }
+  /* o quadro final: o Allan, no par cor+mascara que a hero ja usa */
+  .rl-fim { background-image: url('assets/obs2.jpg');
+    background-size: 185%; background-position: 63% 12%;
+    -webkit-mask-image: url('assets/obs2-mask.png'); mask-image: url('assets/obs2-mask.png');
+    -webkit-mask-size: 185%; mask-size: 185%;
+    -webkit-mask-position: 63% 12%; mask-position: 63% 12%;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
+  .rl-vinheta { position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(to bottom, oklch(0 0 0 / .5) 0%, transparent 26%,
+      transparent 62%, oklch(0 0 0 / .72) 100%); }
+
   /* z-index auto nao e descuido: com z-index proprio a .rl-titulo criaria
-     contexto de empilhamento e as duas linhas ficariam presas no mesmo
-     plano, impossibilitando uma passar atras e a outra na frente do
-     aparelho */
-  /* z-index auto nao e descuido: com z-index proprio a .rl-titulo criaria
-     contexto de empilhamento e prenderia as duas linhas no mesmo plano */
-  /* o aparelho encaixa ENTRE as duas palavras: cada uma entra so uns 15%
-     na sobreposicao, o bastante para ler trama sem picar a leitura */
+     contexto de empilhamento e prenderia as duas linhas no mesmo plano,
+     impedindo uma passar na frente e a outra atras do painel */
   .rl-titulo { position: absolute; z-index: auto; inset: 0; margin: 0;
     pointer-events: none; font-family: var(--display); font-weight: 400;
-    font-size: clamp(42px, 12.5vw, 232px); line-height: 0.84; letter-spacing: -0.025em; }
+    font-size: clamp(30px, 8.4vw, 156px); line-height: 0.96; letter-spacing: -0.02em; }
   .rl-t1, .rl-t2 { position: absolute; width: max-content; }
-  .rl-t1 { z-index: 2; right: 55%; top: 23%; color: var(--vermelho-claro); } /* POR TRAS */
-  .rl-t2 { z-index: 4; left: 55%;  top: 48%; color: oklch(0.99 0.008 85); }  /* NA FRENTE */
+  .rl-t1 { z-index: 3; right: 54%; top: 36%; color: var(--vermelho-claro); } /* NA FRENTE */
+  .rl-t2 { z-index: 1; left: 57%;  top: 50%; color: oklch(0.99 0.008 85); }  /* POR TRAS */
 
-  /* o aparelho: 9:16 com canto redondo, sem moldura de celular — o que
-     identifica o Reels e a interface dentro, nao o desenho do telefone */
-  /* ---- o aparelho ---- */
-  /* a sombra no chao: e ela, mais que a inclinacao, que poe o aparelho
-     num espaco em vez de colado no fundo */
-  .rl-sombra { position: absolute; z-index: 1; left: 50%; top: 50%;
-    width: 52vh; height: 12vh; margin-top: 47vh;
-    transform: translate(-50%, -50%); pointer-events: none; opacity: 0;
-    border-radius: 50%; filter: blur(34px);
-    background: radial-gradient(ellipse at center, oklch(0 0 0 / .85) 0%, transparent 72%); }
-  /* o verso acompanha o corpo com 180deg a mais: um dos dois sempre esta
-     de frente, entao o giro nunca mostra a interface espelhada */
-  .rl-verso { position: absolute; z-index: 2; left: 50%; top: 52%;
-    transform: translate(-50%, -50%); pointer-events: none; opacity: 0;
-    height: 92vh; aspect-ratio: 9 / 19.5; border-radius: 46px;
-    backface-visibility: hidden; -webkit-backface-visibility: hidden;
-    background: linear-gradient(145deg, oklch(0.3 0.012 55) 0%,
-      oklch(0.16 0.01 55) 48%, oklch(0.26 0.012 55) 100%);
-    box-shadow: 0 0 0 1px oklch(0.99 0.008 85 / .14); }
-
-  /* o .rl-fone e o CORPO, nao a tela: o padding e a moldura, e quem
-     recorta o conteudo e o .rl-tela la dentro */
-  .rl-fone { position: absolute; z-index: 3; left: 50%; top: 52%;
-    transform: translate(-50%, -50%); cursor: pointer;
-    opacity: 0;                      /* o JS acende quando ele chega */
-    backface-visibility: hidden; -webkit-backface-visibility: hidden;
-    height: 92vh; aspect-ratio: 9 / 19.5; padding: 9px;
-    border-radius: 46px;
-    background: linear-gradient(152deg, oklch(0.42 0.006 60) 0%, oklch(0.2 0.006 60) 22%,
-      oklch(0.13 0.006 60) 50%, oklch(0.2 0.006 60) 78%, oklch(0.46 0.006 60) 100%);
-    box-shadow: 0 46px 90px oklch(0 0 0 / .62), 0 6px 18px oklch(0 0 0 / .5),
-      0 0 0 1px oklch(0.99 0.008 85 / .1);
-    /* a pagina inteira e Caveat; a interface do Instagram nao pode ser */
-    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-    color: oklch(0.99 0.008 85); }
-  .rl-tela { position: relative; width: 100%; height: 100%;
-    border-radius: 38px; overflow: hidden; background: #000; isolation: isolate; }
-
-  /* botoes: dois tracos na lateral bastam para o olho fechar a forma */
-  .rl-bt { position: absolute; width: 3px; border-radius: 3px; pointer-events: none;
-    background: linear-gradient(90deg, oklch(0.16 0.006 60), oklch(0.5 0.006 60)); }
-  .rl-bt-vol { left: -3px; top: 21%; height: 11%; }
-  .rl-bt-pw  { right: -3px; top: 27%; height: 8%;
-    background: linear-gradient(270deg, oklch(0.16 0.006 60), oklch(0.5 0.006 60)); }
-  /* a ilha e o reflexo ficam acima do video, abaixo do botao de som */
-  .rl-ilha { position: absolute; z-index: 7; left: 50%; top: 11px;
-    width: 27%; height: 22px; border-radius: 999px;
-    transform: translateX(-50%); background: #000; pointer-events: none; }
-  .rl-brilho { position: absolute; z-index: 7; inset: 0; pointer-events: none;
-    background: linear-gradient(118deg, oklch(1 0 0 / .17) 0%, oklch(1 0 0 / .05) 18%,
-      transparent 38%, transparent 70%, oklch(1 0 0 / .05) 100%); }
-  .rl-pilha { position: absolute; inset: 0; will-change: transform; }
-  .rl-item { position: absolute; left: 0; right: 0; height: 100%;
-    overflow: hidden; will-change: transform, filter; }
-  .rl-video { display: block; width: 100%; height: 100%; object-fit: cover;
-    will-change: transform; }
-  .rl-sombra { position: absolute; inset: 0; pointer-events: none;
-    background: linear-gradient(to bottom, oklch(0 0 0 / .5) 0%, transparent 20%,
-      transparent 46%, oklch(0 0 0 / .78) 100%); }
-
-  .rl-topo { position: absolute; z-index: 6; top: 0; left: 0; right: 0;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 42px 15px 0; pointer-events: none; }
-  .rl-topo b { font-family: 'Anton', sans-serif; font-weight: 400; font-size: 21px;
-    letter-spacing: 0.005em; }
-  .rl-topo svg { width: 23px; height: 23px; }
-
-  .rl-som { position: absolute; z-index: 8; right: 13px; top: 80px;
-    width: 32px; height: 32px; border: 0; border-radius: 50%;
-    background: oklch(0 0 0 / .5); color: inherit; cursor: pointer;
-    display: grid; place-items: center; }
-  .rl-som svg { width: 17px; height: 17px; grid-area: 1 / 1; }
-  .rl-som .rl-x, .rl-som.mudo .rl-alto { display: none; }
-  .rl-som.mudo .rl-x { display: block; }
-
-  .rl-info { position: absolute; z-index: 5; left: 0; right: 62px; bottom: 0;
-    padding: 0 14px 20px; display: flex; flex-direction: column; gap: 9px;
-    opacity: var(--ui, 1); }
-  .rl-perfil { display: flex; align-items: center; gap: 9px; }
-  .rl-av { width: 29px; height: 29px; flex: 0 0 auto; border-radius: 50%;
-    background: var(--vermelho); display: grid; place-items: center;
-    font-family: 'Anton', sans-serif; font-size: 15px; line-height: 1; }
-  .rl-perfil b { font-size: 13.5px; font-weight: 600; }
-  .rl-seguir { font-size: 12px; padding: 3px 11px; border-radius: 8px;
-    border: 1px solid oklch(0.99 0.008 85 / .75); }
-  .rl-legenda { margin: 0; font-size: 13.5px; line-height: 1.34; }
-  .rl-audio { display: flex; align-items: center; gap: 7px; min-width: 0; }
-  .rl-audio > svg { width: 15px; height: 15px; flex: 0 0 auto; }
-  /* o nome do audio corre, como no app */
-  .rl-marq { overflow: hidden; flex: 1 1 auto; font-size: 12px; white-space: nowrap;
-    -webkit-mask-image: linear-gradient(to right, #000 86%, transparent);
-    mask-image: linear-gradient(to right, #000 86%, transparent); }
-  .rl-marq > span { display: inline-block; animation: rlMarq 14s linear infinite; }
-  @keyframes rlMarq { to { transform: translateX(-50%); } }
-
-  .rl-acoes { position: absolute; z-index: 5; right: 9px; bottom: 18px;
-    display: flex; flex-direction: column; align-items: center; gap: 17px;
-    opacity: var(--ui, 1); }
-  .rl-ac svg { width: 25px; height: 25px; display: block; }
-  .rl-disco { width: 26px; height: 26px; border-radius: 7px; margin-top: 2px;
-    background-size: cover; background-position: center;
-    border: 2px solid oklch(0.99 0.008 85 / .9); }
-
-  .rl-barra { position: absolute; z-index: 6; left: 0; right: 0; bottom: 0; height: 3px;
-    background: oklch(0.99 0.008 85 / .24); }
-  .rl-barra i { display: block; height: 100%; width: 0;
-    background: oklch(0.99 0.008 85); will-change: width; }
+  .rl-dica { position: absolute; z-index: 3; left: 50%; bottom: 5vh; margin: 0;
+    transform: translateX(-50%); opacity: 0;
+    font-size: 12px; font-weight: 500; letter-spacing: .11em; text-transform: uppercase;
+    color: oklch(0.99 0.008 85 / .5); pointer-events: none; }
 
   @media (max-width: 899px) {
-    /* na vertical nao cabe a sobreposicao lateral: o titulo sobe para o
-       topo e so encosta no aparelho */
-    /* numa tela estreita o aparelho nao cabe entre as palavras: elas
-       sobem para o topo, escalonadas, e ele fica inteiro embaixo */
-    .rl-titulo { font-size: clamp(38px, 14vw, 94px); line-height: 0.86; }
-    .rl-t1 { right: auto; left: 5vw;  top: 8%; }
-    .rl-t2 { left: 34vw; top: 15%; }
-    /* na vertical quem manda e a largura: 108vh dava um aparelho de
-       522px numa tela de 414 e cortava a barra de acoes */
-    .rl-fone, .rl-verso { left: 50%; top: 60%; height: 78vh; width: auto;
-      border-radius: 38px; }
-    .rl-fone { padding: 7px; }
-    .rl-tela { border-radius: 31px; }
-    .rl-sombra { margin-top: 30vh; width: 38vh; }
+    .rl-painel { height: 62vh; top: 55%; }
+    .rl-titulo { font-size: clamp(30px, 11vw, 70px); }
+    /* em tela estreita o painel nao cabe entre as palavras: elas sobem
+       escalonadas e ele fica inteiro embaixo */
+    .rl-t1 { right: auto; left: 6vw; top: 9%; }
+    .rl-t2 { left: 38vw; top: 15%; }
   }
-  @media (prefers-reduced-motion: reduce) {
-    #reels { height: 100vh !important; }
-    .rl-pin { position: relative; }
-    .rl-item + .rl-item { display: none; }
-    .rl-marq > span { animation: none; }
-    .rl-luz { display: none; }
-  }
+  @media (prefers-reduced-motion: reduce) { .rl-luz { display: none; } }
 
   /* a galeria: a aba Reels do perfil, em tela cheia */
   .rl-gal { position: fixed; inset: 0; z-index: 850; overflow-y: auto;
@@ -1006,7 +909,7 @@
     padding: clamp(26px, 4vw, 66px) clamp(22px, 3.4vw, 52px);
     border-left: 1px solid oklch(0.99 0.008 85 / .28);
     overflow-y: auto; overscroll-behavior: contain; }
-  .rl-c-t { margin: 0; font-family: 'Anton', sans-serif; font-weight: 400;
+  .rl-c-t { margin: 0; font-family: var(--display); font-weight: 400;
     font-size: clamp(30px, 3.1vw, 60px); line-height: 0.94; letter-spacing: -0.01em;
     color: oklch(0.99 0.008 85); }
   .rl-c-d { margin: 0; font-size: clamp(17px, 1.22vw, 22px); line-height: 1.36;
@@ -1037,7 +940,7 @@
   /* line-height 1: com 0.86 o acento do A passava do teto da caixa e o
      clip-path do rv-clip cortava a ponta */
   .doc-titulo { margin: 0 0 clamp(34px, 4.6vw, 62px); font-family: var(--display);
-    font-weight: 400; font-size: clamp(44px, 9.4vw, 176px); line-height: 1;
+    font-weight: 400; font-size: clamp(27px, 5.6vw, 104px); line-height: 1;
     letter-spacing: -0.015em; color: var(--vermelho); }
   .doc-grade { display: grid; grid-template-columns: repeat(3, 1fr);
     gap: clamp(12px, 1.4vw, 22px); max-width: 1680px; }
@@ -1084,7 +987,7 @@
     border-left: 1px solid oklch(0.99 0.008 85 / .28);
     /* a descricao cresceu: em tela baixa a coluna rola em vez de vazar */
     overflow-y: auto; overscroll-behavior: contain; }
-  .doc-m-t { margin: 0; font-family: 'Anton', sans-serif; font-weight: 400;
+  .doc-m-t { margin: 0; font-family: var(--display); font-weight: 400;
     font-size: clamp(30px, 3.1vw, 60px); line-height: 0.94; letter-spacing: -0.01em;
     color: oklch(0.99 0.008 85); }
   /* tres frases pedem um corpo menor e mais entrelinha que uma so.
@@ -1126,6 +1029,23 @@
         oklch(0.32 0.04 40 / .26) 0%, transparent 15%,
         transparent 85%, oklch(0.32 0.04 40 / .26) 100%); }
   @media (prefers-reduced-motion: reduce) { #curvatura { display: none; } }
+
+  /* o riscado de tubo, sobre a pagina inteira. A opacidade e baixa de
+     proposito: sobre o creme ele quase nao aparece e sobre o preto do
+     feed ele canta, que e como um tubo se comporta */
+  #tubo { position: fixed; inset: 0; z-index: 155; pointer-events: none;
+    background-image: repeating-linear-gradient(0deg,
+      oklch(0 0 0 / .085) 0 1px, transparent 1px 3px); }
+  /* o grao: uma textura SVG parada, sem animacao — animar isso repinta a
+     tela inteira a cada quadro */
+  #tubo::after { content: ''; position: absolute; inset: 0; opacity: .5;
+    mix-blend-mode: overlay; background-size: 190px 190px;
+    background-image: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='190' height='190'>\
+<filter id='r'><feTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/>\
+<feColorMatrix type='saturate' values='0'/></filter>\
+<rect width='190' height='190' filter='url(%23r)' opacity='.42'/></svg>"); }
+  @media (prefers-reduced-motion: reduce) { #tubo { display: none; } }
 </style>
 </head>
 <body>
@@ -1133,15 +1053,16 @@
 <!-- flash da câmera, disparado no último frame do hero 2 -->
 <div id="flashLayer"></div>
 <div id="curvatura" aria-hidden="true"></div>
+<div id="tubo" aria-hidden="true"></div>
 <div id="readBar" aria-hidden="true"></div>
 <div id="cur" aria-hidden="true"></div>
 
 <!-- ===== TOP BAR ===== -->
 <header class="topbar" style="position: fixed; top: 0; left: 0; right: 0; z-index: 200; display: flex; align-items: center; justify-content: space-between; padding: 22px var(--gx);">
-  <div style="display: flex; align-items: baseline; gap: 3px; font-family: 'Anton', sans-serif; font-size: 23px; letter-spacing: 0.04em; color: inherit;">
+  <div style="display: flex; align-items: baseline; gap: 3px; font-family: var(--display); font-size: 23px; letter-spacing: 0.04em; color: inherit;">
     BIRDVIEW<span style="color: var(--vermelho); font-size: 34px; line-height: 0; animation: recBlink 1.4s steps(1) infinite;">.</span>
   </div>
-  <nav style="display: flex; align-items: center; gap: 26px; font-family: 'Caveat', cursive; font-size: 20px; font-weight: 600; letter-spacing: 0.01em; text-transform: none; color: inherit;">
+  <nav style="display: flex; align-items: center; gap: 26px; font-family: var(--texto); font-size: 15px; font-weight: 500; letter-spacing: 0.01em; text-transform: none; color: inherit;">
     <span class="nav-links">
     <a href="#servicos" class="nav-link" style="color: inherit;">O que faço</a>
     <a href="#sobre" class="nav-link" style="color: inherit;">Sobre</a>
@@ -1172,7 +1093,7 @@
 </section>
 
 <!-- ===== DOCUMENTÁRIOS ===== -->
-<section id="documentarios" data-curva="0.35">
+<section id="documentarios" data-curva="0.16">
   <h2 class="doc-titulo rv-clip">DOCUMENTÁRIOS</h2>
   <div class="doc-grade bloco-inteiro">
     <button class="doc-card" type="button" data-t="Água Doce" data-d="Nas cabeceiras, a mata ainda decide por onde a água passa. Acompanhamos uma estiagem inteira até a volta das chuvas, com a mesma queda filmada nos dois extremos do ano. O que o rio perde no caminho não se enxerga de dentro da cidade — só de dentro da mata." aria-label="Abrir Água Doce">
@@ -1213,91 +1134,27 @@
   <button class="doc-m-fechar" type="button" aria-label="Fechar o documentário">&#10005;</button>
 </div>
 
-<!-- ===== REEL 2026 · o feed ===== -->
+<!-- ===== REEL 2026 · a passada ===== -->
 <section id="reels" aria-label="Reel 2026">
   <div class="rl-pin">
     <div class="rl-luz" aria-hidden="true"><i></i></div>
-    <div class="rl-sombra" aria-hidden="true"></div>
-    <div class="rl-verso" aria-hidden="true"></div>
     <h2 class="rl-titulo" aria-label="Reel 2026"><span class="rl-t1">REEL</span><span class="rl-t2">2026</span></h2>
-    <div class="rl-fone" role="button" tabindex="0" aria-label="Abrir a galeria de reels">
-      <span class="rl-bt rl-bt-vol" aria-hidden="true"></span>
-      <span class="rl-bt rl-bt-pw" aria-hidden="true"></span>
-      <div class="rl-tela">
-      <div class="rl-topo" aria-hidden="true"><b>Reels</b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.6h3.1l1.7-2h8.4l1.7 2H21v12.2H3V7.6z"/><circle cx="12" cy="13.5" r="3.4"/></svg></div>
-      <button class="rl-som mudo" type="button" aria-pressed="false" aria-label="Ativar o som do reel"><svg class="rl-alto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.4L12 5.6v12.8L7.4 14.5H4v-5z"/><path class="rl-onda" d="M15.6 9.4a3.6 3.6 0 0 1 0 5.2M18.1 7.2a7 7 0 0 1 0 9.6"/></svg><svg class="rl-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.4L12 5.6v12.8L7.4 14.5H4v-5z"/><path d="m16.2 9.8 4.4 4.4M20.6 9.8l-4.4 4.4"/></svg></button>
-      <div class="rl-pilha">
-      <article class="rl-item" data-t="Hora Dourada" data-d="O momento em que o sol encosta na linha do capim e o campo inteiro vira contraluz. A luz dura poucos minutos e muda de cor a cada um deles, então a câmera já fica montada e esperando. É o corte que abre o reel." style="top: 0%;">
-        <video class="rl-video" poster="assets/rl-01.webp" src="https://videos.pexels.com/video-files/4434150/4434150-hd_1080_1920_30fps.mp4" muted loop playsinline preload="none" disablepictureinpicture></video>
-        <span class="rl-sombra" aria-hidden="true"></span>
-        <div class="rl-info">
-          <div class="rl-perfil"><span class="rl-av" aria-hidden="true">B</span><b>birdviewproducoes</b><span class="rl-seguir">Seguir</span></div>
-          <p class="rl-legenda">a hora em que o campo para de refletir e começa a brilhar.</p>
-          <div class="rl-audio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17.8V5.4l10-2v12.4"/><ellipse cx="6.6" cy="17.8" rx="2.4" ry="2.1"/><ellipse cx="16.6" cy="15.8" rx="2.4" ry="2.1"/></svg><span class="rl-marq"><span>&Aacute;udio original &middot; birdviewproducoes &nbsp;&middot;&nbsp; &Aacute;udio original &middot; birdviewproducoes &nbsp;&middot;&nbsp; </span></span></div>
-        </div>
-        <div class="rl-acoes" aria-hidden="true">
-          <span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.3C8.6 17.7 3.5 14.2 3.5 9.9A4.4 4.4 0 0 1 12 8a4.4 4.4 0 0 1 8.5 1.9c0 4.3-5.1 7.8-8.5 10.4z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.6a8.1 8.1 0 0 1-8.2 8 8.7 8.7 0 0 1-3.7-.8L3.5 20.5l1.8-4.8a7.8 7.8 0 0 1-1.4-4.1 8.1 8.1 0 0 1 8.2-8 8.1 8.1 0 0 1 8.4 8z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.5 2.6 10.8 13.3M21.5 2.6l-6.8 19-3.9-8.3-8.3-3.9 19-6.8z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.2 3.2h11.6v17.6L12 15.9l-5.8 4.9V3.2z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5.5" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="18.5" r="1.1" fill="currentColor" stroke="none"/></svg></span>
-          <span class="rl-disco" style="background-image: url('assets/rl-01.webp');"></span>
-        </div>
-      </article>
-      <article class="rl-item" data-t="Maré de Luz" data-d="Maré baixa e quarenta minutos de luz útil. A areia molhada vira espelho e dobra o céu, o que só funciona nos poucos metros em que a onda acabou de sair. Foi filmado andando para trás, acompanhando a água." style="top: 100%;">
-        <video class="rl-video" poster="assets/rl-02.webp" src="https://videos.pexels.com/video-files/5147455/5147455-hd_1080_1920_30fps.mp4" muted loop playsinline preload="none" disablepictureinpicture></video>
-        <span class="rl-sombra" aria-hidden="true"></span>
-        <div class="rl-info">
-          <div class="rl-perfil"><span class="rl-av" aria-hidden="true">B</span><b>birdviewproducoes</b><span class="rl-seguir">Seguir</span></div>
-          <p class="rl-legenda">maré baixa, quarenta minutos de luz. era tudo o que tinha.</p>
-          <div class="rl-audio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17.8V5.4l10-2v12.4"/><ellipse cx="6.6" cy="17.8" rx="2.4" ry="2.1"/><ellipse cx="16.6" cy="15.8" rx="2.4" ry="2.1"/></svg><span class="rl-marq"><span>&Aacute;udio original &middot; birdviewproducoes &nbsp;&middot;&nbsp; &Aacute;udio original &middot; birdviewproducoes &nbsp;&middot;&nbsp; </span></span></div>
-        </div>
-        <div class="rl-acoes" aria-hidden="true">
-          <span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.3C8.6 17.7 3.5 14.2 3.5 9.9A4.4 4.4 0 0 1 12 8a4.4 4.4 0 0 1 8.5 1.9c0 4.3-5.1 7.8-8.5 10.4z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.6a8.1 8.1 0 0 1-8.2 8 8.7 8.7 0 0 1-3.7-.8L3.5 20.5l1.8-4.8a7.8 7.8 0 0 1-1.4-4.1 8.1 8.1 0 0 1 8.2-8 8.1 8.1 0 0 1 8.4 8z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.5 2.6 10.8 13.3M21.5 2.6l-6.8 19-3.9-8.3-8.3-3.9 19-6.8z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.2 3.2h11.6v17.6L12 15.9l-5.8 4.9V3.2z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5.5" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="18.5" r="1.1" fill="currentColor" stroke="none"/></svg></span>
-          <span class="rl-disco" style="background-image: url('assets/rl-02.webp');"></span>
-        </div>
-      </article>
-      <article class="rl-item" data-t="Corrente" data-d="Água corrente é o som mais difícil de gravar limpo: de perto satura, de longe some no ambiente. Este trecho foi captado em dois microfones, um rente à pedra e outro afastado, para dar corpo sem embolar." style="top: 200%;">
-        <video class="rl-video" poster="assets/rl-03.webp" src="https://videos.pexels.com/video-files/5896379/5896379-hd_1080_1920_24fps.mp4" muted loop playsinline preload="none" disablepictureinpicture></video>
-        <span class="rl-sombra" aria-hidden="true"></span>
-        <div class="rl-info">
-          <div class="rl-perfil"><span class="rl-av" aria-hidden="true">B</span><b>birdviewproducoes</b><span class="rl-seguir">Seguir</span></div>
-          <p class="rl-legenda">água corrente é o som mais difícil de gravar limpo.</p>
-          <div class="rl-audio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17.8V5.4l10-2v12.4"/><ellipse cx="6.6" cy="17.8" rx="2.4" ry="2.1"/><ellipse cx="16.6" cy="15.8" rx="2.4" ry="2.1"/></svg><span class="rl-marq"><span>&Aacute;udio original &middot; birdviewproducoes &nbsp;&middot;&nbsp; &Aacute;udio original &middot; birdviewproducoes &nbsp;&middot;&nbsp; </span></span></div>
-        </div>
-        <div class="rl-acoes" aria-hidden="true">
-          <span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.3C8.6 17.7 3.5 14.2 3.5 9.9A4.4 4.4 0 0 1 12 8a4.4 4.4 0 0 1 8.5 1.9c0 4.3-5.1 7.8-8.5 10.4z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.6a8.1 8.1 0 0 1-8.2 8 8.7 8.7 0 0 1-3.7-.8L3.5 20.5l1.8-4.8a7.8 7.8 0 0 1-1.4-4.1 8.1 8.1 0 0 1 8.2-8 8.1 8.1 0 0 1 8.4 8z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.5 2.6 10.8 13.3M21.5 2.6l-6.8 19-3.9-8.3-8.3-3.9 19-6.8z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.2 3.2h11.6v17.6L12 15.9l-5.8 4.9V3.2z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5.5" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="18.5" r="1.1" fill="currentColor" stroke="none"/></svg></span>
-          <span class="rl-disco" style="background-image: url('assets/rl-03.webp');"></span>
-        </div>
-      </article>
-      <article class="rl-item" data-t="Desenho de Outono" data-d="Do alto, o outono deixa de ser cor e vira desenho: a curva do rio contra o talude, a mancha das árvores, a linha onde a mata para. Um plano só, em movimento lento, porque a paisagem já se move sozinha." style="top: 300%;">
-        <video class="rl-video" poster="assets/rl-04.webp" src="https://videos.pexels.com/video-files/4434286/4434286-hd_1080_1920_30fps.mp4" muted loop playsinline preload="none" disablepictureinpicture></video>
-        <span class="rl-sombra" aria-hidden="true"></span>
-        <div class="rl-info">
-          <div class="rl-perfil"><span class="rl-av" aria-hidden="true">B</span><b>birdviewproducoes</b><span class="rl-seguir">Seguir</span></div>
-          <p class="rl-legenda">do alto, o outono não é cor: é desenho.</p>
-          <div class="rl-audio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17.8V5.4l10-2v12.4"/><ellipse cx="6.6" cy="17.8" rx="2.4" ry="2.1"/><ellipse cx="16.6" cy="15.8" rx="2.4" ry="2.1"/></svg><span class="rl-marq"><span>&Aacute;udio original &middot; birdviewproducoes &nbsp;&middot;&nbsp; &Aacute;udio original &middot; birdviewproducoes &nbsp;&middot;&nbsp; </span></span></div>
-        </div>
-        <div class="rl-acoes" aria-hidden="true">
-          <span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.3C8.6 17.7 3.5 14.2 3.5 9.9A4.4 4.4 0 0 1 12 8a4.4 4.4 0 0 1 8.5 1.9c0 4.3-5.1 7.8-8.5 10.4z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.6a8.1 8.1 0 0 1-8.2 8 8.7 8.7 0 0 1-3.7-.8L3.5 20.5l1.8-4.8a7.8 7.8 0 0 1-1.4-4.1 8.1 8.1 0 0 1 8.2-8 8.1 8.1 0 0 1 8.4 8z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.5 2.6 10.8 13.3M21.5 2.6l-6.8 19-3.9-8.3-8.3-3.9 19-6.8z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.2 3.2h11.6v17.6L12 15.9l-5.8 4.9V3.2z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5.5" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="18.5" r="1.1" fill="currentColor" stroke="none"/></svg></span>
-          <span class="rl-disco" style="background-image: url('assets/rl-04.webp');"></span>
-        </div>
-      </article>
-      <article class="rl-item" data-t="Retrato Institucional" data-d="Institucional não precisa ser frio. Janela como fonte única, nada de luz dura, e uma conversa no lugar de um script decorado. O corte fica nas pausas, que é onde a pessoa aparece." style="top: 400%;">
-        <video class="rl-video" poster="assets/rl-05.webp" src="https://videos.pexels.com/video-files/5438937/5438937-hd_1080_1920_25fps.mp4" muted loop playsinline preload="none" disablepictureinpicture></video>
-        <span class="rl-sombra" aria-hidden="true"></span>
-        <div class="rl-info">
-          <div class="rl-perfil"><span class="rl-av" aria-hidden="true">B</span><b>birdviewproducoes</b><span class="rl-seguir">Seguir</span></div>
-          <p class="rl-legenda">institucional não precisa ser frio.</p>
-          <div class="rl-audio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17.8V5.4l10-2v12.4"/><ellipse cx="6.6" cy="17.8" rx="2.4" ry="2.1"/><ellipse cx="16.6" cy="15.8" rx="2.4" ry="2.1"/></svg><span class="rl-marq"><span>&Aacute;udio original &middot; birdviewproducoes &nbsp;&middot;&nbsp; &Aacute;udio original &middot; birdviewproducoes &nbsp;&middot;&nbsp; </span></span></div>
-        </div>
-        <div class="rl-acoes" aria-hidden="true">
-          <span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.3C8.6 17.7 3.5 14.2 3.5 9.9A4.4 4.4 0 0 1 12 8a4.4 4.4 0 0 1 8.5 1.9c0 4.3-5.1 7.8-8.5 10.4z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.6a8.1 8.1 0 0 1-8.2 8 8.7 8.7 0 0 1-3.7-.8L3.5 20.5l1.8-4.8a7.8 7.8 0 0 1-1.4-4.1 8.1 8.1 0 0 1 8.2-8 8.1 8.1 0 0 1 8.4 8z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.5 2.6 10.8 13.3M21.5 2.6l-6.8 19-3.9-8.3-8.3-3.9 19-6.8z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.2 3.2h11.6v17.6L12 15.9l-5.8 4.9V3.2z"/></svg></span><span class="rl-ac"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5.5" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/><circle cx="12" cy="18.5" r="1.1" fill="currentColor" stroke="none"/></svg></span>
-          <span class="rl-disco" style="background-image: url('assets/rl-05.webp');"></span>
-        </div>
-      </article>
-      </div>
-      <div class="rl-barra" aria-hidden="true"><i></i></div>
-      <span class="rl-ilha" aria-hidden="true"></span>
-      <span class="rl-brilho" aria-hidden="true"></span>
-      </div>
+    <div class="rl-painel" role="button" tabindex="0" aria-label="Abrir a galeria de reels">
+      <span class="rl-q" style="background-image: url('assets/doc-03.webp');"></span>
+      <span class="rl-q" style="background-image: url('assets/rl-01.webp');"></span>
+      <span class="rl-q" style="background-image: url('assets/doc-05.webp');"></span>
+      <span class="rl-q" style="background-image: url('assets/rl-03.webp');"></span>
+      <span class="rl-q" style="background-image: url('assets/doc-01.webp');"></span>
+      <span class="rl-q" style="background-image: url('assets/rl-04.webp');"></span>
+      <span class="rl-q" style="background-image: url('assets/doc-06.webp');"></span>
+      <span class="rl-q" style="background-image: url('assets/rl-02.webp');"></span>
+      <span class="rl-q" style="background-image: url('assets/doc-04.webp');"></span>
+      <span class="rl-q" style="background-image: url('assets/rl-05.webp');"></span>
+      <span class="rl-q" style="background-image: url('assets/doc-02.webp');"></span>
+      <span class="rl-q rl-fim" aria-hidden="true"></span>
+      <span class="rl-vinheta" aria-hidden="true"></span>
     </div>
+    <p class="rl-dica">Clique para ver os reels</p>
   </div>
 </section>
 
@@ -1309,23 +1166,23 @@
     <button class="rl-gal-x" type="button" aria-label="Fechar a galeria">&#10005;</button>
   </header>
   <div class="rl-gal-grade">
-    <button class="rl-cel" type="button" data-i="0" aria-label="Abrir Hora Dourada">
+    <button class="rl-cel" type="button" data-i="0" data-src="https://videos.pexels.com/video-files/4434150/4434150-hd_1080_1920_30fps.mp4" data-t="Hora Dourada" data-d="O momento em que o sol encosta na linha do capim e o campo inteiro vira contraluz. A luz dura poucos minutos e muda de cor a cada um deles, então a câmera já fica montada e esperando. É o corte que abre o reel." aria-label="Abrir Hora Dourada">
       <img src="assets/rl-01.webp" alt="" loading="lazy" decoding="async" width="720" height="1280">
       <svg class="rl-cel-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5-13-7.5z"/></svg>
     </button>
-    <button class="rl-cel" type="button" data-i="1" aria-label="Abrir Maré de Luz">
+    <button class="rl-cel" type="button" data-i="1" data-src="https://videos.pexels.com/video-files/5147455/5147455-hd_1080_1920_30fps.mp4" data-t="Maré de Luz" data-d="Maré baixa e quarenta minutos de luz útil. A areia molhada vira espelho e dobra o céu, o que só funciona nos poucos metros em que a onda acabou de sair. Foi filmado andando para trás, acompanhando a água." aria-label="Abrir Maré de Luz">
       <img src="assets/rl-02.webp" alt="" loading="lazy" decoding="async" width="720" height="1280">
       <svg class="rl-cel-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5-13-7.5z"/></svg>
     </button>
-    <button class="rl-cel" type="button" data-i="2" aria-label="Abrir Corrente">
+    <button class="rl-cel" type="button" data-i="2" data-src="https://videos.pexels.com/video-files/5896379/5896379-hd_1080_1920_24fps.mp4" data-t="Corrente" data-d="Água corrente é o som mais difícil de gravar limpo: de perto satura, de longe some no ambiente. Este trecho foi captado em dois microfones, um rente à pedra e outro afastado, para dar corpo sem embolar." aria-label="Abrir Corrente">
       <img src="assets/rl-03.webp" alt="" loading="lazy" decoding="async" width="720" height="1280">
       <svg class="rl-cel-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5-13-7.5z"/></svg>
     </button>
-    <button class="rl-cel" type="button" data-i="3" aria-label="Abrir Desenho de Outono">
+    <button class="rl-cel" type="button" data-i="3" data-src="https://videos.pexels.com/video-files/4434286/4434286-hd_1080_1920_30fps.mp4" data-t="Desenho de Outono" data-d="Do alto, o outono deixa de ser cor e vira desenho: a curva do rio contra o talude, a mancha das árvores, a linha onde a mata para. Um plano só, em movimento lento, porque a paisagem já se move sozinha." aria-label="Abrir Desenho de Outono">
       <img src="assets/rl-04.webp" alt="" loading="lazy" decoding="async" width="720" height="1280">
       <svg class="rl-cel-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5-13-7.5z"/></svg>
     </button>
-    <button class="rl-cel" type="button" data-i="4" aria-label="Abrir Retrato Institucional">
+    <button class="rl-cel" type="button" data-i="4" data-src="https://videos.pexels.com/video-files/5438937/5438937-hd_1080_1920_25fps.mp4" data-t="Retrato Institucional" data-d="Institucional não precisa ser frio. Janela como fonte única, nada de luz dura, e uma conversa no lugar de um script decorado. O corte fica nas pausas, que é onde a pessoa aparece." aria-label="Abrir Retrato Institucional">
       <img src="assets/rl-05.webp" alt="" loading="lazy" decoding="async" width="720" height="1280">
       <svg class="rl-cel-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5-13-7.5z"/></svg>
     </button>
@@ -1342,12 +1199,13 @@
 </div>
 
 <!-- ===== O QUE FAÇO ===== -->
-<section id="servicos" class="tema-claro com-campo" style="position: relative; z-index: 60; padding: clamp(96px, 12vw, 150px) var(--gx);">
+<section id="servicos" data-curva="0.14" class="tema-claro com-campo" style="position: relative; z-index: 60; padding: clamp(96px, 12vw, 150px) var(--gx);">
   <canvas class="pnt-campo fundo-campo" data-escala="0.18" aria-hidden="true"></canvas>
-  <div style="max-width: 1200px; margin: 0 auto;">
+  <div class="editorial" style="max-width: 1320px; margin: 0 auto;">
     <div class="olho" style="color: var(--marca);"><span class="line" style="background: var(--marca);"></span>Atuação profissional</div>
+    <div>
     <div class="faz-head">
-      <h2 class="rv-clip" style="margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(40px, 6vw, 104px); line-height: 0.9; letter-spacing: -0.01em;">NÃO É SÓ <span class="scribble salmon" style="color: var(--marca);">FILMAR<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span></h2>
+      <h2 class="rv-clip" style="margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(26px, 3.7vw, 64px); line-height: 0.9; letter-spacing: -0.01em;">NÃO É SÓ <span class="scribble salmon" style="color: var(--marca);">FILMAR<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span></h2>
       <p class="rv" style="margin: 0; font-size: clamp(21px, 1.8vw, 28px); line-height: 1.2; color: var(--tinta2); max-width: 46ch;">Da concepção à finalização, atuo em todas as etapas do processo criativo e estratégico. Cada projeto é tratado como uma oportunidade de gerar impacto real e permanente.</p>
     </div>
     <div class="faz-grid">
@@ -1355,25 +1213,26 @@
       <div class="rv faz-card" style="--d:0.09s;"><div class="faz-n">02</div><h3>PRODUÇÃO AUDIOVISUAL</h3><div class="faz-sub">Captação · Edição · Finalização</div><p>Experiência em captação, edição e finalização de conteúdos para diferentes formatos: documentários, institucionais, campanhas e projetos culturais.</p></div>
       <div class="rv faz-card" style="--d:0.18s;"><div class="faz-n">03</div><h3>ESTRATÉGIA DE COMUNICAÇÃO</h3><div class="faz-sub">Diretor comercial &amp; estrategista</div><p>Planejamento de comunicação e desenvolvimento de narrativas estratégicas para marcas e projetos que buscam crescimento nas plataformas digitais.</p></div>
     </div>
+    </div>
   </div>
 </section>
 
 <!-- ===== MARQUEE ===== -->
 <div class="marquee" style="position: relative; z-index: 60; background: var(--vermelho); overflow: hidden; padding: 13px 0; border-top: 1px solid oklch(0.18 0.012 60); border-bottom: 1px solid oklch(0.18 0.012 60);">
-  <div style="display: inline-flex; white-space: nowrap; animation: recMarquee 46s linear infinite; font-family: 'Anton', sans-serif; font-size: 19px; letter-spacing: 0.12em; color: oklch(0.97 0.008 85);">
+  <div style="display: inline-flex; white-space: nowrap; animation: recMarquee 46s linear infinite; font-family: var(--display); font-size: 19px; letter-spacing: 0.12em; color: oklch(0.97 0.008 85);">
     <span style="padding: 0 24px;">NARRATIVA ✦ <span class="hand" style="font-size: 1.45em; letter-spacing: 0;">cultura</span> ✦ IMAGEM ✦ <span class="hand" style="font-size: 1.45em; letter-spacing: 0;">propósito</span> ✦ IMPACTO ✦ <span class="hand" style="font-size: 1.45em; letter-spacing: 0;">permanência</span> ✦</span>
     <span style="padding: 0 24px;">NARRATIVA ✦ <span class="hand" style="font-size: 1.45em; letter-spacing: 0;">cultura</span> ✦ IMAGEM ✦ <span class="hand" style="font-size: 1.45em; letter-spacing: 0;">propósito</span> ✦ IMPACTO ✦ <span class="hand" style="font-size: 1.45em; letter-spacing: 0;">permanência</span> ✦</span>
   </div>
 </div>
 
 <!-- ===== VISÃO E PROPÓSITO ===== -->
-<section id="sobre" class="tema-escuro com-campo" style="position: relative; z-index: 60; padding: clamp(96px, 12vw, 150px) var(--gx) clamp(80px, 10vw, 120px);">
+<section id="sobre" data-curva="0.14" class="tema-escuro com-campo" style="position: relative; z-index: 60; padding: clamp(96px, 12vw, 150px) var(--gx) clamp(80px, 10vw, 120px);">
   <canvas class="pnt-campo fundo-campo" data-escala="0.18" aria-hidden="true"></canvas>
   <div style="max-width: 1200px; margin: 0 auto;">
     <div class="olho" style="color: var(--marca);"><span class="line" style="background: var(--marca);"></span>Sobre</div>
     <div class="visao-grid">
       <div>
-        <h2 class="rv-clip" style="margin: 0 0 34px; font-family: var(--display); font-weight: 400; font-size: clamp(40px, 6vw, 104px); line-height: 0.9; letter-spacing: -0.01em;">VISÃO<br><span class="hand" style="color: var(--marca); font-size: 0.78em; letter-spacing: 0;">e propósito</span></h2>
+        <h2 class="rv-clip" style="margin: 0 0 34px; font-family: var(--display); font-weight: 400; font-size: clamp(26px, 3.7vw, 64px); line-height: 0.9; letter-spacing: -0.01em;">VISÃO<br><span class="hand" style="color: var(--marca); font-size: 0.78em; letter-spacing: 0;">e propósito</span></h2>
         <div class="stats">
         <div class="stat"><b class="count" data-n="3" data-suf="">3</b><span>Pilares criativos</span></div>
         <div class="stat"><b>∞</b><span>Histórias a contar</span></div>
@@ -1396,11 +1255,11 @@
 </section>
 
 <!-- ===== TRAJETÓRIA & FORMAÇÃO ===== -->
-<section id="trajetoria" class="tema-claro com-campo" style="position: relative; z-index: 60; padding: clamp(96px, 12vw, 150px) var(--gx);">
+<section id="trajetoria" data-curva="0.14" class="tema-claro com-campo" style="position: relative; z-index: 60; padding: clamp(96px, 12vw, 150px) var(--gx);">
   <canvas class="pnt-campo fundo-campo" data-escala="0.18" aria-hidden="true"></canvas>
   <div style="max-width: 1200px; margin: 0 auto;">
     <div class="olho" style="color: var(--marca);"><span class="line" style="background: var(--marca);"></span>Formação</div>
-    <h2 class="rv-clip" style="margin: 0 0 clamp(40px, 5vw, 68px); font-family: var(--display); font-weight: 400; font-size: clamp(40px, 6vw, 104px); line-height: 0.9; letter-spacing: -0.01em;">TRAJETÓRIA<br>&amp; <span class="scribble salmon" style="color: var(--marca);">FORMAÇÃO<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span></h2>
+    <h2 class="rv-clip" style="margin: 0 0 clamp(40px, 5vw, 68px); font-family: var(--display); font-weight: 400; font-size: clamp(26px, 3.7vw, 64px); line-height: 0.9; letter-spacing: -0.01em;">TRAJETÓRIA<br>&amp; <span class="scribble salmon" style="color: var(--marca);">FORMAÇÃO<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span></h2>
     <div class="traj-grid">
       <div class="traj-linha">
         <div class="traj-item rv" style="--d:0.00s;"><h4>Arte-finalista</h4><p>Início em gráfica de comunicação visual — base técnica em design, composição e produção gráfica.</p></div>
@@ -1423,9 +1282,9 @@
   <div class="spot" aria-hidden="true"></div><div class="halftone" aria-hidden="true"></div>
   <div class="stamp light" aria-hidden="true" style="right: var(--gx); top: 110px;"><svg viewBox="0 0 120 120"><defs><path id="stampB" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs><circle cx="60" cy="60" r="56"/><circle cx="60" cy="60" r="32"/><text><textPath href="#stampB">CRIAR COM INTENÇÃO · BIRDVIEW · </textPath></text><circle class="dot" cx="60" cy="60" r="6"/></svg></div>
   <div style="max-width: 1200px; margin: 0 auto; position: relative; z-index: 2;">
-    <div class="rv" style="font-family: 'Caveat', cursive; font-size: 20px; font-weight: 600; letter-spacing: 0.01em; text-transform: none; color: oklch(0.97 0.008 85 / 0.8); margin-bottom: 24px;"><span class="hand" style="font-size: 36px; letter-spacing: 0; text-transform: none;">contato</span></div>
-    <h2 class="rv-clip" style="margin: 0 0 40px; font-family: var(--display); font-weight: 400; font-size: clamp(48px, 9vw, 168px); line-height: 0.86; letter-spacing: -0.015em;">VAMOS<br><span style="color: oklch(0.18 0.012 60);">CRIAR</span><br><span class="scribble under light">JUNTOS<svg viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M4,22 C40,10 120,30 196,16 M14,32 C70,26 130,36 190,28"/></svg></span></h2>
-    <a href="https://wa.me/qr/OBPBCW7RNX5KB1" target="_blank" rel="noopener" class="cta-dark" style="display: inline-flex; align-items: center; gap: 12px; background: oklch(0.18 0.012 60); color: oklch(0.97 0.008 85); padding: 18px 32px; border-radius: 50px; font-family: 'Caveat', cursive; font-size: 24px; font-weight: 600; letter-spacing: 0; text-transform: none;">Falar comigo <span style="font-size:18px;">→</span></a>
+    <div class="rv" style="font-family: var(--texto); font-size: 15px; font-weight: 500; letter-spacing: 0.01em; text-transform: none; color: oklch(0.97 0.008 85 / 0.8); margin-bottom: 24px;"><span class="hand" style="font-size: 36px; letter-spacing: 0; text-transform: none;">contato</span></div>
+    <h2 class="rv-clip" style="margin: 0 0 40px; font-family: var(--display); font-weight: 400; font-size: clamp(30px, 5.4vw, 100px); line-height: 0.86; letter-spacing: -0.015em;">VAMOS<br><span style="color: oklch(0.18 0.012 60);">CRIAR</span><br><span class="scribble under light">JUNTOS<svg viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M4,22 C40,10 120,30 196,16 M14,32 C70,26 130,36 190,28"/></svg></span></h2>
+    <a href="https://wa.me/qr/OBPBCW7RNX5KB1" target="_blank" rel="noopener" class="cta-dark" style="display: inline-flex; align-items: center; gap: 12px; background: oklch(0.18 0.012 60); color: oklch(0.97 0.008 85); padding: 18px 32px; border-radius: 50px; font-family: var(--texto); font-size: 18px; font-weight: 500; letter-spacing: 0; text-transform: none;">Falar comigo <span style="font-size:18px;">→</span></a>
     <p class="hand rv" style="margin: 28px 0 0; font-size: 27px; line-height: 1.15; color: oklch(0.97 0.008 85 / 0.92); max-width: 30ch;">Narrativas que conectam cultura, imagem e propósito.</p>
     <div class="canais rv" style="--d:.15s;"><a href="https://www.youtube.com/watch?v=8U4cpeMxG2w" target="_blank" rel="noopener">▶ Ecos do Pantanal — YouTube</a><a href="https://www.instagram.com/birdviewproducoes/" target="_blank" rel="noopener">◉ Instagram — @birdviewproducoes</a><a href="mailto:allan.woch@gmail.com">✉ E-mail</a></div>
   </div>
@@ -1435,7 +1294,7 @@
 </section>
 
 <footer style="position: relative; z-index: 60; background: oklch(0.18 0.012 60); color: oklch(0.7 0.01 85); padding: 32px var(--gx); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; font-size: 13px;">
-  <div style="font-family: 'Anton', sans-serif; font-size: 20px; letter-spacing: 0.04em; color: oklch(0.97 0.008 85);">BIRDVIEW<span style="color: var(--vermelho);">.</span></div>
+  <div style="font-family: var(--display); font-size: 20px; letter-spacing: 0.04em; color: oklch(0.97 0.008 85);">BIRDVIEW<span style="color: var(--vermelho);">.</span></div>
   <div style="letter-spacing: 0.04em;">© 2026 Allan Kevin Ricaldes da Rocha Castro — Birdview Produções</div>
   <a href="https://www.instagram.com/birdviewproducoes/" target="_blank" rel="noopener" style="letter-spacing: 0.04em; color: inherit;">@birdviewproducoes</a>
 </footer>
@@ -1829,24 +1688,58 @@
     campo(sec, sec && sec.querySelector('.pnt-campo'));
   });
 
-  /* REEL 2026: a rolagem da pagina vira o gesto do polegar. O Instagram nao
-     desliza junto com o dedo — segura o reel e estala no fim do gesto. Por
-     isso a posicao da pilha nao e linear no scroll, e um degrau suavizado. */
+  /* REEL 2026: a passada. Os quadros piscam rapido e desaceleram ate
+     parar no ultimo, que e a foto do Allan. Nao e transicao com duracao
+     fixa entre um e outro: e um indice que corre com amortecimento, que e
+     o que da a sensacao de polegar rolando o feed. */
   (function reels(){
     var sec = document.getElementById('reels');
     if (!sec) return;
-    var pilha = sec.querySelector('.rl-pilha');
-    var itens = Array.prototype.slice.call(sec.querySelectorAll('.rl-item'));
-    var barra = sec.querySelector('.rl-barra i');
-    var som = sec.querySelector('.rl-som');
-    var N = itens.length;
-    if (!pilha || !N) return;
+    var painel = sec.querySelector('.rl-painel');
+    var quadros = Array.prototype.slice.call(sec.querySelectorAll('.rl-q'));
+    var dica = sec.querySelector('.rl-dica');
+    var N = quadros.length;
+    if (!painel || !N) return;
     function clamp(v){ return v < 0 ? 0 : (v > 1 ? 1 : v); }
 
-    var mudo = true, ativo = -1, naTela = false;
+    var PASSADA = 1500;
+    var inicio = 0, passou = false, naTela = false, atual = -1;
 
-    // a lanterna: persegue o cursor com atraso, e o atraso e o que faz
-    // parecer que a textura esta por baixo e nao colada no ponteiro
+    function mostra(i){
+      if (i === atual) return;
+      if (atual >= 0) quadros[atual].style.opacity = '0';
+      quadros[i].style.opacity = '1';
+      atual = i;
+    }
+    mostra(0);
+
+    (function laco(){
+      requestAnimationFrame(laco);
+      if (!naTela || passou) return;
+      if (!inicio) inicio = performance.now();
+      var k = clamp((performance.now() - inicio) / PASSADA);
+      var e = 1 - Math.pow(1 - k, 5);
+      painel.style.opacity = Math.min(1, k * 6).toFixed(3);
+      mostra(Math.min(N - 1, Math.floor(e * N)));
+      if (k >= 1){
+        passou = true;
+        mostra(N - 1);
+        if (dica) dica.style.opacity = '1';
+      }
+    })();
+
+    if ('IntersectionObserver' in window && !REDUZIDO){
+      new IntersectionObserver(function(es){
+        es.forEach(function(e){ naTela = e.isIntersecting; });
+      }, { rootMargin: '30% 0px' }).observe(sec);
+    } else {
+      naTela = true;
+      if (REDUZIDO){ painel.style.opacity = '1'; mostra(N - 1); passou = true;
+        if (dica) dica.style.opacity = '1'; }
+    }
+
+    /* a lanterna: persegue o cursor com atraso, e o atraso e o que faz
+       parecer que a textura esta por baixo e nao colada no ponteiro */
     (function lanterna(){
       var luz = sec.querySelector('.rl-luz');
       var pin = sec.querySelector('.rl-pin');
@@ -1875,60 +1768,19 @@
       })();
     })();
 
-    function acorda(v){
-      if (v && v.preload === 'none'){ v.preload = 'auto'; v.load(); }
-      return v;
-    }
-    function liga(i){
-      if (i === ativo) return;
-      ativo = i;
-      itens.forEach(function(el, j){
-        var v = el.querySelector('.rl-video');
-        if (!v) return;
-        if (j === i){
-          acorda(v);
-          v.muted = mudo;
-          var pr = v.play();
-          if (pr && pr.catch) pr.catch(function(){});
-        } else if (!v.paused){ v.pause(); }
-      });
-    }
-
-    if (som) som.addEventListener('click', function(){
-      mudo = !mudo;
-      som.classList.toggle('mudo', mudo);
-      som.setAttribute('aria-pressed', String(!mudo));
-      som.setAttribute('aria-label', mudo ? 'Ativar o som do reel' : 'Desativar o som do reel');
-      var v = itens[ativo] && itens[ativo].querySelector('.rl-video');
-      if (!v) return;
-      v.muted = mudo;
-      if (!mudo){
-        var pr = v.play();
-        // com som o navegador ainda pode recusar; ai volta a ficar mudo
-        if (pr && pr.catch) pr.catch(function(){
-          mudo = true; v.muted = true; som.classList.add('mudo');
-          som.setAttribute('aria-pressed', 'false');
-        });
-      }
-    });
-
-
-    /* o aparelho abre a galeria; a galeria abre o reel grande; fechar o
+    /* o painel abre a galeria; a galeria abre o reel grande; fechar o
        reel volta para a galeria, como no app */
     (function telas(){
-      var fone = sec.querySelector('.rl-fone');
       var gal = document.getElementById('rlGaleria');
       var cheio = document.getElementById('rlCheio');
-      if (!fone || !gal || !cheio) return;
+      if (!gal || !cheio) return;
       var tela = cheio.querySelector('.rl-c-tela');
       var tit = cheio.querySelector('.rl-c-t');
       var des = cheio.querySelector('.rl-c-d');
       var celulas = Array.prototype.slice.call(gal.querySelectorAll('.rl-cel'));
       var voltaFoco = null;
 
-      function trava(liga){
-        document.documentElement.style.overflow = liga ? 'hidden' : '';
-      }
+      function trava(liga){ document.documentElement.style.overflow = liga ? 'hidden' : ''; }
       function abreGal(){
         if (!gal.hidden) return;
         voltaFoco = document.activeElement;
@@ -1936,10 +1788,6 @@
         requestAnimationFrame(function(){ gal.classList.add('on'); });
         trava(true);
         gal.querySelector('.rl-gal-x').focus();
-        itens.forEach(function(el){
-          var v = el.querySelector('.rl-video');
-          if (v && !v.paused) v.pause();
-        });
       }
       function fechaGal(){
         if (gal.hidden) return;
@@ -1949,13 +1797,11 @@
         if (voltaFoco && voltaFoco.focus) voltaFoco.focus();
         voltaFoco = null;
       }
-      function abreCheio(i){
-        var fonte = itens[i] && itens[i].querySelector('.rl-video');
-        var ficha = itens[i];
-        if (!fonte || !ficha) return;
-        tit.textContent = ficha.dataset.t || '';
-        des.textContent = ficha.dataset.d || '';
-        tela.src = fonte.currentSrc || fonte.getAttribute('src');
+      // a ficha mora na propria celula: o painel nao guarda mais os reels
+      function abreCheio(c){
+        tit.textContent = c.dataset.t || '';
+        des.textContent = c.dataset.d || '';
+        tela.src = c.dataset.src || '';
         cheio.hidden = false;
         requestAnimationFrame(function(){ cheio.classList.add('on'); });
         cheio.querySelector('.rl-c-x').focus();
@@ -1975,23 +1821,16 @@
           tela.removeAttribute('src');
           tela.load();
         }, 310);
-        // volta para a galeria, nao para a pagina
-        var c = celulas[0];
-        if (c && !gal.hidden) c.focus();
+        if (celulas[0] && !gal.hidden) celulas[0].focus();
       }
 
-      fone.addEventListener('click', function(e){
-        if (e.target.closest('.rl-som')) return;   // o botao de som e dele
-        abreGal();
-      });
-      fone.addEventListener('keydown', function(e){
+      painel.addEventListener('click', abreGal);
+      painel.addEventListener('keydown', function(e){
         if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar'){
           e.preventDefault(); abreGal();
         }
       });
-      celulas.forEach(function(c){
-        c.addEventListener('click', function(){ abreCheio(parseInt(c.dataset.i, 10) || 0); });
-      });
+      celulas.forEach(function(c){ c.addEventListener('click', function(){ abreCheio(c); }); });
       gal.querySelector('.rl-gal-x').addEventListener('click', fechaGal);
       cheio.querySelector('.rl-c-x').addEventListener('click', fechaCheio);
       document.addEventListener('keydown', function(e){
@@ -1999,122 +1838,6 @@
         if (!cheio.hidden) fechaCheio();
         else fechaGal();
       });
-    })();
-
-    if (REDUZIDO){ liga(0); return; }
-
-    if ('IntersectionObserver' in window){
-      new IntersectionObserver(function(es){
-        es.forEach(function(e){
-          naTela = e.isIntersecting;
-          // a passada para no ultimo: e ele que precisa estar pronto
-          if (naTela) acorda(itens[N - 1].querySelector('.rl-video'));
-          else itens.forEach(function(el){
-            var v = el.querySelector('.rl-video');
-            if (v && !v.paused) v.pause();
-          });
-        });
-      }, { rootMargin: '60% 0px' }).observe(sec);
-    } else { naTela = true; }
-
-    // uma rolada so: ao entrar em cena o feed passa rapido por todos os
-    // reels e para no ultimo. Desaceleracao forte (quinta potencia) para
-    // parecer polegar com atrito, nao transicao com duracao
-    var fone = sec.querySelector('.rl-fone');
-    var verso = sec.querySelector('.rl-verso');
-    var sombra = sec.querySelector('.rl-sombra');
-    var CHEGADA = 1800;    // o aparelho vem de longe girando
-    // a inclinacao de repouso: o aparelho fica de tres quartos, nao de
-    // frente chapada. E o que o faz parecer objeto e nao retangulo
-    var REPY = -15, REPX = 3;
-    var incY = 0, incX = 0, alvoY = 0, alvoX = 0, pronto = false;
-    var PASSADA = 1700;    // e so entao o feed da a passada
-    var inicio = 0, passou = false;
-
-    // de longe e girando ate assentar. O giro passa de uma volta: no meio
-    // dele ve-se o verso espelhado, mas a desaceleracao e tao forte que
-    // isso acontece nos primeiros 200ms, como borrao de movimento
-    function poe(z, gz, gy, gx, op){
-      var base = 'translate(-50%, -50%) translateZ(' + z.toFixed(0) + 'px) rotateZ('
-        + gz.toFixed(2) + 'deg) rotateX(' + gx.toFixed(2) + 'deg) rotateY(';
-      fone.style.opacity = op;
-      fone.style.transform = base + gy.toFixed(2) + 'deg)';
-      if (verso){
-        verso.style.opacity = op;
-        verso.style.transform = base + (gy + 180).toFixed(2) + 'deg)';
-      }
-      if (sombra) sombra.style.opacity = op;
-    }
-    // vem de longe girando e assenta JA na inclinacao de repouso: parar
-    // de frente chapada jogaria fora o 3D que a entrada acabou de montar
-    function chega(k){
-      var e = 1 - Math.pow(1 - k, 3);
-      poe(-1400 * (1 - e), -12 * (1 - e), REPY + (-390 - REPY) * (1 - e),
-          REPX * e, Math.min(1, k * 5).toFixed(3));
-      if (k >= 1) pronto = true;
-    }
-    chega(0);
-
-    // o mouse inclina de leve: so depois que ele assentou, senao briga
-    // com a animacao de chegada
-    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches && !REDUZIDO){
-      sec.addEventListener('mousemove', function(ev){
-        var r = sec.getBoundingClientRect();
-        alvoY = ((ev.clientX - r.left) / r.width - 0.5) * 13;
-        alvoX = (0.5 - (ev.clientY - r.top) / r.height) * 8;
-      });
-      sec.addEventListener('mouseleave', function(){ alvoY = 0; alvoX = 0; });
-    }
-
-    function pinta(pos){
-      var i = Math.max(0, Math.min(N - 2, Math.floor(pos)));
-      var e = N > 1 ? clamp(pos - i) : 0;
-      var q = e * (1 - e) * 4;
-      pilha.style.transform = 'translate3d(0,' + (-pos * 100).toFixed(3) + '%,0) scale('
-        + (1 - q * 0.03).toFixed(4) + ')';
-      itens.forEach(function(el, j){
-        var esc = 1, bri = 0.45;
-        if (j === i){ esc = 1 - e * 0.05; bri = 1 - e * 0.55; }
-        else if (j === i + 1){ esc = 1.05 - e * 0.05; bri = 0.45 + e * 0.55; }
-        var v = el.querySelector('.rl-video');
-        if (v) v.style.transform = 'scale(' + esc.toFixed(4) + ')';
-        el.style.filter = 'brightness(' + bri.toFixed(3) + ')';
-        // a interface de cada reel troca por corte, nunca as duas juntas
-        var op = 0;
-        if (j === i) op = 1 - clamp(e / 0.5);
-        else if (j === i + 1) op = clamp((e - 0.5) / 0.5);
-        el.style.setProperty('--ui', op.toFixed(3));
-      });
-    }
-    pinta(0);
-
-    (function laco(){
-      requestAnimationFrame(laco);
-      if (!naTela) return;
-
-      if (!passou){
-        if (!inicio) inicio = performance.now();
-        var dt = performance.now() - inicio;
-        chega(clamp(dt / CHEGADA));
-        var k = clamp((dt - CHEGADA) / PASSADA);
-        pinta((1 - Math.pow(1 - k, 5)) * (N - 1));
-        if (k >= 1){
-          passou = true;
-          liga(N - 1);   // so no fim: ligar no caminho carregaria os cinco
-        }
-      }
-
-      if (pronto){
-        incY += (alvoY - incY) * 0.07;
-        incX += (alvoX - incX) * 0.07;
-        poe(0, 0, REPY + incY, REPX + incX, '1');
-      }
-
-      if (barra){
-        var va = itens[ativo] && itens[ativo].querySelector('.rl-video');
-        barra.style.width = (va && va.duration
-          ? (va.currentTime / va.duration * 100) : 0).toFixed(2) + '%';
-      }
     })();
   })();
 
