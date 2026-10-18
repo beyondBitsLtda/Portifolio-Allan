@@ -7,7 +7,7 @@
 <title>REC. — Videomaker & Estrategista</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=Courier+Prime:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Space+Grotesk:wght@400;500;700&family=Courier+Prime:wght@700&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
@@ -123,8 +123,8 @@
   /* ===== refinamento: variáveis, revelação, entrada, cabeçalho ===== */
   :root { --gx: 40px;
     /* um nome so para a fonte de display: trocar aqui troca em toda a pagina */
-    --display: 'Archivo Black', 'Arial Black', sans-serif;
-    --texto: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --display: 'Syne', 'Arial Black', sans-serif;
+    --texto: 'Space Grotesk', system-ui, -apple-system, sans-serif;
     /* o vermelho da marca, um so na pagina inteira. O --claro e o mesmo
        vermelho levantado para ter contraste sobre fundo escuro */
     /* medido no navegador: 0.56/0.24 e o vermelho mais vivo que ainda
@@ -196,10 +196,12 @@
        porque a posicao estatica dentro do flex nao centraliza a caixa */
     margin-top: -4vh; pointer-events: none; }
   .h1-word { animation: wipeIn 1.3s cubic-bezier(.77,0,.18,1) .45s both;
-    margin: 0; font-family: var(--display); font-weight: 400;
+    margin: 0; font-family: var(--display); font-weight: 800;
     /* as metricas que a palavra grande tinha antes: Anton foi desenhada
        para caixa alta, em caixa mista as hastes descasam */
-    font-size: clamp(38px, 8.6vw, 162px); line-height: 0.8; letter-spacing: -0.015em;
+    /* a Syne 800 e larga: este corpo e o que faz ALLAN KEVIN caber
+       inteiro numa linha, medido na tela */
+    font-size: clamp(26px, 5.6vw, 104px); line-height: 1; letter-spacing: -0.02em;
     /* vermelho gritante: mais claro e saturado que o painel, e o nome so
        aparece depois que ele entra, ja sobre a camiseta escura */
     color: var(--vermelho); white-space: nowrap; user-select: none;
@@ -410,7 +412,7 @@
     padding: clamp(80px, 10vw, 140px) var(--gx); }
   /* largura em vw, não em ch: ch usa o corpo de 20px e deixava a coluna com ~370px */
   .claq-copy { position: relative; z-index: 2; max-width: min(38vw, 760px); display: flex; flex-direction: column; gap: 24px; }
-  .claq-copy h2 { font-family: var(--display); font-weight: 400; margin: 0; font-size: clamp(50px, 9vw, 158px); line-height: .88; letter-spacing: -.012em; color: oklch(0.18 0.012 60); }
+  .claq-copy h2 { font-family: var(--display); font-weight: 800; margin: 0; font-size: clamp(50px, 9vw, 158px); line-height: .88; letter-spacing: -.012em; color: oklch(0.18 0.012 60); }
   .claq-copy h2 em { font-style: normal; color: var(--vermelho); }
   .claq-copy .hand { font-size: clamp(26px, 3vw, 46px); line-height: 1.14; color: oklch(0.3 0.012 60); max-width: none; }
   .claq-copy .take { font-size: clamp(20px, 1.6vw, 28px); color: var(--vermelho); }
@@ -462,7 +464,7 @@
   @media (min-width: 900px) { .faz-grid { grid-template-columns: repeat(3, 1fr); } }
   .faz-card { background: var(--cartao); padding: 40px 34px; }
   .faz-n { font-family: var(--texto); font-size: 18px; font-weight: 600; color: var(--marca); }
-  .faz-card h3 { margin: 12px 0 8px; font-family: var(--display); font-weight: 400; font-size: clamp(24px, 2.2vw, 32px);
+  .faz-card h3 { margin: 12px 0 8px; font-family: var(--display); font-weight: 800; font-size: clamp(24px, 2.2vw, 32px);
     line-height: 1.02; letter-spacing: 0.005em; }
   .faz-sub { font-family: var(--texto); font-size: 15px; font-weight: 500; color: var(--marca); margin-bottom: 14px; }
   .faz-card p { margin: 0; font-size: 20px; line-height: 1.22; color: var(--tinta2); }
@@ -473,13 +475,13 @@
   .visao-txt p { margin: 0 0 18px; font-size: clamp(20px, 1.6vw, 25px); line-height: 1.24; color: var(--tinta2); }
   .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 26px 20px; margin-top: 8px; }
   .stat { border-left: 2px solid var(--marca); padding-left: 16px; }
-  .stat b { display: block; font-family: var(--display); font-weight: 400; font-size: clamp(38px, 4.2vw, 62px);
+  .stat b { display: block; font-family: var(--display); font-weight: 800; font-size: clamp(38px, 4.2vw, 62px);
     line-height: 0.9; color: var(--marca); }
   .stat span { display: block; margin-top: 8px; font-family: var(--texto); font-size: 14px; font-weight: 500; color: var(--tinta3); }
   .pilares { margin-top: 34px; display: grid; gap: 1px; background: var(--cartaoLinha); border: 1px solid var(--cartaoLinha); }
   .pilar { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: start; background: var(--cartao); padding: 22px 24px; }
   .pilar-n { font-family: var(--display); font-size: 26px; line-height: 1; color: var(--marca); opacity: .55; }
-  .pilar h4 { margin: 0 0 4px; font-family: var(--display); font-weight: 400; font-size: 21px; letter-spacing: 0.01em; color: var(--tinta); }
+  .pilar h4 { margin: 0 0 4px; font-family: var(--display); font-weight: 800; font-size: 21px; letter-spacing: 0.01em; color: var(--tinta); }
   .pilar p { margin: 0; font-size: 19px; line-height: 1.2; color: var(--tinta2); }
 
   /* ===== Obras & acervos ===== */
@@ -493,7 +495,7 @@
   .obra:hover .obra-img img { transform: scale(1.04); }
   .obra-tag { display: inline-block; font-family: var(--texto); font-size: 14px; font-weight: 500;
     color: var(--vermelho); border: 1px solid color-mix(in oklch, var(--vermelho) 40%, transparent); padding: 3px 11px; margin-bottom: 14px; }
-  .obra-txt h3 { margin: 0 0 6px; font-family: var(--display); font-weight: 400;
+  .obra-txt h3 { margin: 0 0 6px; font-family: var(--display); font-weight: 800;
     font-size: clamp(26px, 2.6vw, 40px); line-height: 1.0; letter-spacing: -0.005em; color: oklch(0.18 0.012 60); }
   .obra-sub { margin: 0 0 14px !important; font-family: var(--texto); font-size: 16px; color: oklch(0.5 0.012 60) !important; }
   .obra-txt p { margin: 0; font-size: 20px; line-height: 1.22; color: oklch(0.38 0.012 60); max-width: 62ch; }
@@ -511,7 +513,7 @@
   .traj-item::after { content: ''; position: absolute; left: 5px; top: 22px; bottom: -30px; width: 1px;
     background: var(--marca); opacity: .4; }
   .traj-linha .traj-item:last-child::after { display: none; }
-  .traj-item h4 { margin: 0 0 6px; font-family: var(--display); font-weight: 400; font-size: 22px; letter-spacing: 0.01em; }
+  .traj-item h4 { margin: 0 0 6px; font-family: var(--display); font-weight: 800; font-size: 22px; letter-spacing: 0.01em; }
   .traj-item p { margin: 0; font-size: 19px; line-height: 1.2; color: var(--tinta2); }
   .traj-txt p { margin: 0 0 18px; font-size: clamp(20px, 1.6vw, 25px); line-height: 1.24; color: var(--tinta2); }
   .traj-txt blockquote { margin: 28px 0 0; padding: 22px 26px; border-left: 3px solid var(--marca);
@@ -623,7 +625,7 @@
 
   /* o nome passa atras do widget e desfoca nas pontas */
   .pnt-nome { position: absolute; z-index: 2; left: 0; right: 0; top: 50%;
-    font-family: var(--display); font-weight: 400; font-size: clamp(44px, 9.4vw, 158px);
+    font-family: var(--display); font-weight: 800; font-size: clamp(44px, 9.4vw, 158px);
     line-height: 0.82; letter-spacing: -0.02em; white-space: nowrap; text-align: center;
     color: var(--vermelho); opacity: 0; transform: translateY(-50%);
     pointer-events: none; user-select: none; will-change: transform, filter; }
@@ -710,7 +712,7 @@
       oklch(0.15 0.02 40 / .2) 30%, transparent 56%); }
   .gal-nome { position: absolute; z-index: 2;
     left: clamp(12px, 1.2vw, 20px); bottom: clamp(10px, 1vw, 16px);
-    font-family: var(--display); font-weight: 400;
+    font-family: var(--display); font-weight: 800;
     font-size: clamp(15px, 1.5vw, 26px); line-height: 0.98; letter-spacing: -0.015em;
     color: oklch(0.99 0.006 85); text-shadow: 0 4px 18px oklch(0.14 0.02 40 / .6); }
   .acv-palco:hover .gal-item { filter: saturate(0.5) brightness(0.88); }
@@ -745,7 +747,7 @@
     transform: translateX(26px); opacity: 0; transition: transform .42s .1s ease, opacity .42s .1s ease; }
   .pnt-modal.on .pm-texto { transform: none; opacity: 1; }
   .pm-tag { font-family: var(--texto); font-size: 16px; color: oklch(0.72 0.18 27); }
-  .pm-texto h3 { margin: 0; font-family: var(--display); font-weight: 400;
+  .pm-texto h3 { margin: 0; font-family: var(--display); font-weight: 800;
     font-size: clamp(38px, 4.6vw, 68px); line-height: 0.92; letter-spacing: -0.015em; }
   .pm-sub { margin: 0; font-size: 25px; color: oklch(0.78 0.01 85); }
   .pm-texto p { margin: 0; font-size: 19px; line-height: 1.42; color: oklch(0.85 0.01 85); }
@@ -789,70 +791,59 @@
     overflow: hidden; background: oklch(0.11 0.012 55); }
   .rl-pin { position: absolute; inset: 0; overflow: hidden; }
 
-  /* a textura por baixo do preto. O circulo tem tamanho fixo e mascara
-     parada: so o transform muda, entao nada e repintado */
-  .rl-luz { position: absolute; z-index: 0; left: 0; top: 0;
-    width: 620px; height: 620px; margin: -310px 0 0 -310px;
-    border-radius: 50%; overflow: hidden; pointer-events: none;
-    opacity: 0; will-change: transform, opacity;
-    -webkit-mask-image: radial-gradient(circle, #000 38%, transparent 70%);
-    mask-image: radial-gradient(circle, #000 38%, transparent 70%); }
-  /* a mesma textura do hero VAMOS CRIAR JUNTOS: o vermelho da marca, o
-     realce radial do .spot e a reticula do .halftone */
-  .rl-luz i { position: absolute; left: 0; top: 0; display: block;
-    width: 100vw; height: 100vh; will-change: transform;
-    background-color: var(--vermelho);
-    background-image: radial-gradient(40% 44% at 42% 38%,
-      oklch(0.68 0.23 27 / .9) 0%, transparent 70%); }
-  .rl-luz i::after { content: ''; position: absolute; inset: 0; opacity: .16;
-    background-image: radial-gradient(oklch(0.28 0.1 27) 1px, transparent 1.5px);
-    background-size: 9px 9px; }
-
-  /* o painel: um quadro vertical, sem moldura de aparelho. O que conta
-     aqui e a passada das imagens, nao o desenho de um telefone */
-  .rl-painel { position: absolute; z-index: 2; left: 50%; top: 50%;
-    transform: translate(-50%, -50%); cursor: pointer;
-    height: 78vh; aspect-ratio: 9 / 15; overflow: hidden; border-radius: 4px;
-    background: oklch(0.11 0.012 55); opacity: 0;
-    box-shadow: 0 50px 110px oklch(0 0 0 / .7); }
-  .rl-painel:focus-visible { outline: 2px solid var(--vermelho-claro); outline-offset: 6px; }
+  /* as imagens cobrem a hero inteira */
+  /* z-index auto de proposito: com z-index proprio o painel criaria
+     contexto de empilhamento e prenderia o recorte do Allan abaixo do
+     2026, desfazendo a trama */
+  .rl-painel { position: absolute; inset: 0; z-index: auto; cursor: pointer; }
+  .rl-painel:focus-visible { outline: 2px solid var(--vermelho-claro); outline-offset: -6px; }
+  /* o vermelho vem de background-blend-mode, nao de uma camada por cima:
+     assim a mascara do recorte do Allan corta a tinta junto com a foto, e
+     nao sobra um retangulo vermelho em volta dele */
   .rl-q { position: absolute; inset: 0; opacity: 0;
-    background-size: cover; background-position: center; }
-  /* o quadro final: o Allan, no par cor+mascara que a hero ja usa */
-  .rl-fim { background-image: url('assets/obs2.jpg');
-    background-size: 185%; background-position: 63% 12%;
+    background-size: cover; background-position: center;
+    background-color: var(--vermelho); background-blend-mode: multiply;
+    filter: brightness(1.32) contrast(1.04); }
+  /* o quadro final: o Allan, no par cor+mascara que a hero ja usa. Fica
+     ACIMA do 2026 e abaixo do REEL — e dai que vem a trama agora que a
+     imagem ocupa tudo */
+  .rl-fim { z-index: 3;
+    background-image: url('assets/obs2.jpg');
+    background-size: auto 104%; background-position: bottom center;
+    background-repeat: no-repeat;
     -webkit-mask-image: url('assets/obs2-mask.png'); mask-image: url('assets/obs2-mask.png');
-    -webkit-mask-size: 185%; mask-size: 185%;
-    -webkit-mask-position: 63% 12%; mask-position: 63% 12%;
+    -webkit-mask-size: auto 104%; mask-size: auto 104%;
+    -webkit-mask-position: bottom center; mask-position: bottom center;
     -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
-  .rl-vinheta { position: absolute; inset: 0; pointer-events: none;
-    background: linear-gradient(to bottom, oklch(0 0 0 / .5) 0%, transparent 26%,
-      transparent 62%, oklch(0 0 0 / .72) 100%); }
+  .rl-vinheta { position: absolute; inset: 0; z-index: 4; pointer-events: none;
+    background: linear-gradient(to bottom, oklch(0 0 0 / .42) 0%, transparent 24%,
+      transparent 58%, oklch(0 0 0 / .66) 100%); }
 
   /* z-index auto nao e descuido: com z-index proprio a .rl-titulo criaria
      contexto de empilhamento e prenderia as duas linhas no mesmo plano,
      impedindo uma passar na frente e a outra atras do painel */
   .rl-titulo { position: absolute; z-index: auto; inset: 0; margin: 0;
-    pointer-events: none; font-family: var(--display); font-weight: 400;
-    font-size: clamp(30px, 8.4vw, 156px); line-height: 0.96; letter-spacing: -0.02em; }
+    pointer-events: none; font-family: var(--display); font-weight: 800;
+    font-size: clamp(26px, 6.4vw, 118px); line-height: 0.96; letter-spacing: -0.02em; }
   .rl-t1, .rl-t2 { position: absolute; width: max-content; }
-  .rl-t1 { z-index: 3; right: 54%; top: 36%; color: var(--vermelho-claro); } /* NA FRENTE */
-  .rl-t2 { z-index: 1; left: 57%;  top: 50%; color: oklch(0.99 0.008 85); }  /* POR TRAS */
+  .rl-t1 { z-index: 5; right: 57.5%; top: 31%; color: var(--vermelho-claro); } /* sobre tudo */
+  .rl-t2 { z-index: 2; left: 67%;  top: 50%; color: oklch(0.99 0.008 85); }  /* o Allan passa na frente */
 
-  .rl-dica { position: absolute; z-index: 3; left: 50%; bottom: 5vh; margin: 0;
+  .rl-dica { position: absolute; z-index: 5; left: 50%; bottom: 5vh; margin: 0;
     transform: translateX(-50%); opacity: 0;
     font-size: 12px; font-weight: 500; letter-spacing: .11em; text-transform: uppercase;
     color: oklch(0.99 0.008 85 / .5); pointer-events: none; }
 
   @media (max-width: 899px) {
-    .rl-painel { height: 62vh; top: 55%; }
+    /* em tela estreita as palavras sobem escalonadas e o Allan fica
+       inteiro embaixo: a trama lateral nao cabe em 414px */
     .rl-titulo { font-size: clamp(30px, 11vw, 70px); }
-    /* em tela estreita o painel nao cabe entre as palavras: elas sobem
-       escalonadas e ele fica inteiro embaixo */
     .rl-t1 { right: auto; left: 6vw; top: 9%; }
-    .rl-t2 { left: 38vw; top: 15%; }
+    .rl-t2 { left: 36vw; top: 17%; }
+    /* auto 104% deixava o rosto gigante numa tela estreita */
+    .rl-fim { background-size: auto 56%; -webkit-mask-size: auto 56%;
+      mask-size: auto 56%; }
   }
-  @media (prefers-reduced-motion: reduce) { .rl-luz { display: none; } }
 
   /* a galeria: a aba Reels do perfil, em tela cheia */
   .rl-gal { position: fixed; inset: 0; z-index: 850; overflow-y: auto;
@@ -909,7 +900,7 @@
     padding: clamp(26px, 4vw, 66px) clamp(22px, 3.4vw, 52px);
     border-left: 1px solid oklch(0.99 0.008 85 / .28);
     overflow-y: auto; overscroll-behavior: contain; }
-  .rl-c-t { margin: 0; font-family: var(--display); font-weight: 400;
+  .rl-c-t { margin: 0; font-family: var(--display); font-weight: 800;
     font-size: clamp(30px, 3.1vw, 60px); line-height: 0.94; letter-spacing: -0.01em;
     color: oklch(0.99 0.008 85); }
   .rl-c-d { margin: 0; font-size: clamp(17px, 1.22vw, 22px); line-height: 1.36;
@@ -987,7 +978,7 @@
     border-left: 1px solid oklch(0.99 0.008 85 / .28);
     /* a descricao cresceu: em tela baixa a coluna rola em vez de vazar */
     overflow-y: auto; overscroll-behavior: contain; }
-  .doc-m-t { margin: 0; font-family: var(--display); font-weight: 400;
+  .doc-m-t { margin: 0; font-family: var(--display); font-weight: 800;
     font-size: clamp(30px, 3.1vw, 60px); line-height: 0.94; letter-spacing: -0.01em;
     color: oklch(0.99 0.008 85); }
   /* tres frases pedem um corpo menor e mais entrelinha que uma so.
@@ -1030,15 +1021,11 @@
         transparent 85%, oklch(0.32 0.04 40 / .26) 100%); }
   @media (prefers-reduced-motion: reduce) { #curvatura { display: none; } }
 
-  /* o riscado de tubo, sobre a pagina inteira. A opacidade e baixa de
-     proposito: sobre o creme ele quase nao aparece e sobre o preto do
-     feed ele canta, que e como um tubo se comporta */
-  #tubo { position: fixed; inset: 0; z-index: 155; pointer-events: none;
-    background-image: repeating-linear-gradient(0deg,
-      oklch(0 0 0 / .085) 0 1px, transparent 1px 3px); }
-  /* o grao: uma textura SVG parada, sem animacao — animar isso repinta a
-     tela inteira a cada quadro */
-  #tubo::after { content: ''; position: absolute; inset: 0; opacity: .5;
+  /* o chiado de tubo, sobre a pagina inteira */
+  #tubo { position: fixed; inset: 0; z-index: 155; pointer-events: none; }
+  /* so o chiado, sem as linhas horizontais: uma textura SVG parada, sem
+     animacao — animar isso repinta a tela inteira a cada quadro */
+  #tubo::after { content: ''; position: absolute; inset: 0; opacity: .72;
     mix-blend-mode: overlay; background-size: 190px 190px;
     background-image: url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' width='190' height='190'>\
@@ -1137,7 +1124,6 @@
 <!-- ===== REEL 2026 · a passada ===== -->
 <section id="reels" aria-label="Reel 2026">
   <div class="rl-pin">
-    <div class="rl-luz" aria-hidden="true"><i></i></div>
     <h2 class="rl-titulo" aria-label="Reel 2026"><span class="rl-t1">REEL</span><span class="rl-t2">2026</span></h2>
     <div class="rl-painel" role="button" tabindex="0" aria-label="Abrir a galeria de reels">
       <span class="rl-q" style="background-image: url('assets/doc-03.webp');"></span>
@@ -1205,7 +1191,7 @@
     <div class="olho" style="color: var(--marca);"><span class="line" style="background: var(--marca);"></span>Atuação profissional</div>
     <div>
     <div class="faz-head">
-      <h2 class="rv-clip" style="margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(26px, 3.7vw, 64px); line-height: 0.9; letter-spacing: -0.01em;">NÃO É SÓ <span class="scribble salmon" style="color: var(--marca);">FILMAR<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span></h2>
+      <h2 class="rv-clip" style="margin: 0; font-family: var(--display); font-weight: 800; font-size: clamp(26px, 3.7vw, 64px); line-height: 0.9; letter-spacing: -0.01em;">NÃO É SÓ <span class="scribble salmon" style="color: var(--marca);">FILMAR<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span></h2>
       <p class="rv" style="margin: 0; font-size: clamp(21px, 1.8vw, 28px); line-height: 1.2; color: var(--tinta2); max-width: 46ch;">Da concepção à finalização, atuo em todas as etapas do processo criativo e estratégico. Cada projeto é tratado como uma oportunidade de gerar impacto real e permanente.</p>
     </div>
     <div class="faz-grid">
@@ -1232,7 +1218,7 @@
     <div class="olho" style="color: var(--marca);"><span class="line" style="background: var(--marca);"></span>Sobre</div>
     <div class="visao-grid">
       <div>
-        <h2 class="rv-clip" style="margin: 0 0 34px; font-family: var(--display); font-weight: 400; font-size: clamp(26px, 3.7vw, 64px); line-height: 0.9; letter-spacing: -0.01em;">VISÃO<br><span class="hand" style="color: var(--marca); font-size: 0.78em; letter-spacing: 0;">e propósito</span></h2>
+        <h2 class="rv-clip" style="margin: 0 0 34px; font-family: var(--display); font-weight: 800; font-size: clamp(26px, 3.7vw, 64px); line-height: 0.9; letter-spacing: -0.01em;">VISÃO<br><span class="hand" style="color: var(--marca); font-size: 0.78em; letter-spacing: 0;">e propósito</span></h2>
         <div class="stats">
         <div class="stat"><b class="count" data-n="3" data-suf="">3</b><span>Pilares criativos</span></div>
         <div class="stat"><b>∞</b><span>Histórias a contar</span></div>
@@ -1259,7 +1245,7 @@
   <canvas class="pnt-campo fundo-campo" data-escala="0.18" aria-hidden="true"></canvas>
   <div style="max-width: 1200px; margin: 0 auto;">
     <div class="olho" style="color: var(--marca);"><span class="line" style="background: var(--marca);"></span>Formação</div>
-    <h2 class="rv-clip" style="margin: 0 0 clamp(40px, 5vw, 68px); font-family: var(--display); font-weight: 400; font-size: clamp(26px, 3.7vw, 64px); line-height: 0.9; letter-spacing: -0.01em;">TRAJETÓRIA<br>&amp; <span class="scribble salmon" style="color: var(--marca);">FORMAÇÃO<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span></h2>
+    <h2 class="rv-clip" style="margin: 0 0 clamp(40px, 5vw, 68px); font-family: var(--display); font-weight: 800; font-size: clamp(26px, 3.7vw, 64px); line-height: 0.9; letter-spacing: -0.01em;">TRAJETÓRIA<br>&amp; <span class="scribble salmon" style="color: var(--marca);">FORMAÇÃO<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span></h2>
     <div class="traj-grid">
       <div class="traj-linha">
         <div class="traj-item rv" style="--d:0.00s;"><h4>Arte-finalista</h4><p>Início em gráfica de comunicação visual — base técnica em design, composição e produção gráfica.</p></div>
@@ -1283,7 +1269,7 @@
   <div class="stamp light" aria-hidden="true" style="right: var(--gx); top: 110px;"><svg viewBox="0 0 120 120"><defs><path id="stampB" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs><circle cx="60" cy="60" r="56"/><circle cx="60" cy="60" r="32"/><text><textPath href="#stampB">CRIAR COM INTENÇÃO · BIRDVIEW · </textPath></text><circle class="dot" cx="60" cy="60" r="6"/></svg></div>
   <div style="max-width: 1200px; margin: 0 auto; position: relative; z-index: 2;">
     <div class="rv" style="font-family: var(--texto); font-size: 15px; font-weight: 500; letter-spacing: 0.01em; text-transform: none; color: oklch(0.97 0.008 85 / 0.8); margin-bottom: 24px;"><span class="hand" style="font-size: 36px; letter-spacing: 0; text-transform: none;">contato</span></div>
-    <h2 class="rv-clip" style="margin: 0 0 40px; font-family: var(--display); font-weight: 400; font-size: clamp(30px, 5.4vw, 100px); line-height: 0.86; letter-spacing: -0.015em;">VAMOS<br><span style="color: oklch(0.18 0.012 60);">CRIAR</span><br><span class="scribble under light">JUNTOS<svg viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M4,22 C40,10 120,30 196,16 M14,32 C70,26 130,36 190,28"/></svg></span></h2>
+    <h2 class="rv-clip" style="margin: 0 0 40px; font-family: var(--display); font-weight: 800; font-size: clamp(30px, 5.4vw, 100px); line-height: 0.86; letter-spacing: -0.015em;">VAMOS<br><span style="color: oklch(0.18 0.012 60);">CRIAR</span><br><span class="scribble under light">JUNTOS<svg viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M4,22 C40,10 120,30 196,16 M14,32 C70,26 130,36 190,28"/></svg></span></h2>
     <a href="https://wa.me/qr/OBPBCW7RNX5KB1" target="_blank" rel="noopener" class="cta-dark" style="display: inline-flex; align-items: center; gap: 12px; background: oklch(0.18 0.012 60); color: oklch(0.97 0.008 85); padding: 18px 32px; border-radius: 50px; font-family: var(--texto); font-size: 18px; font-weight: 500; letter-spacing: 0; text-transform: none;">Falar comigo <span style="font-size:18px;">→</span></a>
     <p class="hand rv" style="margin: 28px 0 0; font-size: 27px; line-height: 1.15; color: oklch(0.97 0.008 85 / 0.92); max-width: 30ch;">Narrativas que conectam cultura, imagem e propósito.</p>
     <div class="canais rv" style="--d:.15s;"><a href="https://www.youtube.com/watch?v=8U4cpeMxG2w" target="_blank" rel="noopener">▶ Ecos do Pantanal — YouTube</a><a href="https://www.instagram.com/birdviewproducoes/" target="_blank" rel="noopener">◉ Instagram — @birdviewproducoes</a><a href="mailto:allan.woch@gmail.com">✉ E-mail</a></div>
@@ -1719,7 +1705,6 @@
       if (!inicio) inicio = performance.now();
       var k = clamp((performance.now() - inicio) / PASSADA);
       var e = 1 - Math.pow(1 - k, 5);
-      painel.style.opacity = Math.min(1, k * 6).toFixed(3);
       mostra(Math.min(N - 1, Math.floor(e * N)));
       if (k >= 1){
         passou = true;
@@ -1734,39 +1719,9 @@
       }, { rootMargin: '30% 0px' }).observe(sec);
     } else {
       naTela = true;
-      if (REDUZIDO){ painel.style.opacity = '1'; mostra(N - 1); passou = true;
+      if (REDUZIDO){ mostra(N - 1); passou = true;
         if (dica) dica.style.opacity = '1'; }
     }
-
-    /* a lanterna: persegue o cursor com atraso, e o atraso e o que faz
-       parecer que a textura esta por baixo e nao colada no ponteiro */
-    (function lanterna(){
-      var luz = sec.querySelector('.rl-luz');
-      var pin = sec.querySelector('.rl-pin');
-      if (!luz || !pin || REDUZIDO) return;
-      if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-      var dentro = luz.firstElementChild;
-      var ax = 0, ay = 0, bx = 0, by = 0, op = 0, alvoOp = 0, viu = false;
-      pin.addEventListener('mousemove', function(e){
-        var r = pin.getBoundingClientRect();
-        bx = e.clientX - r.left; by = e.clientY - r.top;
-        if (!viu){ ax = bx; ay = by; viu = true; }
-        alvoOp = 1;
-      });
-      pin.addEventListener('mouseleave', function(){ alvoOp = 0; });
-      (function anda(){
-        requestAnimationFrame(anda);
-        if (!viu && op < 0.002) return;
-        ax += (bx - ax) * 0.16;
-        ay += (by - ay) * 0.16;
-        op += (alvoOp - op) * 0.09;
-        if (op < 0.002){ op = 0; viu = false; }
-        luz.style.opacity = op.toFixed(3);
-        luz.style.transform = 'translate3d(' + ax.toFixed(1) + 'px,' + ay.toFixed(1) + 'px,0)';
-        dentro.style.transform = 'translate3d(' + (310 - ax).toFixed(1) + 'px,'
-          + (310 - ay).toFixed(1) + 'px,0)';
-      })();
-    })();
 
     /* o painel abre a galeria; a galeria abre o reel grande; fechar o
        reel volta para a galeria, como no app */
