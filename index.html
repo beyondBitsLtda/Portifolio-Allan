@@ -273,6 +273,22 @@
 
   /* contato: holofote que segue o mouse sobre o vermelho + retícula de impressão */
   #contato { --mx: 60%; --my: 40%; }
+  /* o duotone vermelho da foto do CTA. Num <img> o background-blend-mode
+     nao alcanca o conteudo, entao a foto entra como background de um div
+     e o proprio WebP serve de mascara, para a tinta nao vazar do recorte */
+  #contato .cta-foto { width: 100%; aspect-ratio: 1100 / 1424;
+    background-image: url('assets/cta.webp');
+    background-size: contain; background-position: bottom center;
+    background-repeat: no-repeat;
+    background-color: var(--vermelho); background-blend-mode: multiply;
+    /* sem grayscale: o filter roda DEPOIS da mesclagem e dessaturaria o
+       vermelho que o multiply acabou de criar. O multiply sozinho ja zera
+       o verde e o azul, que e o duotone */
+    filter: brightness(1.18) contrast(1.12);
+    -webkit-mask-image: url('assets/cta.webp'); mask-image: url('assets/cta.webp');
+    -webkit-mask-size: contain; mask-size: contain;
+    -webkit-mask-position: bottom center; mask-position: bottom center;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
   #contato .spot { position: absolute; inset: 0; z-index: 0; pointer-events: none;
     background: radial-gradient(40% 44% at var(--mx) var(--my), oklch(0.68 0.23 27 / .9) 0%, transparent 70%); }
   #contato .halftone { position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .16;
@@ -1283,7 +1299,7 @@
     <div class="canais rv" style="--d:.15s;"><a href="https://www.youtube.com/watch?v=8U4cpeMxG2w" target="_blank" rel="noopener">▶ Ecos do Pantanal — YouTube</a><a href="https://www.instagram.com/birdviewproducoes/" target="_blank" rel="noopener">◉ Instagram — @birdviewproducoes</a><a href="mailto:allan.woch@gmail.com">✉ E-mail</a></div>
   </div>
   <div style="position: absolute; right: -2vw; bottom: 0; z-index: 1; width: min(42vw, 620px); pointer-events: none; opacity: 0.95;">
-    <img src="assets/cta.webp" alt="" width="1100" height="1424" loading="lazy" decoding="async" style="display: block; width: 100%; height: auto;">
+    <div class="cta-foto" role="img" aria-label="Allan Kevin"></div>
   </div>
 </section>
 
