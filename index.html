@@ -480,15 +480,15 @@
   @media (min-width: 900px) { .faz-grid { grid-template-columns: repeat(3, 1fr); } }
   .faz-card { background: var(--cartao); padding: 40px 34px; }
   .faz-n { font-family: var(--texto); font-size: 18px; font-weight: 600; color: var(--marca); }
-  .faz-card h3 { margin: 12px 0 8px; font-family: var(--display); font-weight: 800; font-size: clamp(24px, 2.2vw, 32px);
+  .faz-card h3 { margin: 12px 0 8px; font-family: var(--display); font-weight: 800; font-size: clamp(18px, 1.5vw, 23px);
     line-height: 1.02; letter-spacing: 0.005em; }
   .faz-sub { font-family: var(--texto); font-size: 15px; font-weight: 500; color: var(--marca); margin-bottom: 14px; }
-  .faz-card p { margin: 0; font-size: 20px; line-height: 1.22; color: var(--tinta2); }
+  .faz-card p { margin: 0; font-size: 16px; line-height: 1.5; color: var(--tinta2); }
 
   /* ===== Visão e propósito ===== */
   .visao-grid { display: grid; grid-template-columns: 1fr; gap: 44px; }
   @media (min-width: 900px) { .visao-grid { grid-template-columns: minmax(0,.85fr) minmax(0,1.15fr); gap: 64px; } }
-  .visao-txt p { margin: 0 0 18px; font-size: clamp(20px, 1.6vw, 25px); line-height: 1.24; color: var(--tinta2); }
+  .visao-txt p { margin: 0 0 16px; font-size: clamp(15px, 1.15vw, 18px); line-height: 1.55; color: var(--tinta2); }
   .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 26px 20px; margin-top: 8px; }
   .stat { border-left: 2px solid var(--marca); padding-left: 16px; }
   .stat b { display: block; font-family: var(--display); font-weight: 800; font-size: clamp(38px, 4.2vw, 62px);
@@ -496,9 +496,9 @@
   .stat span { display: block; margin-top: 8px; font-family: var(--texto); font-size: 14px; font-weight: 500; color: var(--tinta3); }
   .pilares { margin-top: 34px; display: grid; gap: 1px; background: var(--cartaoLinha); border: 1px solid var(--cartaoLinha); }
   .pilar { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: start; background: var(--cartao); padding: 22px 24px; }
-  .pilar-n { font-family: var(--display); font-size: 26px; line-height: 1; color: var(--marca); opacity: .55; }
-  .pilar h4 { margin: 0 0 4px; font-family: var(--display); font-weight: 800; font-size: 21px; letter-spacing: 0.01em; color: var(--tinta); }
-  .pilar p { margin: 0; font-size: 19px; line-height: 1.2; color: var(--tinta2); }
+  .pilar-n { font-family: var(--display); font-size: 19px; line-height: 1; color: var(--marca); opacity: .55; }
+  .pilar h4 { margin: 0 0 5px; font-family: var(--display); font-weight: 800; font-size: 16px; letter-spacing: 0.01em; color: var(--tinta); }
+  .pilar p { margin: 0; font-size: 15px; line-height: 1.45; color: var(--tinta2); }
 
   /* ===== Obras & acervos ===== */
   .obras { display: grid; gap: 0; border-top: 1px solid oklch(0.86 0.006 80); }
@@ -529,12 +529,12 @@
   .traj-item::after { content: ''; position: absolute; left: 5px; top: 22px; bottom: -30px; width: 1px;
     background: var(--marca); opacity: .4; }
   .traj-linha .traj-item:last-child::after { display: none; }
-  .traj-item h4 { margin: 0 0 6px; font-family: var(--display); font-weight: 800; font-size: 22px; letter-spacing: 0.01em; }
-  .traj-item p { margin: 0; font-size: 19px; line-height: 1.2; color: var(--tinta2); }
-  .traj-txt p { margin: 0 0 18px; font-size: clamp(20px, 1.6vw, 25px); line-height: 1.24; color: var(--tinta2); }
+  .traj-item h4 { margin: 0 0 6px; font-family: var(--display); font-weight: 800; font-size: 17px; letter-spacing: 0.01em; }
+  .traj-item p { margin: 0; font-size: 15px; line-height: 1.45; color: var(--tinta2); }
+  .traj-txt p { margin: 0 0 16px; font-size: clamp(15px, 1.15vw, 18px); line-height: 1.55; color: var(--tinta2); }
   .traj-txt blockquote { margin: 28px 0 0; padding: 22px 26px; border-left: 3px solid var(--marca);
-    background: var(--caixa); font-family: var(--texto); font-size: clamp(18px, 1.5vw, 24px);
-    line-height: 1.16; color: var(--tinta); }
+    background: var(--caixa); font-family: var(--texto); font-size: clamp(16px, 1.25vw, 21px);
+    line-height: 1.45; color: var(--tinta); }
 
   /* ===== Contato: canais ===== */
   .canais { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
@@ -899,6 +899,10 @@
   .rl-cel-play { position: absolute; left: 10px; bottom: 10px; width: 19px; height: 19px;
     color: oklch(0.99 0.008 85); filter: drop-shadow(0 1px 3px oklch(0 0 0 / .7)); }
   .rl-cel:focus-visible { outline: 2px solid var(--vermelho-claro); outline-offset: -2px; }
+  /* o trabalho horizontal nao cabe num quadro 9:16 sem perder metade do
+     enquadramento. Em vez de cortar, ele toma a fileira inteira na forma
+     dele — e assim a grade de tres colunas tambem fecha sem sobra */
+  .rl-cel-deitado { grid-column: 1 / -1; aspect-ratio: 16 / 9; }
 
   /* o reel grande: o mesmo desenho do modal dos documentarios, de pe */
   /* grid-template-rows: 100% nao e enfeite: sem uma altura definida na
@@ -914,6 +918,8 @@
   .rl-cheio.on { opacity: 1; }
   .rl-c-video { position: relative; display: flex; align-items: center; justify-content: center;
     min-width: 0; min-height: 0; padding: clamp(14px, 2.4vw, 36px); }
+  /* a proporcao vem do proprio trabalho (data-ar): fixa em 9/16 ela
+     espremia o horizontal dentro de um quadro de pe */
   .rl-c-tela { width: auto; height: auto; max-width: 100%; max-height: 100%;
     aspect-ratio: 9 / 16; object-fit: contain; background: oklch(0.3 0.14 28);
     border-radius: 10px; }
@@ -1342,17 +1348,22 @@
   <div class="rl-pin">
     <h2 class="rl-titulo" aria-label="Reel 2026"><span class="rl-t1">REEL</span><span class="rl-t2">2026</span></h2>
     <div class="rl-painel" role="button" tabindex="0" aria-label="Abrir a galeria de reels">
-      <span class="rl-q" style="background-image: url('assets/doc-03.webp');"></span>
-      <span class="rl-q" style="background-image: url('assets/rl-01.webp');"></span>
-      <span class="rl-q" style="background-image: url('assets/doc-05.webp');"></span>
-      <span class="rl-q" style="background-image: url('assets/rl-03.webp');"></span>
-      <span class="rl-q" style="background-image: url('assets/doc-01.webp');"></span>
-      <span class="rl-q" style="background-image: url('assets/rl-04.webp');"></span>
-      <span class="rl-q" style="background-image: url('assets/doc-06.webp');"></span>
-      <span class="rl-q" style="background-image: url('assets/rl-02.webp');"></span>
-      <span class="rl-q" style="background-image: url('assets/doc-04.webp');"></span>
-      <span class="rl-q" style="background-image: url('assets/rl-05.webp');"></span>
-      <span class="rl-q" style="background-image: url('assets/doc-02.webp');"></span>
+      <span class="rl-q" style="background-image: url('assets/flash/01.webp');"></span>
+      <span class="rl-q" style="background-image: url('assets/flash/02.webp');"></span>
+      <span class="rl-q" style="background-image: url('assets/flash/03.webp');"></span>
+      <span class="rl-q" style="background-image: url('assets/flash/04.webp');"></span>
+      <span class="rl-q" style="background-image: url('assets/flash/05.webp');"></span>
+      <span class="rl-q" style="background-image: url('assets/flash/06.webp');"></span>
+      <span class="rl-q" style="background-image: url('assets/flash/07.webp');"></span>
+      <span class="rl-q" style="background-image: url('assets/flash/08.webp');"></span>
+      <span class="rl-q" style="background-image: url('assets/flash/09.webp');"></span>
+      <span class="rl-q" style="background-image: url('assets/flash/10.webp');"></span>
+      <span class="rl-q" style="background-image: url('assets/flash/11.webp');"></span>
+      <span class="rl-q" style="background-image: url('assets/flash/12.webp');"></span>
+      <span class="rl-q" style="background-image: url('assets/flash/13.webp');"></span>
+      <span class="rl-q" style="background-image: url('assets/flash/14.webp');"></span>
+      <span class="rl-q" style="background-image: url('assets/flash/15.webp');"></span>
+      <span class="rl-q" style="background-image: url('assets/flash/16.webp');"></span>
       <span class="rl-q rl-fim" aria-hidden="true"></span>
       <span class="rl-vinheta" aria-hidden="true"></span>
     </div>
@@ -1368,24 +1379,20 @@
     <button class="rl-gal-x" type="button" aria-label="Fechar a galeria">&#10005;</button>
   </header>
   <div class="rl-gal-grade">
-    <button class="rl-cel" type="button" data-i="0" data-src="https://videos.pexels.com/video-files/4434150/4434150-hd_1080_1920_30fps.mp4" data-t="Hora Dourada" data-d="O momento em que o sol encosta na linha do capim e o campo inteiro vira contraluz. A luz dura poucos minutos e muda de cor a cada um deles, então a câmera já fica montada e esperando. É o corte que abre o reel." aria-label="Abrir Hora Dourada">
-      <img src="assets/rl-01.webp" alt="" loading="lazy" decoding="async" width="720" height="1280">
+    <button class="rl-cel" type="button" data-i="0" data-src="assets/av/turismo.mp4" data-ar="9 / 16" data-t="Av. do Turismo" data-d="Apresenta&ccedil;&atilde;o de im&oacute;vel na Av. do Turismo: planos a&eacute;reos da fachada, passagem pelos ambientes e a metragem em cartela sobre a imagem. Vertical, montado para o feed." aria-label="Abrir Av. do Turismo">
+      <img src="assets/av/turismo.webp" alt="" loading="lazy" decoding="async" width="640" height="1138">
       <svg class="rl-cel-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5-13-7.5z"/></svg>
     </button>
-    <button class="rl-cel" type="button" data-i="1" data-src="https://videos.pexels.com/video-files/5147455/5147455-hd_1080_1920_30fps.mp4" data-t="Maré de Luz" data-d="Maré baixa e quarenta minutos de luz útil. A areia molhada vira espelho e dobra o céu, o que só funciona nos poucos metros em que a onda acabou de sair. Foi filmado andando para trás, acompanhando a água." aria-label="Abrir Maré de Luz">
-      <img src="assets/rl-02.webp" alt="" loading="lazy" decoding="async" width="720" height="1280">
+    <button class="rl-cel" type="button" data-i="1" data-src="assets/av/selminha.mp4" data-ar="9 / 16" data-t="Selminha" data-d="A casa por dentro e por fora &mdash; corredor, madeira aparente, deck e piscina. A c&acirc;mera acompanha o percurso de quem chega, na altura de quem caminha." aria-label="Abrir Selminha">
+      <img src="assets/av/selminha.webp" alt="" loading="lazy" decoding="async" width="640" height="1138">
       <svg class="rl-cel-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5-13-7.5z"/></svg>
     </button>
-    <button class="rl-cel" type="button" data-i="2" data-src="https://videos.pexels.com/video-files/5896379/5896379-hd_1080_1920_24fps.mp4" data-t="Corrente" data-d="Água corrente é o som mais difícil de gravar limpo: de perto satura, de longe some no ambiente. Este trecho foi captado em dois microfones, um rente à pedra e outro afastado, para dar corpo sem embolar." aria-label="Abrir Corrente">
-      <img src="assets/rl-03.webp" alt="" loading="lazy" decoding="async" width="720" height="1280">
+    <button class="rl-cel" type="button" data-i="2" data-src="assets/av/drinks.mp4" data-ar="9 / 16" data-t="Drinks &mdash; Brasa Bonito" data-d="Os drinks da casa filmados no balc&atilde;o, com o neon da brasa ao fundo. Vinte segundos de recortes curtos, guiados pelo brilho do vidro e pelo contraste da luz." aria-label="Abrir Drinks - Brasa Bonito">
+      <img src="assets/av/drinks.webp" alt="" loading="lazy" decoding="async" width="640" height="1138">
       <svg class="rl-cel-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5-13-7.5z"/></svg>
     </button>
-    <button class="rl-cel" type="button" data-i="3" data-src="https://videos.pexels.com/video-files/4434286/4434286-hd_1080_1920_30fps.mp4" data-t="Desenho de Outono" data-d="Do alto, o outono deixa de ser cor e vira desenho: a curva do rio contra o talude, a mancha das árvores, a linha onde a mata para. Um plano só, em movimento lento, porque a paisagem já se move sozinha." aria-label="Abrir Desenho de Outono">
-      <img src="assets/rl-04.webp" alt="" loading="lazy" decoding="async" width="720" height="1280">
-      <svg class="rl-cel-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5-13-7.5z"/></svg>
-    </button>
-    <button class="rl-cel" type="button" data-i="4" data-src="https://videos.pexels.com/video-files/5438937/5438937-hd_1080_1920_25fps.mp4" data-t="Retrato Institucional" data-d="Institucional não precisa ser frio. Janela como fonte única, nada de luz dura, e uma conversa no lugar de um script decorado. O corte fica nas pausas, que é onde a pessoa aparece." aria-label="Abrir Retrato Institucional">
-      <img src="assets/rl-05.webp" alt="" loading="lazy" decoding="async" width="720" height="1280">
+    <button class="rl-cel rl-cel-deitado" type="button" data-i="3" data-src="assets/av/mks.mp4" data-ar="16 / 9" data-t="A Vida &eacute; Passageira" data-d="Projeto com MKS. &Eacute; o trabalho mais longo do conjunto e o &uacute;nico em formato horizontal: tr&ecirc;s minutos, fora do recorte de reel." aria-label="Abrir A Vida e Passageira">
+      <img src="assets/av/mks.webp" alt="" loading="lazy" decoding="async" width="640" height="360">
       <svg class="rl-cel-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5-13-7.5z"/></svg>
     </button>
   </div>
@@ -1487,7 +1494,7 @@
     <div>
     <div class="faz-head">
       <h2 class="rv-clip" style="margin: 0; font-family: var(--display); font-weight: 800; font-size: clamp(26px, 3.7vw, 64px); line-height: 0.9; letter-spacing: -0.01em;">NÃO É SÓ <span class="scribble salmon" style="color: var(--marca);">FILMAR<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span></h2>
-      <p class="rv" style="margin: 0; font-size: clamp(21px, 1.8vw, 28px); line-height: 1.2; color: var(--tinta2); max-width: 46ch;">Da concepção à finalização, atuo em todas as etapas do processo criativo e estratégico. Cada projeto é tratado como uma oportunidade de gerar impacto real e permanente.</p>
+      <p class="rv" style="margin: 0; font-size: clamp(16px, 1.25vw, 20px); line-height: 1.5; color: var(--tinta2); max-width: 54ch;">Da concepção à finalização, atuo em todas as etapas do processo criativo e estratégico. Cada projeto é tratado como uma oportunidade de gerar impacto real e permanente.</p>
     </div>
     <div class="faz-grid">
       <div class="rv faz-card" style="--d:0.00s;"><div class="faz-n">01</div><h3>DIREÇÃO DE CRIAÇÃO</h3><div class="faz-sub">Birdview Produções</div><p>Responsável pela concepção criativa, direção e execução de projetos audiovisuais, desde o desenvolvimento de ideias até a finalização. Cada frame carrega intenção.</p></div>
@@ -1566,7 +1573,7 @@
     <div class="rv" style="font-family: var(--texto); font-size: 15px; font-weight: 500; letter-spacing: 0.01em; text-transform: none; color: oklch(0.97 0.008 85 / 0.8); margin-bottom: 24px;"><span class="hand" style="font-size: 36px; letter-spacing: 0; text-transform: none;">contato</span></div>
     <h2 class="rv-clip" style="margin: 0 0 40px; font-family: var(--display); font-weight: 800; font-size: clamp(30px, 5.4vw, 100px); line-height: 0.86; letter-spacing: -0.015em;">VAMOS<br><span style="color: oklch(0.18 0.012 60);">CRIAR</span><br><span class="scribble under light">JUNTOS<svg viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M4,22 C40,10 120,30 196,16 M14,32 C70,26 130,36 190,28"/></svg></span></h2>
     <a href="https://wa.me/qr/OBPBCW7RNX5KB1" target="_blank" rel="noopener" class="cta-dark" style="display: inline-flex; align-items: center; gap: 12px; background: oklch(0.18 0.012 60); color: oklch(0.97 0.008 85); padding: 18px 32px; border-radius: 50px; font-family: var(--texto); font-size: 18px; font-weight: 500; letter-spacing: 0; text-transform: none;">Falar comigo <span style="font-size:18px;">→</span></a>
-    <p class="hand rv" style="margin: 28px 0 0; font-size: 27px; line-height: 1.15; color: oklch(0.97 0.008 85 / 0.92); max-width: 30ch;">Narrativas que conectam cultura, imagem e propósito.</p>
+    <p class="hand rv" style="margin: 28px 0 0; font-size: 19px; line-height: 1.4; color: oklch(0.97 0.008 85 / 0.92); max-width: 30ch;">Narrativas que conectam cultura, imagem e propósito.</p>
     <div class="canais rv" style="--d:.15s;"><a href="https://www.youtube.com/watch?v=8U4cpeMxG2w" target="_blank" rel="noopener">▶ Ecos do Pantanal — YouTube</a><a href="https://www.instagram.com/birdviewproducoes/" target="_blank" rel="noopener">◉ Instagram — @birdviewproducoes</a><a href="mailto:allan.woch@gmail.com">✉ E-mail</a></div>
   </div>
   <div style="position: absolute; right: -2vw; bottom: 0; z-index: 1; width: min(42vw, 620px); pointer-events: none; opacity: 0.95;">
@@ -1984,7 +1991,7 @@
     function clamp(v){ return v < 0 ? 0 : (v > 1 ? 1 : v); }
 
     var PASSADA = 1500;    // quanto dura a passada
-    var DESCANSO = 5200;   // quanto o ultimo quadro fica parado antes da proxima
+    var DESCANSO = 2400;   // quanto o ultimo quadro fica parado antes da proxima
     var inicio = 0, naTela = false, atual = -1;
 
     function mostra(i){
@@ -2055,6 +2062,11 @@
       function abreCheio(c){
         tit.textContent = c.dataset.t || '';
         des.textContent = c.dataset.d || '';
+        // a forma do quadro acompanha o trabalho, e o cartaz da celula
+        // segura a imagem enquanto o video nao comeca
+        tela.style.aspectRatio = c.dataset.ar || '9 / 16';
+        var cap = c.querySelector('img');
+        if (cap) tela.poster = cap.currentSrc || cap.src;
         tela.src = c.dataset.src || '';
         cheio.hidden = false;
         requestAnimationFrame(function(){ cheio.classList.add('on'); });
