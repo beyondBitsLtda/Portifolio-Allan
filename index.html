@@ -533,7 +533,10 @@
   /* janela baixa: não cabe bloco de texto + palavra + selo, então a palavra encolhe */
   @media (max-height: 780px) and (min-width: 900px) {
     .chips { display: none; }
-    .h1-word { font-size: 15vw !important; margin-top: 17vh !important; }
+    /* 15vw vinha da Anton, que e estreita; com a Syne isso da 277px numa
+       janela larga e o nome vaza os dois lados. Em tela baixa o que
+       falta e altura, entao o corpo cai em vez de crescer */
+    .h1-word { font-size: min(5vw, 84px) !important; margin-top: 11vh !important; }
   }
 
   /* o hero do avatar perdeu a coluna de texto: figura, visor e foco voltam ao centro */
@@ -1025,8 +1028,10 @@
   #tubo { position: fixed; inset: 0; z-index: 155; pointer-events: none; }
   /* so o chiado, sem as linhas horizontais: uma textura SVG parada, sem
      animacao — animar isso repinta a tela inteira a cada quadro */
-  #tubo::after { content: ''; position: absolute; inset: 0; opacity: .72;
-    mix-blend-mode: overlay; background-size: 190px 190px;
+  /* screen no lugar de overlay: screen so soma luz, e sobre o creme,
+     que ja esta perto do teto, quase nao muda; sobre o preto ele canta */
+  #tubo::after { content: ''; position: absolute; inset: 0; opacity: .5;
+    mix-blend-mode: screen; background-size: 190px 190px;
     background-image: url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' width='190' height='190'>\
 <filter id='r'><feTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/>\
