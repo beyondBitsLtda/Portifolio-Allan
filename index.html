@@ -1064,43 +1064,51 @@
 
   /* a galeria do projeto: so fotos, como a do Atoto */
   .gal-modal { position: fixed; inset: 0; z-index: 820; overflow-y: auto;
-    overscroll-behavior: contain; background: oklch(0.1 0.012 55);
+    overscroll-behavior: contain; background: var(--vermelho);
     opacity: 0; transition: opacity .3s ease; }
   .gal-modal.on { opacity: 1; }
   .gal-modal[hidden] { display: none; }
   .gal-m-topo { position: sticky; top: 0; z-index: 3;
     display: flex; align-items: baseline; gap: 14px;
     padding: 18px clamp(16px, 3vw, 34px);
-    background: oklch(0.1 0.012 55 / .92); backdrop-filter: blur(8px);
+    background: color-mix(in oklch, var(--vermelho) 92%, transparent);
+    backdrop-filter: blur(8px);
     border-bottom: 1px solid oklch(0.99 0.008 85 / .14); }
   .gal-m-t { margin: 0; font-family: var(--display); font-weight: 800;
     font-size: clamp(18px, 1.8vw, 30px); letter-spacing: -0.01em;
     color: oklch(0.99 0.008 85); }
   .gal-m-conta { font-size: 12px; font-weight: 500; letter-spacing: .12em;
     text-transform: uppercase; color: oklch(0.99 0.008 85 / .55); }
-  .gal-pro { position: relative; columns: 3; column-gap: 8px; padding: 8px; }
+  .gal-pro { position: relative; display: flex; flex-wrap: wrap; gap: 8px;
+    padding: 8px 8px clamp(60px, 9vh, 120px); }
   .gal-pro[hidden] { display: none; }
-  .gal-pro img { display: block; width: 100%; height: auto; cursor: zoom-in;
-    margin: 0 0 8px; break-inside: avoid; background: oklch(0.2 0.012 55); }
+  .gal-pro img { display: block; cursor: zoom-in;
+    height: var(--linha, 260px); width: calc(var(--ar, 1.4) * var(--linha, 260px));
+    flex: var(--ar, 1.4) 1 auto; min-width: 140px;
+    object-fit: cover; background: var(--vermelho); }
   /* o chiado tambem aqui: o #tubo global vive no z-index 155 e nao alcanca
      um modal que mora no 820 */
-  .gal-pro::after { content: ''; position: absolute; inset: 0; pointer-events: none;
-    z-index: 2; opacity: .55; mix-blend-mode: overlay; background-size: 190px 190px;
+  /* o chiado cobre o modal inteiro, nao so onde ha foto: e fundo, nao
+     tratamento de imagem */
+  .gal-modal::after, .doc-m-galeria::before { content: ''; position: fixed;
+    inset: 0; pointer-events: none;
+    z-index: 2; opacity: .62; mix-blend-mode: overlay; background-size: 190px 190px;
     background-image: url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' width='190' height='190'>\
 <filter id='r'><feTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/>\
 <feColorMatrix type='saturate' values='0'/></filter>\
 <rect width='190' height='190' filter='url(%23r)' opacity='.42'/></svg>"); }
+  .gal-modal { position: fixed; }
   .gal-m-x { position: fixed; z-index: 4; right: clamp(14px, 2.4vw, 30px);
     top: clamp(14px, 2.4vw, 26px); width: 46px; height: 46px; border-radius: 50%;
     border: 1px solid oklch(0.99 0.008 85 / .45); background: oklch(0 0 0 / .5);
     color: oklch(0.99 0.008 85); font-size: 19px; line-height: 1; cursor: pointer; }
   .gal-m-x:hover { background: var(--vermelho); border-color: var(--vermelho); }
-  @media (max-width: 1099px) { .gal-pro { columns: 2; } }
+  @media (max-width: 1099px) { .doc-m-galeria, .gal-pro { --linha: 210px; } }
   @media (max-width: 899px) {
     .gal-grade { grid-template-columns: 1fr; }
     .gal-card { height: min(40vh, 320px); }
-    .gal-pro { columns: 1; }
+    .doc-m-galeria, .gal-pro { --linha: 170px; }
   }
   @media (prefers-reduced-motion: reduce) {
     .gal-capa, .gal-tinta, .gal-rot, .gal-rot i, .gal-modal { transition: none; }
@@ -1133,14 +1141,18 @@
 
   /* a galeria do projeto: so as fotos, sem legenda nenhuma. Colunas em
      mosaico para retrato e paisagem conviverem sem corte */
-  /* fundo escuro sob as fotos: o vermelho do modal aparecia nos vaos e
-     competia com elas, que e justamente o que a galeria nao pode fazer */
-  .doc-m-galeria { position: relative; columns: 3; column-gap: 8px;
+  /* linhas justificadas no lugar do mosaico de colunas: cada coluna
+     terminava na sua propria altura e sobrava buraco no pe da galeria.
+     Aqui a altura e fixa e cada foto cresce proporcional a sua forma,
+     entao a linha fecha exata na largura */
+  .doc-m-galeria { position: relative; display: flex; flex-wrap: wrap; gap: 8px;
     padding: 8px 8px clamp(60px, 9vh, 120px);
-    background: oklch(0.12 0.012 55); }
+    background: var(--vermelho); }
   .doc-m-galeria[hidden] { display: none; }
-  .doc-m-galeria img { display: block; width: 100%; height: auto; cursor: zoom-in;
-    margin: 0 0 8px; break-inside: avoid; background: oklch(0.2 0.012 55); }
+  .doc-m-galeria img { display: block; cursor: zoom-in;
+    height: var(--linha, 260px); width: calc(var(--ar, 1.4) * var(--linha, 260px));
+    flex: var(--ar, 1.4) 1 auto; min-width: 140px;
+    object-fit: cover; background: var(--vermelho); }
   /* o chiado tambem aqui: o #tubo e global mas vive no z-index 155, e o
      modal mora no 800 — o grao nao chegava la dentro */
   .doc-m-galeria::after, .doc-m-topo::after { content: ''; position: absolute;
@@ -1152,9 +1164,8 @@
 <feColorMatrix type='saturate' values='0'/></filter>\
 <rect width='190' height='190' filter='url(%23r)' opacity='.42'/></svg>"); }
   .doc-m-topo { position: relative; }
-  @media (max-width: 1099px) { .doc-m-galeria { columns: 2; } }
+
   @media (max-width: 899px) {
-    .doc-m-galeria { columns: 1; }
     .doc-grade { grid-template-columns: 1fr; }
     .doc-card { height: min(62vh, 560px); }
     .doc-m-topo { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); }
@@ -1295,30 +1306,30 @@
   </aside>
   </div>
   <div class="doc-m-galeria galeria-fotos" aria-label="Fotos do projeto" hidden>
-    <img tabindex="0" src="assets/atoto/g01.webp" alt="" loading="lazy" decoding="async">
-    <img tabindex="0" src="assets/atoto/g02.webp" alt="" loading="lazy" decoding="async">
-    <img tabindex="0" src="assets/atoto/g03.webp" alt="" loading="lazy" decoding="async">
-    <img tabindex="0" src="assets/atoto/g04.webp" alt="" loading="lazy" decoding="async">
-    <img tabindex="0" src="assets/atoto/g05.webp" alt="" loading="lazy" decoding="async">
-    <img tabindex="0" src="assets/atoto/g06.webp" alt="" loading="lazy" decoding="async">
-    <img tabindex="0" src="assets/atoto/g07.webp" alt="" loading="lazy" decoding="async">
-    <img tabindex="0" src="assets/atoto/g08.webp" alt="" loading="lazy" decoding="async">
-    <img tabindex="0" src="assets/atoto/g09.webp" alt="" loading="lazy" decoding="async">
-    <img tabindex="0" src="assets/atoto/g10.webp" alt="" loading="lazy" decoding="async">
-    <img tabindex="0" src="assets/atoto/g11.webp" alt="" loading="lazy" decoding="async">
-    <img tabindex="0" src="assets/atoto/g12.webp" alt="" loading="lazy" decoding="async">
-    <img tabindex="0" src="assets/atoto/g13.webp" alt="" loading="lazy" decoding="async">
-    <img tabindex="0" src="assets/atoto/g14.webp" alt="" loading="lazy" decoding="async">
-    <img tabindex="0" src="assets/atoto/g15.webp" alt="" loading="lazy" decoding="async">
-    <img tabindex="0" src="assets/atoto/g16.webp" alt="" loading="lazy" decoding="async">
-    <img tabindex="0" src="assets/atoto/g17.webp" alt="" loading="lazy" decoding="async">
-    <img tabindex="0" src="assets/atoto/g18.webp" alt="" loading="lazy" decoding="async">
-    <img tabindex="0" src="assets/atoto/g19.webp" alt="" loading="lazy" decoding="async">
-    <img tabindex="0" src="assets/atoto/g20.webp" alt="" loading="lazy" decoding="async">
-    <img tabindex="0" src="assets/atoto/g21.webp" alt="" loading="lazy" decoding="async">
-    <img tabindex="0" src="assets/atoto/g22.webp" alt="" loading="lazy" decoding="async">
-    <img tabindex="0" src="assets/atoto/g23.webp" alt="" loading="lazy" decoding="async">
-    <img tabindex="0" src="assets/atoto/g24.webp" alt="" loading="lazy" decoding="async">
+    <img tabindex="0" style="--ar: 0.563" src="assets/atoto/g01.webp" alt="" loading="lazy" decoding="async">
+    <img tabindex="0" style="--ar: 0.563" src="assets/atoto/g02.webp" alt="" loading="lazy" decoding="async">
+    <img tabindex="0" style="--ar: 0.667" src="assets/atoto/g03.webp" alt="" loading="lazy" decoding="async">
+    <img tabindex="0" style="--ar: 1.5" src="assets/atoto/g04.webp" alt="" loading="lazy" decoding="async">
+    <img tabindex="0" style="--ar: 1.781" src="assets/atoto/g05.webp" alt="" loading="lazy" decoding="async">
+    <img tabindex="0" style="--ar: 0.561" src="assets/atoto/g06.webp" alt="" loading="lazy" decoding="async">
+    <img tabindex="0" style="--ar: 0.561" src="assets/atoto/g07.webp" alt="" loading="lazy" decoding="async">
+    <img tabindex="0" style="--ar: 1.5" src="assets/atoto/g08.webp" alt="" loading="lazy" decoding="async">
+    <img tabindex="0" style="--ar: 1.5" src="assets/atoto/g09.webp" alt="" loading="lazy" decoding="async">
+    <img tabindex="0" style="--ar: 1.5" src="assets/atoto/g10.webp" alt="" loading="lazy" decoding="async">
+    <img tabindex="0" style="--ar: 1.5" src="assets/atoto/g11.webp" alt="" loading="lazy" decoding="async">
+    <img tabindex="0" style="--ar: 1.5" src="assets/atoto/g12.webp" alt="" loading="lazy" decoding="async">
+    <img tabindex="0" style="--ar: 1.5" src="assets/atoto/g13.webp" alt="" loading="lazy" decoding="async">
+    <img tabindex="0" style="--ar: 1.5" src="assets/atoto/g14.webp" alt="" loading="lazy" decoding="async">
+    <img tabindex="0" style="--ar: 1.5" src="assets/atoto/g15.webp" alt="" loading="lazy" decoding="async">
+    <img tabindex="0" style="--ar: 1.5" src="assets/atoto/g16.webp" alt="" loading="lazy" decoding="async">
+    <img tabindex="0" style="--ar: 1.5" src="assets/atoto/g17.webp" alt="" loading="lazy" decoding="async">
+    <img tabindex="0" style="--ar: 1.5" src="assets/atoto/g18.webp" alt="" loading="lazy" decoding="async">
+    <img tabindex="0" style="--ar: 1.5" src="assets/atoto/g19.webp" alt="" loading="lazy" decoding="async">
+    <img tabindex="0" style="--ar: 0.667" src="assets/atoto/g20.webp" alt="" loading="lazy" decoding="async">
+    <img tabindex="0" style="--ar: 1.5" src="assets/atoto/g21.webp" alt="" loading="lazy" decoding="async">
+    <img tabindex="0" style="--ar: 0.667" src="assets/atoto/g22.webp" alt="" loading="lazy" decoding="async">
+    <img tabindex="0" style="--ar: 0.561" src="assets/atoto/g23.webp" alt="" loading="lazy" decoding="async">
+    <img tabindex="0" style="--ar: 0.667" src="assets/atoto/g24.webp" alt="" loading="lazy" decoding="async">
   </div>
   <button class="doc-m-fechar" type="button" aria-label="Fechar o documentário">&#10005;</button>
 </div>
@@ -1389,7 +1400,7 @@
 
 <!-- ===== GALERIA ===== -->
 <section id="galeria" data-curva="0.16">
-  <h2 class="doc-titulo rv-clip">GALERIA</h2>
+  <h2 class="doc-titulo rv-clip">MEUS OUTROS TRABALHOS</h2>
   <div class="gal-grade bloco-inteiro">
     <button class="gal-card" type="button" data-proj="produtos" data-nome="Produtos"
       aria-label="Ver as fotos de Produtos">
@@ -1421,47 +1432,47 @@
 <div id="galModal" class="gal-modal" role="dialog" aria-modal="true" aria-labelledby="galModalT" hidden>
   <header class="gal-m-topo"><h3 class="gal-m-t" id="galModalT"></h3><span class="gal-m-conta"></span></header>
     <div class="gal-pro galeria-fotos" data-proj="produtos" hidden>
-      <img tabindex="0" src="assets/gal/produtos/01.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/produtos/02.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/produtos/03.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/produtos/04.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/produtos/05.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/produtos/06.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 1.5" src="assets/gal/produtos/01.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 1.5" src="assets/gal/produtos/02.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 0.667" src="assets/gal/produtos/03.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 0.667" src="assets/gal/produtos/04.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 1.5" src="assets/gal/produtos/05.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 1.5" src="assets/gal/produtos/06.webp" alt="" loading="lazy" decoding="async">
     </div>
     <div class="gal-pro galeria-fotos" data-proj="esporte" hidden>
-      <img tabindex="0" src="assets/gal/esporte/01.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/esporte/02.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/esporte/03.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/esporte/04.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/esporte/05.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/esporte/06.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/esporte/07.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/esporte/08.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/esporte/09.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/esporte/10.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 1.777" src="assets/gal/esporte/01.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 1.777" src="assets/gal/esporte/02.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 1.5" src="assets/gal/esporte/03.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 0.563" src="assets/gal/esporte/04.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 1.777" src="assets/gal/esporte/05.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 1.5" src="assets/gal/esporte/06.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 0.667" src="assets/gal/esporte/07.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 0.667" src="assets/gal/esporte/08.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 0.563" src="assets/gal/esporte/09.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 0.667" src="assets/gal/esporte/10.webp" alt="" loading="lazy" decoding="async">
     </div>
     <div class="gal-pro galeria-fotos" data-proj="aves" hidden>
-      <img tabindex="0" src="assets/gal/aves/01.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/aves/02.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/aves/03.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/aves/04.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/aves/05.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/aves/06.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/aves/07.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/aves/08.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/aves/09.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/aves/10.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/aves/11.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 1.5" src="assets/gal/aves/01.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 1.777" src="assets/gal/aves/02.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 0.563" src="assets/gal/aves/03.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 1.5" src="assets/gal/aves/04.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 1.777" src="assets/gal/aves/05.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 1.5" src="assets/gal/aves/06.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 1.779" src="assets/gal/aves/07.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 0.563" src="assets/gal/aves/08.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 0.563" src="assets/gal/aves/09.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 1.5" src="assets/gal/aves/10.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 1.5" src="assets/gal/aves/11.webp" alt="" loading="lazy" decoding="async">
     </div>
     <div class="gal-pro galeria-fotos" data-proj="brasa" hidden>
-      <img tabindex="0" src="assets/gal/brasa/01.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/brasa/02.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/brasa/03.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/brasa/04.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/brasa/05.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/brasa/06.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/brasa/07.webp" alt="" loading="lazy" decoding="async">
-      <img tabindex="0" src="assets/gal/brasa/08.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 0.563" src="assets/gal/brasa/01.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 0.563" src="assets/gal/brasa/02.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 0.563" src="assets/gal/brasa/03.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 0.789" src="assets/gal/brasa/04.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 0.563" src="assets/gal/brasa/05.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 0.563" src="assets/gal/brasa/06.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 1.777" src="assets/gal/brasa/07.webp" alt="" loading="lazy" decoding="async">
+      <img tabindex="0" style="--ar: 1.777" src="assets/gal/brasa/08.webp" alt="" loading="lazy" decoding="async">
     </div>
   <button class="gal-m-x" type="button" aria-label="Fechar a galeria">&#10005;</button>
 </div>
