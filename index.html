@@ -1028,10 +1028,11 @@
   #tubo { position: fixed; inset: 0; z-index: 155; pointer-events: none; }
   /* so o chiado, sem as linhas horizontais: uma textura SVG parada, sem
      animacao — animar isso repinta a tela inteira a cada quadro */
-  /* screen no lugar de overlay: screen so soma luz, e sobre o creme,
-     que ja esta perto do teto, quase nao muda; sobre o preto ele canta */
+  /* overlay, nao screen: o screen so soma luz e sobre o creme, que ja
+     esta perto do teto, o grao sumia. A 0.38 em vez dos 0.72 do inicio:
+     presente no claro, sem saltar */
   #tubo::after { content: ''; position: absolute; inset: 0; opacity: .5;
-    mix-blend-mode: screen; background-size: 190px 190px;
+    mix-blend-mode: overlay; background-size: 190px 190px;
     background-image: url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' width='190' height='190'>\
 <filter id='r'><feTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/>\
@@ -2033,6 +2034,13 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
+/* A COR DO PAINEL DE FUNDO. E aqui que se mexe, nao no GLB: o arquivo
+   vem com a cor assada, e estas duas linhas a sobrescrevem no carregar.
+   O brilho segura o vermelho na sombra — sem ele a dobra de baixo do
+   papel escurece e o painel deixa de ler como uma cor so. */
+const PAINEL = 0xF20010;        // a cor difusa
+const PAINEL_BRILHO = 0x8E0000; // o quanto ele emite por conta propria
+
 const sec = document.getElementById('abertura');
 const tela = document.getElementById('estudio');
 const reduzido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2067,7 +2075,19 @@ if (tela && !reduzido) {
     g.scene.traverse((o) => {
       if (!o.isMesh) return;
       const ms = [].concat(o.material);
-      if (ms.some((m) => m && m.name === 'Studio_Setup_Mtl_1.001')) pecas.push(o);
+      if (!ms.some((m) => m && m.name === 'Studio_Setup_Mtl_1.001')) return;
+      pecas.push(o);
+      ms.forEach((m) => {
+        if (!m) return;
+        m.color.setHex(PAINEL);
+        if (m.emissive) m.emissive.setHex(PAINEL_BRILHO);
+        m.metalness = 0;
+        // papel fosco, nao plastico: o reflexo especular do ambiente e
+        // branco e e ele que levanta o verde e o azul, lavando o vermelho
+        m.roughness = 0.88;
+        m.envMapIntensity = 0.18;
+        m.needsUpdate = true;
+      });
     });
     const cx = new THREE.Box3();
     if (pecas.length) pecas.forEach((o) => cx.expandByObject(o));
