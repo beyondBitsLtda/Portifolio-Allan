@@ -942,43 +942,38 @@
     .rl-gal, .rl-cheio, .rl-cel img { transition: none; }
   }
 
-  /* ===== DOCUMENTARIOS: so a palavra e os videos ===== */
-  /* o mesmo creme e o mesmo campo de curvas da hero do Pantanal */
+  /* ===== DOCUMENTARIOS: dois trabalhos, meio a meio ===== */
   #documentarios { position: relative; z-index: 60; overflow: hidden;
     background: oklch(0.985 0.006 85);
     padding: clamp(96px, 12vw, 150px) var(--gx); }
   #documentarios > .doc-titulo, #documentarios > .doc-grade {
     position: relative; z-index: 2; }
-  /* line-height 1: com 0.86 o acento do A passava do teto da caixa e o
-     clip-path do rv-clip cortava a ponta */
   .doc-titulo { margin: 0 0 clamp(34px, 4.6vw, 62px); font-family: var(--display);
-    font-weight: 400; font-size: clamp(27px, 5.6vw, 104px); line-height: 1;
-    letter-spacing: -0.015em; color: var(--vermelho); }
-  .doc-grade { display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: clamp(12px, 1.4vw, 22px); max-width: 1680px; }
+    font-weight: 800; font-size: clamp(25px, 5.3vw, 99px); line-height: 1.04;
+    letter-spacing: 0; color: var(--vermelho); }
+  /* dois quadros, meio a meio, altos o bastante para encher a tela */
+  .doc-grade { display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: clamp(12px, 1.4vw, 24px); max-width: 1680px; }
   .doc-card { position: relative; display: block; appearance: none; -webkit-appearance: none;
     padding: 0; margin: 0; border: 0; border-radius: 3px; overflow: hidden;
-    aspect-ratio: 16 / 9; background: oklch(0.14 0.012 60); cursor: pointer;
-    /* a mistura da tinta para dentro do card e nao no que estiver atras */
+    height: min(72vh, 760px); background: oklch(0.14 0.012 60); cursor: pointer;
+    /* a mistura da tinta fica dentro do card e nao no que estiver atras */
     isolation: isolate; }
-  /* o quadro parado e um frame do proprio arquivo, na resolucao de origem:
-     nenhuma miniatura comprimida entra no caminho */
-  .doc-video { display: block; width: 100%; height: 100%; object-fit: cover;
-    /* clareia antes de receber a tinta: multiply so escurece, e sem isso o
-       vermelho fecha nas sombras e a imagem some */
+  .doc-capa { position: absolute; inset: 0; display: block;
+    background-size: cover; background-position: center top;
+    /* clareia antes de receber a tinta: multiply so escurece */
     filter: grayscale(1) brightness(1.28) contrast(1.04);
-    transition: filter .55s cubic-bezier(.2,.65,.2,1); }
-  /* multiply sobre cinza: preto nas sombras, a cor da marca nas luzes.
-     Nenhuma chance de escorregar para laranja, que e o que o sepia fazia. */
+    transition: filter .55s cubic-bezier(.2,.65,.2,1), transform .9s cubic-bezier(.2,.65,.2,1);
+    transform: scale(1.02); }
+  /* multiply sobre cinza: preto nas sombras, a cor da marca nas luzes */
   .doc-tinta { position: absolute; inset: 0; pointer-events: none;
     background: var(--vermelho); mix-blend-mode: multiply;
     transition: opacity .55s cubic-bezier(.2,.65,.2,1); }
   .doc-card:hover .doc-tinta, .doc-card:focus-visible .doc-tinta { opacity: 0; }
-  .doc-card:hover .doc-video, .doc-card:focus-visible .doc-video { filter: none; }
+  .doc-card:hover .doc-capa, .doc-card:focus-visible .doc-capa {
+    filter: none; transform: scale(1.06); }
   .doc-card:focus-visible { outline: 2px solid var(--vermelho); outline-offset: 3px; }
 
-  /* vermelho da marca no lugar do preto; o fundo escurece um pouco nas
-     bordas para o quadro do video nao encostar num campo chapado */
   .doc-modal { position: fixed; inset: 0; z-index: 800; display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(320px, 31vw);
     grid-template-rows: 100%;
@@ -990,30 +985,37 @@
   .doc-modal[hidden] { display: none; }
   .doc-m-video { position: relative; display: flex; align-items: center; justify-content: center;
     min-width: 0; min-height: 0; padding: clamp(16px, 3vw, 48px); }
-  /* largura e altura automaticas presas aos maximos: o quadro fica do
-     tamanho do maior 16:9 que cabe na coluna, sem tarja sobrando */
+  /* a proporcao vem do atributo do card: o YouTube e 16:9 e o reel do
+     Instagram e retrato, entao fixar uma so deixaria tarja num dos dois */
   .doc-m-tela { width: auto; height: auto; max-width: 100%; max-height: 100%;
-    aspect-ratio: 16 / 9; object-fit: contain; background: oklch(0.3 0.14 28); }
-  .doc-m-texto { display: flex; flex-direction: column; justify-content: center; gap: 16px;
+    aspect-ratio: var(--prop, 16 / 9); border: 0;
+    background: oklch(0.3 0.14 28); }
+  .doc-m-texto { display: flex; flex-direction: column; justify-content: center; gap: 14px;
     padding: clamp(26px, 4vw, 66px) clamp(22px, 3.4vw, 52px);
     border-left: 1px solid oklch(0.99 0.008 85 / .28);
-    /* a descricao cresceu: em tela baixa a coluna rola em vez de vazar */
     overflow-y: auto; overscroll-behavior: contain; }
+  .doc-m-tag { align-self: flex-start; padding: 5px 12px;
+    border: 1px solid oklch(0.99 0.008 85 / .5); border-radius: 999px;
+    font-size: 11px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+    color: oklch(0.99 0.008 85); }
   .doc-m-t { margin: 0; font-family: var(--display); font-weight: 800;
-    font-size: clamp(30px, 3.1vw, 60px); line-height: 0.94; letter-spacing: -0.01em;
+    font-size: clamp(24px, 2.3vw, 42px); line-height: 1.04; letter-spacing: -0.01em;
     color: oklch(0.99 0.008 85); }
-  /* tres frases pedem um corpo menor e mais entrelinha que uma so.
-     Creme cheio, sem alfa: com .93 o contraste sobre o vermelho caia para
-     4,49:1 e o minimo de corpo de texto e 4,5:1 */
-  .doc-m-d { margin: 0; font-size: clamp(17px, 1.22vw, 22px); line-height: 1.36;
+  .doc-m-sub { margin: 0; font-size: clamp(14px, 1vw, 17px); font-weight: 500;
+    letter-spacing: .02em; color: oklch(0.99 0.008 85 / .8); }
+  .doc-m-d { margin: 0; font-size: clamp(15px, 1.1vw, 19px); line-height: 1.45;
     color: oklch(0.99 0.008 85); }
+  .doc-m-link { align-self: flex-start; margin-top: 6px; padding: 11px 20px;
+    border-radius: 999px; background: oklch(0.18 0.012 60); color: oklch(0.99 0.008 85);
+    font-size: 14px; font-weight: 500; letter-spacing: .02em; text-decoration: none; }
+  .doc-m-link:hover { background: oklch(0.12 0.012 60); }
   .doc-m-fechar { position: absolute; z-index: 2; right: clamp(16px, 2.4vw, 34px);
     top: clamp(16px, 2.4vw, 30px); width: 46px; height: 46px; border-radius: 50%;
     border: 1px solid oklch(0.99 0.008 85 / .5); background: oklch(0.3 0.14 28 / .5);
     color: oklch(0.99 0.008 85); font-size: 19px; line-height: 1; cursor: pointer; }
-  @media (max-width: 1099px) { .doc-grade { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 759px) {
+  @media (max-width: 899px) {
     .doc-grade { grid-template-columns: 1fr; }
+    .doc-card { height: min(62vh, 560px); }
     .doc-modal { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); }
     .doc-m-video { padding: 54px 0 0; }
     .doc-m-tela { width: 100%; }
@@ -1021,8 +1023,9 @@
       border-top: 1px solid oklch(0.99 0.008 85 / .28); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .doc-video, .doc-tinta, .doc-modal { transition: none; }
+    .doc-capa, .doc-tinta, .doc-modal { transition: none; }
   }
+
   /* a pagina desenrolando: cada bloco entra e sai curvado.
      So os blocos que realmente rolam — as seccoes com pino tem movimento
      proprio, e transformar o pino brigaria com ele. */
@@ -1107,43 +1110,41 @@
 <section id="documentarios" data-curva="0.16">
   <h2 class="doc-titulo rv-clip">DOCUMENTÁRIOS</h2>
   <div class="doc-grade bloco-inteiro">
-    <button class="doc-card" type="button" data-t="Água Doce" data-d="Nas cabeceiras, a mata ainda decide por onde a água passa. Acompanhamos uma estiagem inteira até a volta das chuvas, com a mesma queda filmada nos dois extremos do ano. O que o rio perde no caminho não se enxerga de dentro da cidade — só de dentro da mata." aria-label="Abrir Água Doce">
-      <video class="doc-video" poster="assets/doc-01.webp" src="https://videos.pexels.com/video-files/2098989/2098989-hd_1920_1080_30fps.mp4" data-cartaz="1.2" muted loop playsinline preload="none" disablepictureinpicture></video>
+    <button class="doc-card" type="button"
+      data-tag="Lei Aldir Blanc &middot; Documentário" data-t="Ecos do Pantanal &mdash; Esporte e Conservação" data-sub="Esporte &middot; Conservação Ambiental &middot; Narrativa Humana"
+      data-d="Produção audiovisual que integra esporte e conscientização ambiental, destacando a importância da preservação do Pantanal por meio de narrativas humanas e experiências reais. Projeto realizado com incentivo público, reforçando o compromisso com a cultura e o meio ambiente."
+      data-embed="https://www.youtube-nocookie.com/embed/8U4cpeMxG2w?rel=0&amp;autoplay=1" data-prop="16 / 9"
+      data-link="https://www.youtube.com/watch?v=8U4cpeMxG2w" data-link-txt="Assistir no YouTube"
+      aria-label="Abrir Ecos do Pantanal &mdash; Esporte e Conservação">
+      <span class="doc-capa" style="background-image: url('assets/doc-ecos.webp');"></span>
       <span class="doc-tinta" aria-hidden="true"></span>
     </button>
-    <button class="doc-card" type="button" data-t="Costa Viva" data-d="Um filhote de foca na faixa de areia que a maré devolve todo dia. Essa faixa entre a água e a duna muda de tamanho a cada ciclo, e é nela que os filhotes passam as primeiras semanas. Filmado rente ao chão, na altura de quem vive ali, sem cerca e sem isca." aria-label="Abrir Costa Viva">
-      <video class="doc-video" poster="assets/doc-02.webp" src="https://videos.pexels.com/video-files/1526909/1526909-hd_1920_1080_24fps.mp4" data-cartaz="0.8" muted loop playsinline preload="none" disablepictureinpicture></video>
-      <span class="doc-tinta" aria-hidden="true"></span>
-    </button>
-    <button class="doc-card" type="button" data-t="Primeira Luz" data-d="Quem viajou a noite inteira para ver o céu encher de balões. O filme fica com as pessoas em terra: a espera no escuro, o frio antes do sol nascer, o instante em que todo mundo para de falar ao mesmo tempo. O voo é só o que acontece depois." aria-label="Abrir Primeira Luz">
-      <video class="doc-video" poster="assets/doc-03.webp" src="https://videos.pexels.com/video-files/3015510/3015510-hd_1920_1080_24fps.mp4" data-cartaz="1.6" muted loop playsinline preload="none" disablepictureinpicture></video>
-      <span class="doc-tinta" aria-hidden="true"></span>
-    </button>
-    <button class="doc-card" type="button" data-t="Linha de Neve" data-d="O vale só aparece inteiro quando a câmera sobe acima da nuvem. Entre a neve do cume e o verde do fundo cabem poucos quilômetros e várias estações ao mesmo tempo. Uma travessia feita a pé, filmada na hora em que a luz atravessa o vale de lado." aria-label="Abrir Linha de Neve">
-      <video class="doc-video" poster="assets/doc-04.webp" src="https://videos.pexels.com/video-files/3214448/3214448-hd_1920_1080_25fps.mp4" data-cartaz="1.0" muted loop playsinline preload="none" disablepictureinpicture></video>
-      <span class="doc-tinta" aria-hidden="true"></span>
-    </button>
-    <button class="doc-card" type="button" data-t="Maré de Dentro" data-d="O recife quebra a onda e, do outro lado, a vila acorda. A barreira que protege as casas é a mesma que decide onde dá para pescar e onde não dá. Filmado do ar e da água, porque são duas faces do mesmo desenho." aria-label="Abrir Maré de Dentro">
-      <video class="doc-video" poster="assets/doc-05.webp" src="https://videos.pexels.com/video-files/2169880/2169880-hd_1920_1080_30fps.mp4" data-cartaz="1.0" muted loop playsinline preload="none" disablepictureinpicture></video>
-      <span class="doc-tinta" aria-hidden="true"></span>
-    </button>
-    <button class="doc-card" type="button" data-t="Cume" data-d="A crista da serra aparecendo e sumindo no mesmo minuto. A nuvem sobe pela encosta e fecha tudo em segundos, e a janela de luz dura o que dura. Foram três subidas até sobrar um minuto limpo." aria-label="Abrir Cume">
-      <video class="doc-video" poster="assets/doc-06.webp" src="https://videos.pexels.com/video-files/4763824/4763824-hd_1920_1080_24fps.mp4" data-cartaz="1.2" muted loop playsinline preload="none" disablepictureinpicture></video>
+    <button class="doc-card" type="button"
+      data-tag="Projeto independente &middot; Produção + Direção" data-t="Atotô &mdash; Silêncio, o Rei Está na Terra" data-sub="Arte &middot; Identidade &middot; Território &middot; Pantanal"
+      data-d="Documentário sobre uma intervenção artística no coração do Pantanal sul-mato-grossense: uma obra que celebra um tronco centenário de árvore ximbuva como monumento vivo de identidade e território."
+      data-embed="https://www.instagram.com/reel/C6_-qV-JUzM/embed" data-prop="9 / 14"
+      data-link="https://www.instagram.com/reel/C6_-qV-JUzM/" data-link-txt="Ver no Instagram"
+      aria-label="Abrir Atotô &mdash; Silêncio, o Rei Está na Terra">
+      <span class="doc-capa" style="background-image: url('assets/doc-atoto.webp');"></span>
       <span class="doc-tinta" aria-hidden="true"></span>
     </button>
   </div>
 </section>
 
 <div id="docModal" class="doc-modal" role="dialog" aria-modal="true" aria-labelledby="docModalT" hidden>
-  <div class="doc-m-video">
-    <video class="doc-m-tela" controls playsinline preload="metadata"></video>
-  </div>
+  <div class="doc-m-video"><iframe class="doc-m-tela" title="" allowfullscreen
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
+    referrerpolicy="strict-origin-when-cross-origin" loading="lazy"></iframe></div>
   <aside class="doc-m-texto">
+    <span class="doc-m-tag"></span>
     <h3 class="doc-m-t" id="docModalT"></h3>
+    <p class="doc-m-sub"></p>
     <p class="doc-m-d"></p>
+    <a class="doc-m-link" href="#" target="_blank" rel="noopener"></a>
   </aside>
   <button class="doc-m-fechar" type="button" aria-label="Fechar o documentário">&#10005;</button>
 </div>
+
 
 <!-- ===== REEL 2026 · a passada ===== -->
 <section id="reels" aria-label="Reel 2026">
@@ -1824,78 +1825,48 @@
     })();
   })();
 
-  /* DOCUMENTARIOS: o vermelho sai quando o mouse chega e o video roda.
-     No clique ele abre grande e divide a tela com o titulo e a descricao. */
+  /* DOCUMENTARIOS: o vermelho sai quando o mouse chega. No clique o
+     trabalho abre grande, com o video rodando de onde ele mora — YouTube
+     num caso, Instagram no outro — e a ficha ao lado. */
   (function documentarios(){
     var sec = document.getElementById('documentarios');
     var modal = document.getElementById('docModal');
     if (!sec || !modal) return;
     var cards = Array.prototype.slice.call(sec.querySelectorAll('.doc-card'));
     var tela = modal.querySelector('.doc-m-tela');
+    var tag = modal.querySelector('.doc-m-tag');
     var tit = modal.querySelector('.doc-m-t');
+    var sub = modal.querySelector('.doc-m-sub');
     var des = modal.querySelector('.doc-m-d');
+    var link = modal.querySelector('.doc-m-link');
     var fechar = modal.querySelector('.doc-m-fechar');
     if (!cards.length) return;
 
-    // o quadro parado e o poster: um WebP de 1280x720 tirado do proprio
-    // arquivo. Medido antes com preload=metadata + seek no mp4: 23,6 MB para
-    // pintar as seis miniaturas, porque o navegador nao para no quadro pedido.
-    // Assim nenhum byte de video viaja enquanto o mouse nao chega.
-    function cartaz(v){
-      var t = parseFloat(v.dataset.cartaz || 0.1);
-      // o poster foi tirado deste mesmo instante: voltar aqui nao da salto
-      try { if (v.readyState >= 1) v.currentTime = t; } catch (e) {}
-    }
-    function acorda(c){
-      var v = c.querySelector('.doc-video');
-      if (v && v.preload === 'none'){ v.preload = 'auto'; v.load(); }
-      return v;
-    }
-
-    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches && !REDUZIDO){
-      cards.forEach(function(c){
-        c.addEventListener('mouseenter', function(){
-          var v = acorda(c);
-          var pr = v.play();
-          if (pr && pr.catch) pr.catch(function(){});
-        });
-        c.addEventListener('mouseleave', function(){
-          var v = c.querySelector('.doc-video');
-          v.pause();
-          cartaz(v);
-        });
-      });
-    }
-
     var voltaPara = null;
     function abre(c){
-      var v = c.querySelector('.doc-video');
+      tag.textContent = c.dataset.tag || '';
       tit.textContent = c.dataset.t || '';
+      sub.textContent = c.dataset.sub || '';
       des.textContent = c.dataset.d || '';
-      tela.src = v.currentSrc || v.getAttribute('src');
+      link.href = c.dataset.link || '#';
+      link.textContent = c.dataset.linkTxt || 'Abrir';
+      tela.title = c.dataset.t || '';
+      // a proporcao e do video, nao do modal: 16:9 no YouTube, retrato no reel
+      tela.style.setProperty('--prop', c.dataset.prop || '16 / 9');
+      tela.src = c.dataset.embed || '';
       voltaPara = c;
       modal.hidden = false;
       requestAnimationFrame(function(){ modal.classList.add('on'); });
       document.documentElement.style.overflow = 'hidden';
-      tela.muted = false;
-      var pr = tela.play();
-      // com som o navegador pode recusar mesmo depois do clique; ai vai mudo
-      if (pr && pr.catch) pr.catch(function(){
-        tela.muted = true;
-        var p2 = tela.play();
-        if (p2 && p2.catch) p2.catch(function(){});
-      });
       fechar.focus();
     }
     function fecha(){
       if (modal.hidden) return;
       modal.classList.remove('on');
-      tela.pause();
       document.documentElement.style.overflow = '';
       setTimeout(function(){
         modal.hidden = true;
-        tela.removeAttribute('src');
-        tela.load();
+        tela.src = 'about:blank';   // sem isso o video segue tocando atras
       }, 340);
       if (voltaPara){ voltaPara.focus(); voltaPara = null; }
     }
@@ -1906,6 +1877,7 @@
       if (e.key === 'Escape' || e.keyCode === 27) fecha();
     });
   })();
+
 
   /* da segunda hero em diante a pagina desenrola: cada bloco chega curvado,
      endireita no meio da tela e volta a curvar ao sair */
