@@ -960,7 +960,9 @@
     /* a mistura da tinta fica dentro do card e nao no que estiver atras */
     isolation: isolate; }
   .doc-capa { position: absolute; inset: 0; display: block;
-    background-size: cover; background-position: center top;
+    /* as capas sao paisagem: centrar nos dois eixos corta igual dos dois
+       lados, enquanto alinhar pelo topo jogava o assunto para baixo */
+    background-size: cover; background-position: center center;
     /* clareia antes de receber a tinta: multiply so escurece */
     filter: grayscale(1) brightness(1.28) contrast(1.04);
     transition: filter .55s cubic-bezier(.2,.65,.2,1), transform .9s cubic-bezier(.2,.65,.2,1);
@@ -974,15 +976,20 @@
     filter: none; transform: scale(1.06); }
   .doc-card:focus-visible { outline: 2px solid var(--vermelho); outline-offset: 3px; }
 
-  .doc-modal { position: fixed; inset: 0; z-index: 800; display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(320px, 31vw);
-    grid-template-rows: 100%;
+  /* o modal deixa de ser so o split: ele rola, porque o Atoto traz uma
+     galeria embaixo da ficha */
+  .doc-modal { position: fixed; inset: 0; z-index: 800; overflow-y: auto;
+    overscroll-behavior: contain;
     background: var(--vermelho);
     background-image: radial-gradient(ellipse 120% 100% at 38% 45%,
       oklch(0.62 0.255 27) 0%, var(--vermelho) 48%, oklch(0.47 0.215 28) 100%);
+    background-attachment: fixed;
     opacity: 0; transition: opacity .32s ease; }
   .doc-modal.on { opacity: 1; }
   .doc-modal[hidden] { display: none; }
+  /* o split, agora um bloco de uma tela dentro do modal que rola */
+  .doc-m-topo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 31vw);
+    grid-template-rows: 100vh; min-height: 100vh; }
   .doc-m-video { position: relative; display: flex; align-items: center; justify-content: center;
     min-width: 0; min-height: 0; padding: clamp(16px, 3vw, 48px); }
   /* a proporcao vem do atributo do card: o YouTube e 16:9 e o reel do
@@ -1009,14 +1016,37 @@
     border-radius: 999px; background: oklch(0.18 0.012 60); color: oklch(0.99 0.008 85);
     font-size: 14px; font-weight: 500; letter-spacing: .02em; text-decoration: none; }
   .doc-m-link:hover { background: oklch(0.12 0.012 60); }
-  .doc-m-fechar { position: absolute; z-index: 2; right: clamp(16px, 2.4vw, 34px);
+  .doc-m-fechar { position: fixed; z-index: 3; right: clamp(16px, 2.4vw, 34px);
     top: clamp(16px, 2.4vw, 30px); width: 46px; height: 46px; border-radius: 50%;
     border: 1px solid oklch(0.99 0.008 85 / .5); background: oklch(0.3 0.14 28 / .5);
     color: oklch(0.99 0.008 85); font-size: 19px; line-height: 1; cursor: pointer; }
+  /* a galeria do projeto: so as fotos, sem legenda nenhuma. Colunas em
+     mosaico para retrato e paisagem conviverem sem corte */
+  /* fundo escuro sob as fotos: o vermelho do modal aparecia nos vaos e
+     competia com elas, que e justamente o que a galeria nao pode fazer */
+  .doc-m-galeria { position: relative; columns: 3; column-gap: 8px;
+    padding: 8px 8px clamp(60px, 9vh, 120px);
+    background: oklch(0.12 0.012 55); }
+  .doc-m-galeria[hidden] { display: none; }
+  .doc-m-galeria img { display: block; width: 100%; height: auto;
+    margin: 0 0 8px; break-inside: avoid; background: oklch(0.2 0.012 55); }
+  /* o chiado tambem aqui: o #tubo e global mas vive no z-index 155, e o
+     modal mora no 800 — o grao nao chegava la dentro */
+  .doc-m-galeria::after, .doc-m-topo::after { content: ''; position: absolute;
+    inset: 0; pointer-events: none; z-index: 2; opacity: .55;
+    mix-blend-mode: overlay; background-size: 190px 190px;
+    background-image: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='190' height='190'>\
+<filter id='r'><feTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/>\
+<feColorMatrix type='saturate' values='0'/></filter>\
+<rect width='190' height='190' filter='url(%23r)' opacity='.42'/></svg>"); }
+  .doc-m-topo { position: relative; }
+  @media (max-width: 1099px) { .doc-m-galeria { columns: 2; } }
   @media (max-width: 899px) {
+    .doc-m-galeria { columns: 1; }
     .doc-grade { grid-template-columns: 1fr; }
     .doc-card { height: min(62vh, 560px); }
-    .doc-modal { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); }
+    .doc-m-topo { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); }
     .doc-m-video { padding: 54px 0 0; }
     .doc-m-tela { width: 100%; }
     .doc-m-texto { justify-content: flex-start; border-left: 0;
@@ -1124,6 +1154,7 @@
       data-d="Documentário sobre uma intervenção artística no coração do Pantanal sul-mato-grossense: uma obra que celebra um tronco centenário de árvore ximbuva como monumento vivo de identidade e território."
       data-embed="https://www.instagram.com/reel/C6_-qV-JUzM/embed" data-prop="9 / 14"
       data-link="https://www.instagram.com/reel/C6_-qV-JUzM/" data-link-txt="Ver no Instagram"
+      data-galeria="1"
       aria-label="Abrir Atotô &mdash; Silêncio, o Rei Está na Terra">
       <span class="doc-capa" style="background-image: url('assets/doc-atoto.webp');"></span>
       <span class="doc-tinta" aria-hidden="true"></span>
@@ -1132,6 +1163,7 @@
 </section>
 
 <div id="docModal" class="doc-modal" role="dialog" aria-modal="true" aria-labelledby="docModalT" hidden>
+  <div class="doc-m-topo">
   <div class="doc-m-video"><iframe class="doc-m-tela" title="" allowfullscreen
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
     referrerpolicy="strict-origin-when-cross-origin" loading="lazy"></iframe></div>
@@ -1142,6 +1174,33 @@
     <p class="doc-m-d"></p>
     <a class="doc-m-link" href="#" target="_blank" rel="noopener"></a>
   </aside>
+  </div>
+  <div class="doc-m-galeria" aria-label="Fotos do projeto" hidden>
+    <img src="assets/atoto/g01.webp" alt="" loading="lazy" decoding="async">
+    <img src="assets/atoto/g02.webp" alt="" loading="lazy" decoding="async">
+    <img src="assets/atoto/g03.webp" alt="" loading="lazy" decoding="async">
+    <img src="assets/atoto/g04.webp" alt="" loading="lazy" decoding="async">
+    <img src="assets/atoto/g05.webp" alt="" loading="lazy" decoding="async">
+    <img src="assets/atoto/g06.webp" alt="" loading="lazy" decoding="async">
+    <img src="assets/atoto/g07.webp" alt="" loading="lazy" decoding="async">
+    <img src="assets/atoto/g08.webp" alt="" loading="lazy" decoding="async">
+    <img src="assets/atoto/g09.webp" alt="" loading="lazy" decoding="async">
+    <img src="assets/atoto/g10.webp" alt="" loading="lazy" decoding="async">
+    <img src="assets/atoto/g11.webp" alt="" loading="lazy" decoding="async">
+    <img src="assets/atoto/g12.webp" alt="" loading="lazy" decoding="async">
+    <img src="assets/atoto/g13.webp" alt="" loading="lazy" decoding="async">
+    <img src="assets/atoto/g14.webp" alt="" loading="lazy" decoding="async">
+    <img src="assets/atoto/g15.webp" alt="" loading="lazy" decoding="async">
+    <img src="assets/atoto/g16.webp" alt="" loading="lazy" decoding="async">
+    <img src="assets/atoto/g17.webp" alt="" loading="lazy" decoding="async">
+    <img src="assets/atoto/g18.webp" alt="" loading="lazy" decoding="async">
+    <img src="assets/atoto/g19.webp" alt="" loading="lazy" decoding="async">
+    <img src="assets/atoto/g20.webp" alt="" loading="lazy" decoding="async">
+    <img src="assets/atoto/g21.webp" alt="" loading="lazy" decoding="async">
+    <img src="assets/atoto/g22.webp" alt="" loading="lazy" decoding="async">
+    <img src="assets/atoto/g23.webp" alt="" loading="lazy" decoding="async">
+    <img src="assets/atoto/g24.webp" alt="" loading="lazy" decoding="async">
+  </div>
   <button class="doc-m-fechar" type="button" aria-label="Fechar o documentário">&#10005;</button>
 </div>
 
@@ -1840,6 +1899,7 @@
     var des = modal.querySelector('.doc-m-d');
     var link = modal.querySelector('.doc-m-link');
     var fechar = modal.querySelector('.doc-m-fechar');
+    var galeria = modal.querySelector('.doc-m-galeria');
     if (!cards.length) return;
 
     var voltaPara = null;
@@ -1854,8 +1914,11 @@
       // a proporcao e do video, nao do modal: 16:9 no YouTube, retrato no reel
       tela.style.setProperty('--prop', c.dataset.prop || '16 / 9');
       tela.src = c.dataset.embed || '';
+      // so o Atoto tem galeria; sem isso o modal do Ecos abriria rolavel a toa
+      if (galeria) galeria.hidden = c.dataset.galeria !== '1';
       voltaPara = c;
       modal.hidden = false;
+      modal.scrollTop = 0;
       requestAnimationFrame(function(){ modal.classList.add('on'); });
       document.documentElement.style.overflow = 'hidden';
       fechar.focus();

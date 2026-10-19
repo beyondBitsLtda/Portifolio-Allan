@@ -9,3 +9,7 @@ fontes/
 assets/obs2.png
 assets/d.jpg
 assets/new0BS2.png
+# originais pesados das fotos; o site usa os WebP em assets/atoto/
+assets/Galeria projeto Atoto/
+assets/capa*.png
+assets/capa*.jpg
