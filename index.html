@@ -1083,11 +1083,10 @@
     padding: 8px 8px clamp(60px, 9vh, 120px); }
   .gal-pro[hidden] { display: none; }
   .gal-pro img { display: block; cursor: zoom-in;
-    height: var(--linha, 260px); width: calc(var(--ar, 1.4) * var(--linha, 260px));
-    flex: var(--ar, 1.4) 1 auto; min-width: 140px;
-    /* teto de crescimento: sem ele uma foto sozinha na ultima linha
-       estica ate a largura inteira e vira uma tira recortada */
-    max-width: calc(var(--ar, 1.4) * var(--linha, 260px) * 1.55);
+    /* a medida sai do laco que justifica as linhas: aqui fica so o
+       tamanho de partida, para o layout nao pular antes de ele rodar */
+    height: 300px; width: calc(var(--ar, 1.4) * 300px);
+    flex: 0 0 auto;
     object-fit: cover; background: var(--vermelho); }
   /* o chiado tambem aqui: o #tubo global vive no z-index 155 e nao alcanca
      um modal que mora no 820 */
@@ -1107,11 +1106,9 @@
     border: 1px solid oklch(0.99 0.008 85 / .45); background: oklch(0 0 0 / .5);
     color: oklch(0.99 0.008 85); font-size: 19px; line-height: 1; cursor: pointer; }
   .gal-m-x:hover { background: var(--vermelho); border-color: var(--vermelho); }
-  @media (max-width: 1099px) { .doc-m-galeria, .gal-pro { --linha: 210px; } }
   @media (max-width: 899px) {
     .gal-grade { grid-template-columns: 1fr; }
     .gal-card { height: min(40vh, 320px); }
-    .doc-m-galeria, .gal-pro { --linha: 170px; }
   }
   @media (prefers-reduced-motion: reduce) {
     .gal-capa, .gal-tinta, .gal-rot, .gal-rot i, .gal-modal { transition: none; }
@@ -1153,11 +1150,10 @@
     background: var(--vermelho); }
   .doc-m-galeria[hidden] { display: none; }
   .doc-m-galeria img { display: block; cursor: zoom-in;
-    height: var(--linha, 260px); width: calc(var(--ar, 1.4) * var(--linha, 260px));
-    flex: var(--ar, 1.4) 1 auto; min-width: 140px;
-    /* teto de crescimento: sem ele uma foto sozinha na ultima linha
-       estica ate a largura inteira e vira uma tira recortada */
-    max-width: calc(var(--ar, 1.4) * var(--linha, 260px) * 1.55);
+    /* a medida sai do laco que justifica as linhas: aqui fica so o
+       tamanho de partida, para o layout nao pular antes de ele rodar */
+    height: 300px; width: calc(var(--ar, 1.4) * 300px);
+    flex: 0 0 auto;
     object-fit: cover; background: var(--vermelho); }
   /* o chiado tambem aqui: o #tubo e global mas vive no z-index 155, e o
      modal mora no 800 — o grao nao chegava la dentro */
@@ -1311,7 +1307,7 @@
     <a class="doc-m-link" href="#" target="_blank" rel="noopener"></a>
   </aside>
   </div>
-  <div class="doc-m-galeria galeria-fotos" aria-label="Fotos do projeto" style="--linha: 290px" hidden>
+  <div class="doc-m-galeria galeria-fotos" aria-label="Fotos do projeto" hidden>
     <img tabindex="0" style="--ar: 0.563" src="assets/atoto/g01.webp" alt="" loading="lazy" decoding="async">
     <img tabindex="0" style="--ar: 0.563" src="assets/atoto/g02.webp" alt="" loading="lazy" decoding="async">
     <img tabindex="0" style="--ar: 0.667" src="assets/atoto/g03.webp" alt="" loading="lazy" decoding="async">
@@ -1437,7 +1433,7 @@
 
 <div id="galModal" class="gal-modal" role="dialog" aria-modal="true" aria-labelledby="galModalT" hidden>
   <header class="gal-m-topo"><h3 class="gal-m-t" id="galModalT"></h3><span class="gal-m-conta"></span></header>
-    <div class="gal-pro galeria-fotos" data-proj="produtos" style="--linha: 450px" hidden>
+    <div class="gal-pro galeria-fotos" data-proj="produtos" hidden>
       <img tabindex="0" style="--ar: 1.5" src="assets/gal/produtos/01.webp" alt="" loading="lazy" decoding="async">
       <img tabindex="0" style="--ar: 1.5" src="assets/gal/produtos/02.webp" alt="" loading="lazy" decoding="async">
       <img tabindex="0" style="--ar: 0.667" src="assets/gal/produtos/03.webp" alt="" loading="lazy" decoding="async">
@@ -1445,7 +1441,7 @@
       <img tabindex="0" style="--ar: 1.5" src="assets/gal/produtos/05.webp" alt="" loading="lazy" decoding="async">
       <img tabindex="0" style="--ar: 1.5" src="assets/gal/produtos/06.webp" alt="" loading="lazy" decoding="async">
     </div>
-    <div class="gal-pro galeria-fotos" data-proj="esporte" style="--linha: 280px" hidden>
+    <div class="gal-pro galeria-fotos" data-proj="esporte" hidden>
       <img tabindex="0" style="--ar: 1.777" src="assets/gal/esporte/01.webp" alt="" loading="lazy" decoding="async">
       <img tabindex="0" style="--ar: 1.777" src="assets/gal/esporte/02.webp" alt="" loading="lazy" decoding="async">
       <img tabindex="0" style="--ar: 1.5" src="assets/gal/esporte/03.webp" alt="" loading="lazy" decoding="async">
@@ -1457,7 +1453,7 @@
       <img tabindex="0" style="--ar: 0.563" src="assets/gal/esporte/09.webp" alt="" loading="lazy" decoding="async">
       <img tabindex="0" style="--ar: 0.667" src="assets/gal/esporte/10.webp" alt="" loading="lazy" decoding="async">
     </div>
-    <div class="gal-pro galeria-fotos" data-proj="aves" style="--linha: 460px" hidden>
+    <div class="gal-pro galeria-fotos" data-proj="aves" hidden>
       <img tabindex="0" style="--ar: 1.5" src="assets/gal/aves/01.webp" alt="" loading="lazy" decoding="async">
       <img tabindex="0" style="--ar: 1.777" src="assets/gal/aves/02.webp" alt="" loading="lazy" decoding="async">
       <img tabindex="0" style="--ar: 0.563" src="assets/gal/aves/03.webp" alt="" loading="lazy" decoding="async">
@@ -1470,7 +1466,7 @@
       <img tabindex="0" style="--ar: 1.5" src="assets/gal/aves/10.webp" alt="" loading="lazy" decoding="async">
       <img tabindex="0" style="--ar: 1.5" src="assets/gal/aves/11.webp" alt="" loading="lazy" decoding="async">
     </div>
-    <div class="gal-pro galeria-fotos" data-proj="brasa" style="--linha: 470px" hidden>
+    <div class="gal-pro galeria-fotos" data-proj="brasa" hidden>
       <img tabindex="0" style="--ar: 0.563" src="assets/gal/brasa/01.webp" alt="" loading="lazy" decoding="async">
       <img tabindex="0" style="--ar: 0.563" src="assets/gal/brasa/02.webp" alt="" loading="lazy" decoding="async">
       <img tabindex="0" style="--ar: 0.563" src="assets/gal/brasa/03.webp" alt="" loading="lazy" decoding="async">
@@ -2099,6 +2095,88 @@
     })();
   })();
 
+  /* Justifica as galerias. O caminho obvio — esticar a caixa com
+     flex-grow e cortar com object-fit — deforma o enquadramento: em
+     projetos com formas misturadas sobra tira fina e corte agressivo.
+     Aqui a conta e a inversa: escolhe-se quantas fotos cabem na linha e
+     ajusta-se a ALTURA dela para a soma das larguras naturais fechar
+     exata. Nenhuma foto e cortada e toda linha fecha. */
+  (function justifica(){
+    var GAP = 8;
+    function alvo(L){ return L < 760 ? 220 : (L < 1200 ? 300 : 380); }
+
+    function poe(linha, soma, util, h){
+      linha.forEach(function(o){
+        o.im.style.width = (o.ar * h).toFixed(2) + 'px';
+        o.im.style.height = h.toFixed(2) + 'px';
+      });
+    }
+    function uma(caixa){
+      var ims = Array.prototype.slice.call(caixa.querySelectorAll('img'));
+      if (!ims.length) return;
+      var cs = getComputedStyle(caixa);
+      var util = caixa.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      if (util <= 0) return;
+      var ars = ims.map(function(im){
+        return parseFloat(im.style.getPropertyValue('--ar')) || 1.4;
+      });
+
+      // simula o empacotamento para uma altura alvo e diz o quao cheia a
+      // ultima linha fica
+      function simula(A){
+        var linhas = [[]], soma = 0;
+        ars.forEach(function(ar){
+          linhas[linhas.length - 1].push(ar);
+          soma += ar;
+          if (soma * A + GAP * (linhas[linhas.length - 1].length - 1) >= util){
+            linhas.push([]); soma = 0;
+          }
+        });
+        if (!linhas[linhas.length - 1].length) linhas.pop();
+        var ult = linhas[linhas.length - 1];
+        var nat = ult.reduce(function(a, b){ return a + b; }, 0) * A
+                + GAP * (ult.length - 1);
+        return { linhas: linhas, cheia: Math.min(1, nat / util) };
+      }
+
+      // procura a altura que fecha melhor a ultima linha. Sem isso ela
+      // sobra curta e a galeria termina com um talho de fundo
+      var base = alvo(util), A = base, melhor = -1;
+      for (var t = Math.round(base * 0.62); t <= Math.round(base * 1.6); t += 10){
+        var r = simula(t);
+        // fechar a ultima linha manda; entre as que fecham, ganha a que
+        // deixa as fotos maiores — senao ele espreme tudo numa linha so
+        var nota = r.cheia + (t / base) * 0.06;
+        if (nota > melhor){ melhor = nota; A = t; }
+      }
+
+      var linha = [], soma = 0;
+      ims.forEach(function(im, k){
+        linha.push({ im: im, ar: ars[k] });
+        soma += ars[k];
+        if (soma * A + GAP * (linha.length - 1) >= util){
+          poe(linha, soma, util, (util - GAP * (linha.length - 1)) / soma);
+          linha = []; soma = 0;
+        }
+      });
+      if (linha.length){
+        var h = (util - GAP * (linha.length - 1)) / soma;
+        poe(linha, soma, util, h > A * 1.45 ? A : h);
+      }
+    }
+    function todas(){
+      Array.prototype.forEach.call(document.querySelectorAll('.galeria-fotos'), function(c){
+        if (c.offsetParent !== null || !c.hidden) uma(c);
+      });
+    }
+    window.__justifica = todas;
+    window.addEventListener('resize', (function(){
+      var t; return function(){ clearTimeout(t); t = setTimeout(todas, 160); };
+    })());
+    if (document.readyState === 'complete') todas();
+    else window.addEventListener('load', todas);
+  })();
+
   /* o visor de foto em tela cheia. Generico de proposito: atende
      qualquer container .galeria-fotos e monta a lista a partir do que foi
      clicado, para a galeria do Atoto e as dos projetos usarem o mesmo. */
@@ -2182,6 +2260,8 @@
       volta = c;
       modal.hidden = false;
       modal.scrollTop = 0;
+      // so agora o painel tem largura: antes disso a conta daria zero
+      if (window.__justifica) window.__justifica();
       requestAnimationFrame(function(){ modal.classList.add('on'); });
       document.documentElement.style.overflow = 'hidden';
       modal.querySelector('.gal-m-x').focus();
@@ -2234,7 +2314,10 @@
       tela.style.setProperty('--prop', c.dataset.prop || '16 / 9');
       tela.src = c.dataset.embed || '';
       // so o Atoto tem galeria; sem isso o modal do Ecos abriria rolavel a toa
-      if (galeria) galeria.hidden = c.dataset.galeria !== '1';
+      if (galeria){
+        galeria.hidden = c.dataset.galeria !== '1';
+        if (!galeria.hidden && window.__justifica) window.__justifica();
+      }
       voltaPara = c;
       modal.hidden = false;
       modal.scrollTop = 0;
