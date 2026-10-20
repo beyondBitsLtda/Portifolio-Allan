@@ -911,8 +911,9 @@
   /* grid-template-rows: 100% nao e enfeite: sem uma altura definida na
      linha, o max-height: 100% do video nao tem contra o que resolver e o
      quadro abre no tamanho nativo */
+  /* uma coluna so: sem ficha ao lado, o reel fica com a tela inteira */
   .rl-cheio { position: fixed; inset: 0; z-index: 870; display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(320px, 31vw);
+    grid-template-columns: 100%;
     grid-template-rows: 100%;
     background: var(--vermelho);
     background-image: radial-gradient(ellipse 120% 100% at 38% 45%,
@@ -920,7 +921,7 @@
     opacity: 0; transition: opacity .3s ease; }
   .rl-cheio.on { opacity: 1; }
   .rl-c-video { position: relative; display: flex; align-items: center; justify-content: center;
-    min-width: 0; min-height: 0; padding: clamp(14px, 2.4vw, 36px); }
+    min-width: 0; min-height: 0; padding: clamp(10px, 1.4vw, 22px); }
   /* a proporcao vem do proprio trabalho (data-ar): fixa em 9/16 ela
      espremia o horizontal dentro de um quadro de pe */
   .rl-c-tela { width: auto; height: auto; max-width: 100%; max-height: 100%;
@@ -940,12 +941,7 @@
     border-color: oklch(0.99 0.008 85 / .5); background: oklch(0.3 0.14 28 / .5); }
   @media (max-width: 899px) {
     .rl-gal-grade { gap: 2px; padding: 2px; }
-    .rl-cheio { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) auto; }
-    .rl-c-video { padding: 46px 10px 6px; }
-    .rl-c-texto { justify-content: flex-start; border-left: 0;
-      border-top: 1px solid oklch(0.99 0.008 85 / .28);
-      padding: 18px clamp(18px, 5vw, 30px) 26px; gap: 10px; }
-    .rl-c-t { font-size: clamp(26px, 7vw, 40px); }
+    .rl-c-video { padding: 46px 8px 8px; }
   }
   @media (prefers-reduced-motion: reduce) {
     .rl-gal, .rl-cheio, .rl-cel img { transition: none; }
@@ -957,17 +953,27 @@
     padding: clamp(96px, 12vw, 150px) var(--gx); }
   #documentarios > .doc-titulo, #documentarios > .doc-grade {
     position: relative; z-index: 2; }
-  .doc-titulo { margin: 0 0 clamp(34px, 4.6vw, 62px); font-family: var(--display);
+  .doc-titulo { margin: 0 0 clamp(18px, 2.2vw, 34px); font-family: var(--display);
     font-weight: 800; font-size: clamp(32px, 7.4vw, 136px); line-height: 0.96;
     letter-spacing: 0; color: var(--vermelho); }
   /* dois quadros, meio a meio, altos o bastante para encher a tela */
   .doc-grade { display: grid; grid-template-columns: repeat(2, 1fr);
     gap: clamp(12px, 1.4vw, 24px); max-width: 1680px; }
+  /* o card deixa de ser so a imagem: embaixo dela entra o nome, fora do
+     quadro, para nao disputar com o que a foto ja mostra */
   .doc-card { position: relative; display: block; appearance: none; -webkit-appearance: none;
-    padding: 0; margin: 0; border: 0; border-radius: 3px; overflow: hidden;
-    height: min(72vh, 760px); background: oklch(0.14 0.012 60); cursor: pointer;
-    /* a mistura da tinta fica dentro do card e nao no que estiver atras */
+    padding: 0; margin: 0; border: 0; background: none; cursor: pointer;
+    text-align: left; color: inherit; }
+  .doc-moldura { position: relative; display: block; overflow: hidden; border-radius: 3px;
+    height: min(47vh, 540px); background: oklch(0.14 0.012 60);
+    /* a mistura da tinta fica dentro do quadro e nao no que estiver atras */
     isolation: isolate; }
+  .doc-nome { display: block; padding: 16px 2px 0; }
+  .doc-nome b { display: block; font-family: var(--display); font-weight: 800;
+    font-size: clamp(20px, 2vw, 34px); line-height: 1.02; letter-spacing: 0;
+    color: var(--vermelho); }
+  .doc-nome i { display: block; margin-top: 5px; font-style: normal;
+    font-size: 13px; font-weight: 500; letter-spacing: .04em; color: var(--tinta2); }
   .doc-capa { position: absolute; inset: 0; display: block;
     /* as capas sao paisagem: centrar nos dois eixos corta igual dos dois
        lados, enquanto alinhar pelo topo jogava o assunto para baixo */
@@ -983,7 +989,17 @@
   .doc-card:hover .doc-tinta, .doc-card:focus-visible .doc-tinta { opacity: 0; }
   .doc-card:hover .doc-capa, .doc-card:focus-visible .doc-capa {
     filter: none; transform: scale(1.06); }
-  .doc-card:focus-visible { outline: 2px solid var(--vermelho); outline-offset: 3px; }
+  .doc-card:focus-visible .doc-moldura { outline: 2px solid var(--vermelho); outline-offset: 3px; }
+
+  /* a previa que entra por cima da capa ao passar o mouse */
+  .doc-previa { position: absolute; inset: 0; z-index: 2; border: 0; display: block;
+    width: 100%; height: 100%; opacity: 0; transition: opacity .35s ease;
+    pointer-events: none; background: transparent; }
+  .doc-previa.on { opacity: 1; }
+  /* o iframe do YouTube e 16:9: cobrir o quadro alto exige escalar por
+     fora, senao sobra tarja preta em cima e embaixo */
+  iframe.doc-previa { width: 100%; height: 56.25vw; min-height: 100%;
+    top: 50%; left: 50%; transform: translate(-50%, -50%) scale(1.02); }
 
   /* o modal deixa de ser so o split: ele rola, porque o Atoto traz uma
      galeria embaixo da ficha */
@@ -1000,8 +1016,10 @@
   /* o split, agora um bloco de uma tela dentro do modal que rola */
   .doc-m-topo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 31vw);
     grid-template-rows: 100vh; min-height: 100vh; }
+  /* respiro curto de proposito: a altura e o que limita o reel de pe, e
+     cada pixel de padding sai direto do tamanho do video */
   .doc-m-video { position: relative; display: flex; align-items: center; justify-content: center;
-    min-width: 0; min-height: 0; padding: clamp(16px, 3vw, 48px); }
+    min-width: 0; min-height: 0; padding: clamp(10px, 1.2vw, 20px); }
   /* a proporcao vem do atributo do card: o YouTube e 16:9 e o reel do
      Instagram e retrato, entao fixar uma so deixaria tarja num dos dois */
   .doc-m-tela { width: auto; height: auto; max-width: 100%; max-height: 100%;
@@ -1190,7 +1208,7 @@
 
   @media (max-width: 899px) {
     .doc-grade { grid-template-columns: 1fr; }
-    .doc-card { height: min(62vh, 560px); }
+    .doc-moldura { height: min(62vh, 560px); }
     .doc-m-topo { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); }
     .doc-m-video { padding: 54px 0 0; }
     .doc-m-tela { width: 100%; }
@@ -1290,9 +1308,13 @@
       data-d="Produção audiovisual que integra esporte e conscientização ambiental, destacando a importância da preservação do Pantanal por meio de narrativas humanas e experiências reais. Projeto realizado com incentivo público, reforçando o compromisso com a cultura e o meio ambiente."
       data-embed="https://www.youtube-nocookie.com/embed/8U4cpeMxG2w?rel=0&amp;autoplay=1" data-prop="16 / 9"
       data-link="https://www.youtube.com/watch?v=8U4cpeMxG2w" data-link-txt="Assistir no YouTube"
+      data-previa="yt:8U4cpeMxG2w"
       aria-label="Abrir Ecos do Pantanal &mdash; Esporte e Conservação">
-      <span class="doc-capa" style="background-image: url('assets/doc-ecos.webp');"></span>
-      <span class="doc-tinta" aria-hidden="true"></span>
+      <span class="doc-moldura">
+        <span class="doc-capa" style="background-image: url('assets/doc-ecos.webp');"></span>
+        <span class="doc-tinta" aria-hidden="true"></span>
+      </span>
+      <span class="doc-nome"><b>Ecos do Pantanal</b><i>Esporte e conservação &middot; Lei Aldir Blanc</i></span>
     </button>
     <button class="doc-card" type="button"
       data-tag="Projeto independente &middot; Produção + Direção" data-t="Atotô &mdash; Silêncio, o Rei Está na Terra" data-sub="Arte &middot; Identidade &middot; Território &middot; Pantanal"
@@ -1300,9 +1322,13 @@
       data-embed="https://www.instagram.com/reel/C6_-qV-JUzM/embed" data-prop="9 / 14"
       data-link="https://www.instagram.com/reel/C6_-qV-JUzM/" data-link-txt="Ver no Instagram"
       data-galeria="1"
+      data-previa="fotos:assets/atoto/g04.webp,assets/atoto/g09.webp,assets/atoto/g13.webp,assets/atoto/g18.webp,assets/atoto/g21.webp"
       aria-label="Abrir Atotô &mdash; Silêncio, o Rei Está na Terra">
-      <span class="doc-capa" style="background-image: url('assets/doc-atoto.webp');"></span>
-      <span class="doc-tinta" aria-hidden="true"></span>
+      <span class="doc-moldura">
+        <span class="doc-capa" style="background-image: url('assets/doc-atoto.webp');"></span>
+        <span class="doc-tinta" aria-hidden="true"></span>
+      </span>
+      <span class="doc-nome"><b>Atotô</b><i>Silêncio, o Rei Está na Terra</i></span>
     </button>
   </div>
 </section>
@@ -1413,12 +1439,8 @@
   </div>
 </div>
 
-<div id="rlCheio" class="rl-cheio" role="dialog" aria-modal="true" aria-labelledby="rlCheioT" hidden>
+<div id="rlCheio" class="rl-cheio" role="dialog" aria-modal="true" aria-label="Reel em tela cheia" hidden>
   <div class="rl-c-video"><video class="rl-c-tela" controls playsinline preload="metadata"></video></div>
-  <aside class="rl-c-texto">
-    <h3 class="rl-c-t" id="rlCheioT"></h3>
-    <p class="rl-c-d"></p>
-  </aside>
   <button class="rl-c-x" type="button" aria-label="Voltar para a galeria">&#10005;</button>
 </div>
 
@@ -2051,8 +2073,6 @@
       var cheio = document.getElementById('rlCheio');
       if (!gal || !cheio) return;
       var tela = cheio.querySelector('.rl-c-tela');
-      var tit = cheio.querySelector('.rl-c-t');
-      var des = cheio.querySelector('.rl-c-d');
       var celulas = Array.prototype.slice.call(gal.querySelectorAll('.rl-cel'));
       var voltaFoco = null;
 
@@ -2075,8 +2095,7 @@
       }
       // a ficha mora na propria celula: o painel nao guarda mais os reels
       function abreCheio(c){
-        tit.textContent = c.dataset.t || '';
-        des.textContent = c.dataset.d || '';
+        // sem nome e sem descricao por enquanto: so o video
         // a forma do quadro acompanha o trabalho, e o cartaz da celula
         // segura a imagem enquanto o video nao comeca
         tela.style.aspectRatio = c.dataset.ar || '9 / 16';
@@ -2360,6 +2379,7 @@
       tela.title = c.dataset.t || '';
       // a proporcao e do video, nao do modal: 16:9 no YouTube, retrato no reel
       tela.style.setProperty('--prop', c.dataset.prop || '16 / 9');
+      tela.dataset.ig = /instagram\.com/.test(c.dataset.embed || '') ? '1' : '0';
       tela.src = c.dataset.embed || '';
       // so o Atoto tem galeria; sem isso o modal do Ecos abriria rolavel a toa
       if (galeria){
@@ -2369,6 +2389,7 @@
       voltaPara = c;
       modal.hidden = false;
       modal.scrollTop = 0;
+      ajustaEmbed();
       requestAnimationFrame(function(){ modal.classList.add('on'); });
       document.documentElement.style.overflow = 'hidden';
       fechar.focus();
@@ -2384,6 +2405,118 @@
       if (voltaPara){ voltaPara.focus(); voltaPara = null; }
     }
     cards.forEach(function(c){ c.addEventListener('click', function(){ abre(c); }); });
+
+    /* Previa ao passar o mouse.
+
+       No Ecos da para tocar o documentario: e YouTube, que aceita autoplay
+       sem som. No Atoto nao da — o que temos dele e o embed do Instagram,
+       que e de outro dominio e nao aceita autoplay nem comando de fora —
+       entao ali a previa anima as fotos do proprio projeto. Quando o
+       arquivo do reel chegar, ele entra no mesmo lugar e os dois ficam
+       iguais. */
+    (function previas(){
+      var fino = window.matchMedia('(hover: hover) and (pointer: fine)');
+      var calmo = window.matchMedia('(prefers-reduced-motion: reduce)');
+      if (!fino.matches || calmo.matches) return;
+
+      cards.forEach(function(c){
+        var spec = c.dataset.previa;
+        if (!spec) return;
+        var moldura = c.querySelector('.doc-moldura');
+        var capa = c.querySelector('.doc-capa');
+        var tipo = spec.slice(0, spec.indexOf(':'));
+        var dado = spec.slice(spec.indexOf(':') + 1);
+        var atraso = null, saiu = null, elo = null, giro = null;
+
+        function liga(){
+          clearTimeout(saiu);
+          // meio segundo de espera: sem isso qualquer passada do mouse pelo
+          // caminho dispara um carregamento de video
+          atraso = setTimeout(function(){
+            if (tipo === 'yt'){
+              if (elo) { elo.classList.add('on'); return; }
+              elo = document.createElement('iframe');
+              elo.className = 'doc-previa';
+              elo.setAttribute('tabindex', '-1');
+              elo.setAttribute('aria-hidden', 'true');
+              elo.allow = 'autoplay; encrypted-media';
+              elo.src = 'https://www.youtube-nocookie.com/embed/' + dado
+                + '?autoplay=1&mute=1&controls=0&loop=1&playlist=' + dado
+                + '&playsinline=1&modestbranding=1&rel=0&start=8';
+              // so revela depois que o player responde: antes disso o que
+              // apareceria e um retangulo preto por cima da capa. O relogio
+              // e a garantia: se o load nao vier — acontece em navegador
+              // sem midia — a previa aparece assim mesmo em vez de sumir
+              var revela = function(){ if (elo) elo.classList.add('on'); };
+              var rede = setTimeout(revela, 1800);
+              elo.addEventListener('load', function(){
+                clearTimeout(rede); setTimeout(revela, 450);
+              });
+              moldura.appendChild(elo);
+            } else {
+              var fotos = dado.split(',');
+              var i = 0;
+              if (!elo){
+                elo = document.createElement('span');
+                elo.className = 'doc-previa';
+                elo.style.backgroundSize = 'cover';
+                elo.style.backgroundPosition = 'center';
+                moldura.appendChild(elo);
+                // pre-carrega, senao o primeiro giro pisca em branco
+                fotos.forEach(function(f){ var im = new Image(); im.src = f; });
+              }
+              function passa(){
+                elo.style.backgroundImage = "url('" + fotos[i % fotos.length] + "')";
+                i++;
+              }
+              passa();
+              requestAnimationFrame(function(){ elo.classList.add('on'); });
+              clearInterval(giro);
+              giro = setInterval(passa, 620);
+            }
+          }, 500);
+        }
+        function desliga(){
+          clearTimeout(atraso);
+          clearInterval(giro);
+          if (!elo) return;
+          elo.classList.remove('on');
+          // o iframe sai de vez: deixado ali ele continua baixando video
+          var velho = elo;
+          if (tipo === 'yt') elo = null;
+          saiu = setTimeout(function(){
+            if (tipo === 'yt' && velho.parentNode) velho.parentNode.removeChild(velho);
+          }, 380);
+        }
+        c.addEventListener('mouseenter', liga);
+        c.addEventListener('mouseleave', desliga);
+        c.addEventListener('focus', liga);
+        c.addEventListener('blur', desliga);
+      });
+    })();
+
+    /* O embed do Instagram nao aceita proporcao chutada: medido entre 360 e
+       760px de largura, a caixa do video e sempre 4:5 e a moldura dele come
+       208px fixos de altura, ou seja altura = 1.25*(largura-15)+208. Com um
+       aspect-ratio fixo no CSS a conta nao fechava e o embed abria cortado
+       por dentro. Aqui a medida vem da formula, no maior tamanho que couber. */
+    function ajustaEmbed(){
+      var caixa = modal.querySelector('.doc-m-video');
+      if (!caixa || modal.hidden) return;
+      var cs = getComputedStyle(caixa);
+      var H = caixa.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+      var L = caixa.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      if (H <= 0 || L <= 0) return;
+      if (tela.dataset.ig === '1'){
+        var larg = Math.min(L, (H - 208) / 1.25 + 15);
+        tela.style.width = Math.max(300, Math.floor(larg)) + 'px';
+        tela.style.height = Math.floor(1.25 * (larg - 15) + 208) + 'px';
+      } else {
+        tela.style.width = '';
+        tela.style.height = '';
+      }
+    }
+    window.addEventListener('resize', ajustaEmbed);
     fechar.addEventListener('click', fecha);
     modal.addEventListener('click', function(e){ if (e.target === modal) fecha(); });
 
