@@ -7,7 +7,7 @@
 <title>REC. — Videomaker & Estrategista</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Space+Grotesk:wght@400;500;700&family=Courier+Prime:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Space+Grotesk:wght@400;500;700&family=Courier+Prime:wght@700&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
@@ -123,7 +123,9 @@
   /* ===== refinamento: variáveis, revelação, entrada, cabeçalho ===== */
   :root { --gx: 40px;
     /* um nome so para a fonte de display: trocar aqui troca em toda a pagina */
-    --display: 'Syne', 'Arial Black', sans-serif;
+    /* condensada de proposito: a Syne era extended e os titulos liam
+       como texto esticado ate a borda da coluna */
+    --display: 'Big Shoulders Display', 'Oswald', 'Arial Narrow', sans-serif;
     --texto: 'Space Grotesk', system-ui, -apple-system, sans-serif;
     /* o vermelho da marca, um so na pagina inteira. O --claro e o mesmo
        vermelho levantado para ter contraste sobre fundo escuro */
@@ -247,7 +249,8 @@
   /* rabisco em volta da palavra, desenhado quando entra na tela */
   .scribble { position: relative; display: inline-block; }
   .scribble svg { position: absolute; left: -5%; top: -14%; width: 110%; height: 132%; overflow: visible; pointer-events: none; }
-  .scribble svg path { fill: none; stroke: var(--vermelho); stroke-width: 3; stroke-linecap: round;
+  .scribble svg path { fill: none; stroke: var(--vermelho); stroke-width: 4; stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
     stroke-dasharray: 1000; stroke-dashoffset: 1000; }
   .js .scribble.in svg path { transition: stroke-dashoffset 1.5s cubic-bezier(.6,0,.2,1) .45s; stroke-dashoffset: 0; }
 
@@ -552,7 +555,7 @@
     /* 15vw vinha da Anton, que e estreita; com a Syne isso da 277px numa
        janela larga e o nome vaza os dois lados. Em tela baixa o que
        falta e altura, entao o corpo cai em vez de crescer */
-    .h1-word { font-size: min(6.2vw, 108px) !important; margin-top: 10vh !important; }
+    .h1-word { font-size: min(8.4vw, 150px) !important; margin-top: 10vh !important; }
   }
 
   /* o hero do avatar perdeu a coluna de texto: figura, visor e foco voltam ao centro */
@@ -955,7 +958,7 @@
   #documentarios > .doc-titulo, #documentarios > .doc-grade {
     position: relative; z-index: 2; }
   .doc-titulo { margin: 0 0 clamp(34px, 4.6vw, 62px); font-family: var(--display);
-    font-weight: 800; font-size: clamp(25px, 5.3vw, 99px); line-height: 1.04;
+    font-weight: 800; font-size: clamp(32px, 7.4vw, 136px); line-height: 0.96;
     letter-spacing: 0; color: var(--vermelho); }
   /* dois quadros, meio a meio, altos o bastante para encher a tela */
   .doc-grade { display: grid; grid-template-columns: repeat(2, 1fr);
@@ -985,6 +988,7 @@
   /* o modal deixa de ser so o split: ele rola, porque o Atoto traz uma
      galeria embaixo da ficha */
   .doc-modal { position: fixed; inset: 0; z-index: 800; overflow-y: auto;
+    scrollbar-gutter: stable;
     overscroll-behavior: contain;
     background: var(--vermelho);
     background-image: radial-gradient(ellipse 120% 100% at 38% 45%,
@@ -1069,7 +1073,11 @@
   .gal-card:focus-visible { outline: 2px solid var(--vermelho); outline-offset: 3px; }
 
   /* a galeria do projeto: so fotos, como a do Atoto */
+  /* scrollbar-gutter nao e enfeite: sem ela a barra aparece depois do
+     calculo e tira 15px da largura, fazendo a ultima foto de cada
+     linha pular para a proxima e abrir o vao vermelho */
   .gal-modal { position: fixed; inset: 0; z-index: 820; overflow-y: auto;
+    scrollbar-gutter: stable;
     overscroll-behavior: contain; background: var(--vermelho);
     opacity: 0; transition: opacity .3s ease; }
   .gal-modal.on { opacity: 1; }
@@ -1098,15 +1106,22 @@
      um modal que mora no 820 */
   /* o chiado cobre o modal inteiro, nao so onde ha foto: e fundo, nao
      tratamento de imagem */
+  /* z-index 9: o cabecalho pegajoso vive no 3 e o fechar no 4; com a
+     textura no 2 a faixa vermelha do topo saia lisa. Sobre vermelho
+     saturado o overlay rende pouco, dai o contraste alto no proprio
+     ruido em vez de so subir a opacidade */
+  /* z-index 9: o cabecalho pegajoso vive no 3 e o fechar no 4; com a
+     textura no 2 a faixa vermelha do topo saia lisa (desvio medido: 0,00).
+     hard-light no lugar de overlay porque o overlay se decide pela cor de
+     baixo, e sobre um vermelho saturado — canais G e B no chao — nao sobra
+     margem: rendia desvio 4. O hard-light se decide pelo proprio ruido e
+     rende 15. E o ladrilho e grande (512px) porque com 170px ele repetia
+     onze vezes na tela e a emenda aparecia como grade. */
   .gal-modal::after, .doc-m-galeria::before { content: ''; position: fixed;
     inset: 0; pointer-events: none;
-    z-index: 2; opacity: .62; mix-blend-mode: overlay; background-size: 190px 190px;
-    background-image: url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' width='190' height='190'>\
-<filter id='r'><feTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/>\
-<feColorMatrix type='saturate' values='0'/></filter>\
-<rect width='190' height='190' filter='url(%23r)' opacity='.42'/></svg>"); }
-  .gal-modal { position: fixed; }
+    z-index: 9; opacity: .45; mix-blend-mode: hard-light;
+    background-size: 512px 512px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='512' height='512'><filter id='r'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/><feComponentTransfer><feFuncA type='linear' slope='2' intercept='-0.42'/></feComponentTransfer></filter><rect width='512' height='512' filter='url(%23r)'/></svg>"); }
   .gal-m-x { position: fixed; z-index: 4; right: clamp(14px, 2.4vw, 30px);
     top: clamp(14px, 2.4vw, 26px); width: 46px; height: 46px; border-radius: 50%;
     border: 1px solid oklch(0.99 0.008 85 / .45); background: oklch(0 0 0 / .5);
@@ -1493,7 +1508,7 @@
     <div class="olho" style="color: var(--marca);"><span class="line" style="background: var(--marca);"></span>Atuação profissional</div>
     <div>
     <div class="faz-head">
-      <h2 class="rv-clip" style="margin: 0; font-family: var(--display); font-weight: 800; font-size: clamp(26px, 3.7vw, 64px); line-height: 0.9; letter-spacing: -0.01em;">NÃO É SÓ <span class="scribble salmon" style="color: var(--marca);">FILMAR<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span></h2>
+      <h2 class="rv-clip" style="margin: 0; font-family: var(--display); font-weight: 800; font-size: clamp(36px, 6.2vw, 112px); line-height: 0.88; letter-spacing: -0.01em;">NÃO É SÓ <span class="scribble salmon" style="color: var(--marca);">FILMAR<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span></h2>
       <p class="rv" style="margin: 0; font-size: clamp(16px, 1.25vw, 20px); line-height: 1.5; color: var(--tinta2); max-width: 54ch;">Da concepção à finalização, atuo em todas as etapas do processo criativo e estratégico. Cada projeto é tratado como uma oportunidade de gerar impacto real e permanente.</p>
     </div>
     <div class="faz-grid">
@@ -1520,7 +1535,7 @@
     <div class="olho" style="color: var(--marca);"><span class="line" style="background: var(--marca);"></span>Sobre</div>
     <div class="visao-grid">
       <div>
-        <h2 class="rv-clip" style="margin: 0 0 34px; font-family: var(--display); font-weight: 800; font-size: clamp(26px, 3.7vw, 64px); line-height: 0.9; letter-spacing: -0.01em;">VISÃO<br><span class="hand" style="color: var(--marca); font-size: 0.78em; letter-spacing: 0;">e propósito</span></h2>
+        <h2 class="rv-clip" style="margin: 0 0 34px; font-family: var(--display); font-weight: 800; font-size: clamp(36px, 6.2vw, 112px); line-height: 0.88; letter-spacing: -0.01em;">VISÃO<br><span class="hand" style="color: var(--marca); font-size: 0.78em; letter-spacing: 0;">e propósito</span></h2>
         <div class="stats">
         <div class="stat"><b class="count" data-n="3" data-suf="">3</b><span>Pilares criativos</span></div>
         <div class="stat"><b>∞</b><span>Histórias a contar</span></div>
@@ -1547,7 +1562,7 @@
   <canvas class="pnt-campo fundo-campo" data-escala="0.18" aria-hidden="true"></canvas>
   <div style="max-width: 1200px; margin: 0 auto;">
     <div class="olho" style="color: var(--marca);"><span class="line" style="background: var(--marca);"></span>Formação</div>
-    <h2 class="rv-clip" style="margin: 0 0 clamp(40px, 5vw, 68px); font-family: var(--display); font-weight: 800; font-size: clamp(26px, 3.7vw, 64px); line-height: 0.9; letter-spacing: -0.01em;">TRAJETÓRIA<br>&amp; <span class="scribble salmon" style="color: var(--marca);">FORMAÇÃO<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span></h2>
+    <h2 class="rv-clip" style="margin: 0 0 clamp(40px, 5vw, 68px); font-family: var(--display); font-weight: 800; font-size: clamp(36px, 6.2vw, 112px); line-height: 0.88; letter-spacing: -0.01em;">TRAJETÓRIA<br>&amp; <span class="scribble salmon" style="color: var(--marca);">FORMAÇÃO<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span></h2>
     <div class="traj-grid">
       <div class="traj-linha">
         <div class="traj-item rv" style="--d:0.00s;"><h4>Arte-finalista</h4><p>Início em gráfica de comunicação visual — base técnica em design, composição e produção gráfica.</p></div>
@@ -1571,7 +1586,7 @@
   <div class="stamp light" aria-hidden="true" style="right: var(--gx); top: 110px;"><svg viewBox="0 0 120 120"><defs><path id="stampB" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs><circle cx="60" cy="60" r="56"/><circle cx="60" cy="60" r="32"/><text><textPath href="#stampB">CRIAR COM INTENÇÃO · BIRDVIEW · </textPath></text><circle class="dot" cx="60" cy="60" r="6"/></svg></div>
   <div style="max-width: 1200px; margin: 0 auto; position: relative; z-index: 2;">
     <div class="rv" style="font-family: var(--texto); font-size: 15px; font-weight: 500; letter-spacing: 0.01em; text-transform: none; color: oklch(0.97 0.008 85 / 0.8); margin-bottom: 24px;"><span class="hand" style="font-size: 36px; letter-spacing: 0; text-transform: none;">contato</span></div>
-    <h2 class="rv-clip" style="margin: 0 0 40px; font-family: var(--display); font-weight: 800; font-size: clamp(30px, 5.4vw, 100px); line-height: 0.86; letter-spacing: -0.015em;">VAMOS<br><span style="color: oklch(0.18 0.012 60);">CRIAR</span><br><span class="scribble under light">JUNTOS<svg viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M4,22 C40,10 120,30 196,16 M14,32 C70,26 130,36 190,28"/></svg></span></h2>
+    <h2 class="rv-clip" style="margin: 0 0 40px; font-family: var(--display); font-weight: 800; font-size: clamp(38px, 7.4vw, 140px); line-height: 0.86; letter-spacing: -0.015em;">VAMOS<br><span style="color: oklch(0.18 0.012 60);">CRIAR</span><br><span class="scribble under light">JUNTOS<svg viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M4,22 C40,10 120,30 196,16 M14,32 C70,26 130,36 190,28"/></svg></span></h2>
     <a href="https://wa.me/qr/OBPBCW7RNX5KB1" target="_blank" rel="noopener" class="cta-dark" style="display: inline-flex; align-items: center; gap: 12px; background: oklch(0.18 0.012 60); color: oklch(0.97 0.008 85); padding: 18px 32px; border-radius: 50px; font-family: var(--texto); font-size: 18px; font-weight: 500; letter-spacing: 0; text-transform: none;">Falar comigo <span style="font-size:18px;">→</span></a>
     <p class="hand rv" style="margin: 28px 0 0; font-size: 19px; line-height: 1.4; color: oklch(0.97 0.008 85 / 0.92); max-width: 30ch;">Narrativas que conectam cultura, imagem e propósito.</p>
     <div class="canais rv" style="--d:.15s;"><a href="https://www.youtube.com/watch?v=8U4cpeMxG2w" target="_blank" rel="noopener">▶ Ecos do Pantanal — YouTube</a><a href="https://www.instagram.com/birdviewproducoes/" target="_blank" rel="noopener">◉ Instagram — @birdviewproducoes</a><a href="mailto:allan.woch@gmail.com">✉ E-mail</a></div>
@@ -2127,7 +2142,11 @@
       var ims = Array.prototype.slice.call(caixa.querySelectorAll('img'));
       if (!ims.length) return;
       var cs = getComputedStyle(caixa);
-      var util = caixa.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      // 1px de folga: a soma fecha na largura cheia e qualquer
+      // arredondamento para cima jogaria a ultima foto para a linha
+      // seguinte, que e exatamente o buraco que aparecia
+      var util = caixa.clientWidth - parseFloat(cs.paddingLeft)
+                 - parseFloat(cs.paddingRight) - 1;
       if (util <= 0) return;
       var ars = ims.map(function(im){
         return parseFloat(im.style.getPropertyValue('--ar')) || 1.4;
@@ -2185,6 +2204,23 @@
     window.addEventListener('resize', (function(){
       var t; return function(){ clearTimeout(t); t = setTimeout(todas, 160); };
     })());
+    /* o resize da janela nao cobria o caso real: quem mudava a largura era
+       a barra de rolagem aparecendo dentro do modal depois que a conta ja
+       tinha rodado. O observador pega qualquer mudanca, venha de onde vier */
+    if (window.ResizeObserver){
+      var larguras = new WeakMap();
+      var ro = new ResizeObserver(function(itens){
+        itens.forEach(function(it){
+          var l = it.target.clientWidth;
+          if (l && larguras.get(it.target) !== l){
+            larguras.set(it.target, l);
+            uma(it.target);
+          }
+        });
+      });
+      Array.prototype.forEach.call(document.querySelectorAll('.galeria-fotos'),
+        function(c){ ro.observe(c); });
+    }
     if (document.readyState === 'complete') todas();
     else window.addEventListener('load', todas);
   })();
