@@ -201,9 +201,10 @@
     margin: 0; font-family: var(--display); font-weight: 800;
     /* as metricas que a palavra grande tinha antes: Anton foi desenhada
        para caixa alta, em caixa mista as hastes descasam */
-    /* a Syne 800 e larga: este corpo e o que faz ALLAN KEVIN caber
-       inteiro numa linha, medido na tela */
-    font-size: clamp(30px, 7vw, 132px); line-height: 1; letter-spacing: -0.02em;
+    /* a condensada rende 40px por caractere a 100px, contra 108px da
+       Syne que estava aqui antes: o corpo sobe na mesma proporcao para
+       o nome voltar a ter a largura que tinha */
+    font-size: clamp(42px, 19.6vw, 360px); line-height: 0.92; letter-spacing: -0.02em;
     /* vermelho gritante: mais claro e saturado que o painel, e o nome so
        aparece depois que ele entra, ja sobre a camiseta escura */
     color: var(--vermelho); white-space: nowrap; user-select: none;
@@ -555,7 +556,7 @@
     /* 15vw vinha da Anton, que e estreita; com a Syne isso da 277px numa
        janela larga e o nome vaza os dois lados. Em tela baixa o que
        falta e altura, entao o corpo cai em vez de crescer */
-    .h1-word { font-size: min(8.4vw, 150px) !important; margin-top: 10vh !important; }
+    .h1-word { font-size: min(17.4vw, 320px) !important; margin-top: 7vh !important; }
   }
 
   /* o hero do avatar perdeu a coluna de texto: figura, visor e foco voltam ao centro */
@@ -849,10 +850,10 @@
      impedindo uma passar na frente e a outra atras do painel */
   .rl-titulo { position: absolute; z-index: auto; inset: 0; margin: 0;
     pointer-events: none; font-family: var(--display); font-weight: 800;
-    font-size: clamp(26px, 6.4vw, 118px); line-height: 0.96; letter-spacing: -0.02em; }
+    font-size: clamp(34px, 17.4vw, 320px); line-height: 0.92; letter-spacing: -0.02em; }
   .rl-t1, .rl-t2 { position: absolute; width: max-content; }
   .rl-t1 { z-index: 5; right: 57.5%; top: 31%; color: var(--vermelho-claro); } /* sobre tudo */
-  .rl-t2 { z-index: 2; left: 67%;  top: 50%; color: oklch(0.99 0.008 85); }  /* o Allan passa na frente */
+  .rl-t2 { z-index: 2; left: 64%;  top: 50%; color: oklch(0.99 0.008 85); }  /* o Allan passa na frente */
 
   .rl-dica { position: absolute; z-index: 5; left: 50%; bottom: 5vh; margin: 0;
     transform: translateX(-50%); opacity: 0;
@@ -862,7 +863,7 @@
   @media (max-width: 899px) {
     /* em tela estreita as palavras sobem escalonadas e o Allan fica
        inteiro embaixo: a trama lateral nao cabe em 414px */
-    .rl-titulo { font-size: clamp(30px, 11vw, 70px); }
+    .rl-titulo { font-size: clamp(38px, 26vw, 170px); }
     .rl-t1 { right: auto; left: 6vw; top: 9%; }
     .rl-t2 { left: 36vw; top: 17%; }
     /* auto 104% deixava o rosto gigante numa tela estreita */
@@ -871,7 +872,8 @@
 
   /* a galeria: a aba Reels do perfil, em tela cheia */
   .rl-gal { position: fixed; inset: 0; z-index: 850; overflow-y: auto;
-    background: oklch(0.1 0.012 55); color: oklch(0.99 0.008 85);
+    scrollbar-gutter: stable;
+    background: var(--vermelho); color: oklch(0.99 0.008 85);
     font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     opacity: 0; transition: opacity .3s ease; }
   .rl-gal.on { opacity: 1; }
@@ -879,22 +881,23 @@
   .rl-gal-topo { position: sticky; top: 0; z-index: 2;
     display: flex; align-items: center; gap: 12px;
     padding: 13px clamp(16px, 3vw, 34px);
-    background: oklch(0.1 0.012 55 / .92); backdrop-filter: blur(8px);
+    background: color-mix(in oklch, var(--vermelho) 92%, transparent);
+    backdrop-filter: blur(8px);
     border-bottom: 1px solid oklch(0.99 0.008 85 / .14); }
   .rl-gal-topo b { font-size: 15px; font-weight: 600; }
   .rl-gal-aba { margin-left: 4px; padding: 4px 11px; border-radius: 999px;
-    font-size: 12.5px; background: var(--vermelho); }
+    font-size: 12.5px; background: oklch(0.18 0.012 55); }
   .rl-gal-x, .rl-c-x { margin-left: auto; width: 42px; height: 42px; flex: 0 0 auto;
     border-radius: 50%; border: 1px solid oklch(0.99 0.008 85 / .4);
     background: oklch(0 0 0 / .35); color: inherit; font-size: 17px; line-height: 1;
     cursor: pointer; }
-  /* estreita de proposito: com a grade larga a celula 9:16 fica com 692px
-     de altura e so uma fileira e meia aparece */
-  .rl-gal-grade { display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 3px; padding: 3px; max-width: min(680px, 94vw); margin: 0 auto; }
+  /* uma coluna por reel: com quatro trabalhos a fileira fecha exata e a
+     grade ocupa a tela inteira, sem tarja preta nas laterais */
+  .rl-gal-grade { display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 4px; padding: 4px; margin: 0; }
   .rl-cel { position: relative; display: block; padding: 0; margin: 0; border: 0;
     appearance: none; -webkit-appearance: none; overflow: hidden; cursor: pointer;
-    aspect-ratio: 9 / 16; background: oklch(0.16 0.012 55); }
+    aspect-ratio: 9 / 16; background: oklch(0.3 0.14 28); }
   .rl-cel img { width: 100%; height: 100%; object-fit: cover; display: block;
     transition: transform .5s cubic-bezier(.2,.65,.2,1), filter .4s ease;
     filter: brightness(.9); }
@@ -902,10 +905,6 @@
   .rl-cel-play { position: absolute; left: 10px; bottom: 10px; width: 19px; height: 19px;
     color: oklch(0.99 0.008 85); filter: drop-shadow(0 1px 3px oklch(0 0 0 / .7)); }
   .rl-cel:focus-visible { outline: 2px solid var(--vermelho-claro); outline-offset: -2px; }
-  /* o trabalho horizontal nao cabe num quadro 9:16 sem perder metade do
-     enquadramento. Em vez de cortar, ele toma a fileira inteira na forma
-     dele — e assim a grade de tres colunas tambem fecha sem sobra */
-  .rl-cel-deitado { grid-column: 1 / -1; aspect-ratio: 16 / 9; }
 
   /* o reel grande: o mesmo desenho do modal dos documentarios, de pe */
   /* grid-template-rows: 100% nao e enfeite: sem uma altura definida na
@@ -940,7 +939,7 @@
     top: clamp(16px, 2.4vw, 30px); margin-left: 0;
     border-color: oklch(0.99 0.008 85 / .5); background: oklch(0.3 0.14 28 / .5); }
   @media (max-width: 899px) {
-    .rl-gal-grade { gap: 2px; padding: 2px; }
+    .rl-gal-grade { grid-template-columns: repeat(2, 1fr); gap: 2px; padding: 2px; }
     .rl-c-video { padding: 46px 8px 8px; }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -1025,6 +1024,10 @@
   .doc-m-tela { width: auto; height: auto; max-width: 100%; max-height: 100%;
     aspect-ratio: var(--prop, 16 / 9); border: 0;
     background: oklch(0.3 0.14 28); }
+  .doc-m-tela[hidden] { display: none; }
+  /* o arquivo nosso usa a altura inteira: nao ha moldura de rede social
+     comendo 208px nem recorte 4:5 imposto por ela */
+  .doc-m-arq { border-radius: 8px; }
   .doc-m-texto { display: flex; flex-direction: column; justify-content: center; gap: 14px;
     padding: clamp(26px, 4vw, 66px) clamp(22px, 3.4vw, 52px);
     border-left: 1px solid oklch(0.99 0.008 85 / .28);
@@ -1137,7 +1140,7 @@
      onze vezes na tela e a emenda aparecia como grade. */
   .gal-modal::after, .doc-m-galeria::before { content: ''; position: fixed;
     inset: 0; pointer-events: none;
-    z-index: 9; opacity: .45; mix-blend-mode: hard-light;
+    z-index: 9; opacity: .18; mix-blend-mode: hard-light;
     background-size: 512px 512px;
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='512' height='512'><filter id='r'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/><feComponentTransfer><feFuncA type='linear' slope='2' intercept='-0.42'/></feComponentTransfer></filter><rect width='512' height='512' filter='url(%23r)'/></svg>"); }
   .gal-m-x { position: fixed; z-index: 4; right: clamp(14px, 2.4vw, 30px);
@@ -1319,10 +1322,10 @@
     <button class="doc-card" type="button"
       data-tag="Projeto independente &middot; Produção + Direção" data-t="Atotô &mdash; Silêncio, o Rei Está na Terra" data-sub="Arte &middot; Identidade &middot; Território &middot; Pantanal"
       data-d="Documentário sobre uma intervenção artística no coração do Pantanal sul-mato-grossense: uma obra que celebra um tronco centenário de árvore ximbuva como monumento vivo de identidade e território."
-      data-embed="https://www.instagram.com/reel/C6_-qV-JUzM/embed" data-prop="9 / 14"
+      data-video="assets/av/atoto.mp4" data-cartaz="assets/av/atoto.webp" data-prop="9 / 16"
       data-link="https://www.instagram.com/reel/C6_-qV-JUzM/" data-link-txt="Ver no Instagram"
       data-galeria="1"
-      data-previa="fotos:assets/atoto/g04.webp,assets/atoto/g09.webp,assets/atoto/g13.webp,assets/atoto/g18.webp,assets/atoto/g21.webp"
+      data-previa="video:assets/av/atoto.mp4"
       aria-label="Abrir Atotô &mdash; Silêncio, o Rei Está na Terra">
       <span class="doc-moldura">
         <span class="doc-capa" style="background-image: url('assets/doc-atoto.webp');"></span>
@@ -1345,7 +1348,8 @@
   <div class="doc-m-topo">
   <div class="doc-m-video"><iframe class="doc-m-tela" title="" allowfullscreen
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
-    referrerpolicy="strict-origin-when-cross-origin" loading="lazy"></iframe></div>
+    referrerpolicy="strict-origin-when-cross-origin" loading="lazy"></iframe><video
+    class="doc-m-tela doc-m-arq" controls playsinline preload="none" hidden></video></div>
   <aside class="doc-m-texto">
     <span class="doc-m-tag"></span>
     <h3 class="doc-m-t" id="docModalT"></h3>
@@ -1432,7 +1436,7 @@
       <img src="assets/av/drinks.webp" alt="" loading="lazy" decoding="async" width="640" height="1138">
       <svg class="rl-cel-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5-13-7.5z"/></svg>
     </button>
-    <button class="rl-cel rl-cel-deitado" type="button" data-i="3" data-src="assets/av/mks.mp4" data-ar="16 / 9" data-t="A Vida &eacute; Passageira" data-d="Projeto com MKS. &Eacute; o trabalho mais longo do conjunto e o &uacute;nico em formato horizontal: tr&ecirc;s minutos, fora do recorte de reel." aria-label="Abrir A Vida e Passageira">
+    <button class="rl-cel" type="button" data-i="3" data-src="assets/av/mks.mp4" data-ar="16 / 9" data-t="A Vida &eacute; Passageira" data-d="Projeto com MKS. &Eacute; o trabalho mais longo do conjunto e o &uacute;nico em formato horizontal: tr&ecirc;s minutos, fora do recorte de reel." aria-label="Abrir A Vida e Passageira">
       <img src="assets/av/mks.webp" alt="" loading="lazy" decoding="async" width="640" height="360">
       <svg class="rl-cel-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5-13-7.5z"/></svg>
     </button>
@@ -2358,7 +2362,8 @@
     var modal = document.getElementById('docModal');
     if (!sec || !modal) return;
     var cards = Array.prototype.slice.call(sec.querySelectorAll('.doc-card'));
-    var tela = modal.querySelector('.doc-m-tela');
+    var tela = modal.querySelector('iframe.doc-m-tela');
+    var arquivo = modal.querySelector('.doc-m-arq');
     var tag = modal.querySelector('.doc-m-tag');
     var tit = modal.querySelector('.doc-m-t');
     var sub = modal.querySelector('.doc-m-sub');
@@ -2378,9 +2383,31 @@
       link.textContent = c.dataset.linkTxt || 'Abrir';
       tela.title = c.dataset.t || '';
       // a proporcao e do video, nao do modal: 16:9 no YouTube, retrato no reel
+      // dois caminhos: embed de fora (YouTube) ou arquivo nosso. O do
+      // Atoto virou arquivo justamente porque o embed do Instagram nao
+      // aceitava autoplay nem crescer
+      var arq = c.dataset.video;
       tela.style.setProperty('--prop', c.dataset.prop || '16 / 9');
-      tela.dataset.ig = /instagram\.com/.test(c.dataset.embed || '') ? '1' : '0';
-      tela.src = c.dataset.embed || '';
+      arquivo.style.setProperty('--prop', c.dataset.prop || '9 / 16');
+      tela.hidden = !!arq;
+      arquivo.hidden = !arq;
+      if (arq){
+        tela.dataset.ig = '0';
+        tela.src = '';
+        arquivo.poster = c.dataset.cartaz || '';
+        arquivo.src = arq;
+        arquivo.muted = false;
+        var pr = arquivo.play();
+        if (pr && pr.catch) pr.catch(function(){
+          // o navegador so libera autoplay sem som: melhor tocar mudo do
+          // que nao tocar
+          arquivo.muted = true;
+          var p2 = arquivo.play(); if (p2 && p2.catch) p2.catch(function(){});
+        });
+      } else {
+        tela.dataset.ig = /instagram\.com/.test(c.dataset.embed || '') ? '1' : '0';
+        tela.src = c.dataset.embed || '';
+      }
       // so o Atoto tem galeria; sem isso o modal do Ecos abriria rolavel a toa
       if (galeria){
         galeria.hidden = c.dataset.galeria !== '1';
@@ -2398,9 +2425,13 @@
       if (modal.hidden) return;
       modal.classList.remove('on');
       document.documentElement.style.overflow = '';
+      // o arquivo nosso para na hora; o iframe so some quando o modal fecha
+      if (arquivo){ arquivo.pause(); }
       setTimeout(function(){
         modal.hidden = true;
         tela.src = 'about:blank';   // sem isso o video segue tocando atras
+        arquivo.removeAttribute('src');
+        arquivo.load();
       }, 340);
       if (voltaPara){ voltaPara.focus(); voltaPara = null; }
     }
@@ -2433,7 +2464,21 @@
           // meio segundo de espera: sem isso qualquer passada do mouse pelo
           // caminho dispara um carregamento de video
           atraso = setTimeout(function(){
-            if (tipo === 'yt'){
+            if (tipo === 'video'){
+              if (!elo){
+                elo = document.createElement('video');
+                elo.className = 'doc-previa';
+                elo.muted = true; elo.loop = true; elo.playsInline = true;
+                elo.preload = 'auto';
+                elo.style.objectFit = 'cover';
+                elo.src = dado;
+                moldura.appendChild(elo);
+              }
+              elo.currentTime = 0;
+              var pv = elo.play();
+              if (pv && pv.catch) pv.catch(function(){});
+              requestAnimationFrame(function(){ elo.classList.add('on'); });
+            } else if (tipo === 'yt'){
               if (elo) { elo.classList.add('on'); return; }
               elo = document.createElement('iframe');
               elo.className = 'doc-previa';
@@ -2480,6 +2525,7 @@
           clearTimeout(atraso);
           clearInterval(giro);
           if (!elo) return;
+          if (tipo === 'video' && elo.pause) elo.pause();
           elo.classList.remove('on');
           // o iframe sai de vez: deixado ali ele continua baixando video
           var velho = elo;
