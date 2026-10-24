@@ -254,6 +254,12 @@
     vector-effect: non-scaling-stroke;
     stroke-dasharray: 1000; stroke-dashoffset: 1000; }
   .js .scribble.in svg path { transition: stroke-dashoffset 1.5s cubic-bezier(.6,0,.2,1) .45s; stroke-dashoffset: 0; }
+  /* o do subtitulo fica DEPOIS do generico de proposito: mesma
+     especificidade, entao quem vem por ultimo vence. A frase e larga e
+     baixa, e o oval na proporcao dos titulos passava por cima das
+     letras; o traco tambem afina, porque aqui o texto e leve */
+  .sub-risco svg { left: -5%; top: -66%; width: 110%; height: 236%; }
+  .sub-risco svg path { stroke-width: 2.6; }
 
   /* carimbo giratório */
   .stamp { position: absolute; z-index: 6; width: 124px; height: 124px; pointer-events: none; }
@@ -1328,7 +1334,7 @@
   </div>
   <div class="h1-bloco">
     <h1 class="h1-word">ALLAN KEVIN</h1>
-    <p class="h1-sub">Produ&ccedil;&otilde;es Audiovisuais</p>
+    <p class="h1-sub"><span class="scribble sub-risco">Produ&ccedil;&otilde;es Audiovisuais<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M14,44 C18,14 168,6 190,34 C206,62 116,80 54,72 C10,66 2,44 30,26 C60,8 150,10 182,26"/></svg></span></p>
   </div>
     </div>
   </div>
@@ -1702,7 +1708,7 @@
   window.addEventListener('resize', medirMolduras);
 
   /* revelação por rolagem */
-  var alvos = document.querySelectorAll('.rv, .rv-clip, .line, .scribble');
+  var alvos = document.querySelectorAll('.rv, .rv-clip, .line, .scribble:not(.sub-risco)');
   if (!('IntersectionObserver' in window) || REDUZIDO){
     Array.prototype.forEach.call(alvos, function(el){ el.classList.add('in'); });
     contar(document.querySelectorAll('.count'), true);
@@ -1756,6 +1762,7 @@
     var bloco = sec.querySelector('.h1-bloco');
     var nome = sec.querySelector('.h1-word');
     var sub = sec.querySelector('.h1-sub');
+    var risco = sec.querySelector('.sub-risco');
     var copia = sec.querySelector('.h1-copy');
     var obsv = document.getElementById('obsv');
     var batida = 0;   // instante do baque; o tranco toca uma vez e amortece
@@ -1846,7 +1853,11 @@
           }
           ultimaFoto = qual;
         }
-        sub.style.opacity = clamp((p - 0.82) / 0.14).toFixed(3);
+        var vis = clamp((p - 0.82) / 0.14);
+        sub.style.opacity = vis.toFixed(3);
+        // o risco so comeca depois que a frase aparece; o observador global
+        // marcaria .in no carregamento e o circulo ja estaria pronto
+        if (risco && vis > 0.55 && !risco.classList.contains('in')) risco.classList.add('in');
 
         // a coluna da esquerda recua e sai de cena
         if (copia){
