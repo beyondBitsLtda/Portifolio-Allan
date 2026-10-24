@@ -752,6 +752,9 @@
   @media (max-width: 899px) {
     /* no celular a figura fica mais alta: descendo junto com o desktop
        ela saia pela borda de baixo e so o alto da cabeca aparecia */
+    /* no celular a cena toca sozinha, sem rolagem dirigindo: os 240vh
+       so sobrariam como tela vazia depois que ela termina */
+    #abertura { height: 100svh !important; }
     .obs-q { bottom: -7%; height: 84%; }
     .h1-bloco { margin-top: -6vh; }
     .pnt-acervo { padding: 10vh 16px 5vh; }
@@ -873,11 +876,15 @@
   @media (max-width: 899px) {
     /* em tela estreita as palavras sobem escalonadas e o Allan fica
        inteiro embaixo: a trama lateral nao cabe em 414px */
-    .rl-titulo { font-size: clamp(38px, 26vw, 170px); }
-    .rl-t1 { right: auto; left: 6vw; top: 9%; }
-    .rl-t2 { left: 36vw; top: 17%; }
-    /* auto 104% deixava o rosto gigante numa tela estreita */
-    .rl-fim { background-size: auto 56%; -webkit-mask-size: auto 56%; mask-size: auto 56%; }
+    .rl-titulo { font-size: clamp(38px, 24vw, 170px); }
+    /* as palavras descem para cima da figura: no desktop elas ja cruzam o
+       Allan, e no celular ficavam empilhadas num canto vazio.
+       O 2026 tambem sobe de camada aqui: no desktop ele passa ATRAS do
+       Allan de proposito, mas numa tela estreita a figura ocupa a largura
+       toda e ele sumia por completo */
+    .rl-t1 { right: auto; left: 5vw; top: 22%; }
+    .rl-t2 { left: 34vw; top: 60%; z-index: 5; }
+    .rl-fim { background-size: auto 92%; -webkit-mask-size: auto 92%; mask-size: auto 92%; }
   }
 
   /* a aba Reels do perfil, copiada do Instagram: preto, tres colunas com
@@ -1787,11 +1794,25 @@
       new Image().src = 'assets/' + n + '.webp';
     });
 
+    /* No celular a cena nao e dirigida pelo scroll: ela toca sozinha ao
+       abrir. O resto do laco nao muda — so a origem do `p`, que ali vem do
+       relogio em vez da posicao da pagina. */
+    var movel = window.matchMedia('(max-width: 899px)');
+    var ABRE = 2600;   // quanto a hero leva para tocar inteira no celular
+    var t0 = 0;
+
     (function laco(){
       var r = sec.getBoundingClientRect();
       if (r.bottom > 0 && r.top < window.innerHeight){
-        var total = r.height - window.innerHeight;
-        var p = clamp(total > 0 ? (-r.top) / total : 0);
+        var p;
+        if (movel.matches){
+          if (!t0) t0 = performance.now();
+          p = clamp((performance.now() - t0) / ABRE);
+        } else {
+          t0 = 0;
+          var total = r.height - window.innerHeight;
+          p = clamp(total > 0 ? (-r.top) / total : 0);
+        }
         sec.dataset.p = p.toFixed(4);          // o modulo do estudio le daqui
         var e = p * p * (3 - 2 * p);
 
