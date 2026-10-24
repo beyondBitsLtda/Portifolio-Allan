@@ -820,20 +820,22 @@
      2026, desfazendo a trama */
   .rl-painel { position: absolute; inset: 0; z-index: auto; cursor: pointer; }
   .rl-painel:focus-visible { outline: 2px solid var(--vermelho-claro); outline-offset: -6px; }
-  /* o vermelho vem de background-blend-mode, nao de uma camada por cima:
-     assim a mascara do recorte do Allan corta a tinta junto com a foto, e
-     nao sobra um retangulo vermelho em volta dele */
+  /* os quadros da passada ficam na cor natural; o vermelho e so do
+     avatar, la embaixo em .rl-fim */
   .rl-q { position: absolute; inset: 0; opacity: 0;
-    background-size: cover; background-position: center;
-    background-color: var(--vermelho); background-blend-mode: multiply;
-    filter: brightness(1.32) contrast(1.04); }
+    background-size: cover; background-position: center; }
   /* o quadro final: o Allan, no par cor+mascara que a hero ja usa. Fica
      ACIMA do 2026 e abaixo do REEL — e dai que vem a trama agora que a
      imagem ocupa tudo */
   /* o quadro final e um recorte. O background-color que pinta o vermelho
      nao conhece o alfa da imagem e encheria a hero inteira de vermelho,
      entao o proprio WebP serve de mascara: assim a tinta fica so nele */
+  /* o vermelho do avatar vem de background-blend-mode, nao de uma camada
+     por cima: assim a mascara do recorte corta a tinta junto com a foto e
+     nao sobra um retangulo vermelho em volta dele */
   .rl-fim { z-index: 3;
+    background-color: var(--vermelho); background-blend-mode: multiply;
+    filter: brightness(1.32) contrast(1.04);
     background-image: url('assets/reel2026.webp');
     background-size: auto 100%; background-position: bottom center;
     background-repeat: no-repeat;
@@ -977,17 +979,10 @@
     /* as capas sao paisagem: centrar nos dois eixos corta igual dos dois
        lados, enquanto alinhar pelo topo jogava o assunto para baixo */
     background-size: cover; background-position: center center;
-    /* clareia antes de receber a tinta: multiply so escurece */
-    filter: grayscale(1) brightness(1.28) contrast(1.04);
-    transition: filter .55s cubic-bezier(.2,.65,.2,1), transform .9s cubic-bezier(.2,.65,.2,1);
+    transition: transform .9s cubic-bezier(.2,.65,.2,1);
     transform: scale(1.02); }
-  /* multiply sobre cinza: preto nas sombras, a cor da marca nas luzes */
-  .doc-tinta { position: absolute; inset: 0; pointer-events: none;
-    background: var(--vermelho); mix-blend-mode: multiply;
-    transition: opacity .55s cubic-bezier(.2,.65,.2,1); }
-  .doc-card:hover .doc-tinta, .doc-card:focus-visible .doc-tinta { opacity: 0; }
   .doc-card:hover .doc-capa, .doc-card:focus-visible .doc-capa {
-    filter: none; transform: scale(1.06); }
+    transform: scale(1.06); }
   .doc-card:focus-visible .doc-moldura { outline: 2px solid var(--vermelho); outline-offset: 3px; }
 
   /* a previa que entra por cima da capa ao passar o mouse */
@@ -1064,19 +1059,17 @@
     isolation: isolate; }
   .gal-capa { position: absolute; inset: 0; display: block;
     background-size: cover; background-position: center center;
-    filter: grayscale(1) brightness(1.28) contrast(1.04);
     transform: scale(1.02);
-    transition: filter .55s cubic-bezier(.2,.65,.2,1), transform .9s cubic-bezier(.2,.65,.2,1); }
-  .gal-tinta { position: absolute; inset: 0; pointer-events: none;
-    background: var(--vermelho); mix-blend-mode: multiply;
-    transition: opacity .55s cubic-bezier(.2,.65,.2,1); }
+    transition: transform .9s cubic-bezier(.2,.65,.2,1); }
   /* o rotulo sobe e o "ver mais" se revela: a animacao mora aqui, nao num
      overlay a parte, para o card inteiro reagir como uma peca so */
   .gal-rot { position: absolute; z-index: 2; left: 0; right: 0; bottom: 0;
     display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
     padding: 0 clamp(16px, 2vw, 28px) clamp(16px, 2vw, 26px);
     text-align: left; pointer-events: none;
-    background: linear-gradient(to top, oklch(0 0 0 / .62), transparent);
+    padding-top: clamp(40px, 6vw, 86px);
+    background: linear-gradient(to top, oklch(0 0 0 / .86) 0%,
+      oklch(0 0 0 / .52) 46%, transparent 100%);
     transform: translateY(0); transition: transform .5s cubic-bezier(.2,.65,.2,1); }
   .gal-rot b { font-family: var(--display); font-weight: 800;
     font-size: clamp(18px, 1.7vw, 30px); line-height: 1.08; letter-spacing: -0.01em;
@@ -1085,9 +1078,8 @@
     letter-spacing: .12em; text-transform: uppercase; color: oklch(0.99 0.008 85 / .75);
     opacity: 0; transform: translateY(6px);
     transition: opacity .45s ease .05s, transform .45s cubic-bezier(.2,.65,.2,1) .05s; }
-  .gal-card:hover .gal-tinta, .gal-card:focus-visible .gal-tinta { opacity: 0; }
   .gal-card:hover .gal-capa, .gal-card:focus-visible .gal-capa {
-    filter: none; transform: scale(1.07); }
+    transform: scale(1.07); }
   .gal-card:hover .gal-rot, .gal-card:focus-visible .gal-rot { transform: translateY(-4px); }
   .gal-card:hover .gal-rot i, .gal-card:focus-visible .gal-rot i {
     opacity: 1; transform: none; }
@@ -1153,7 +1145,7 @@
     .gal-card { height: min(40vh, 320px); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .gal-capa, .gal-tinta, .gal-rot, .gal-rot i, .gal-modal { transition: none; }
+    .gal-capa, .gal-rot, .gal-rot i, .gal-modal { transition: none; }
   }
 
   /* a foto em tela cheia, acima de qualquer galeria */
@@ -1219,7 +1211,7 @@
       border-top: 1px solid oklch(0.99 0.008 85 / .28); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .doc-capa, .doc-tinta, .doc-modal { transition: none; }
+    .doc-capa, .doc-modal { transition: none; }
   }
 
   /* a pagina desenrolando: cada bloco entra e sai curvado.
@@ -1315,7 +1307,6 @@
       aria-label="Abrir Ecos do Pantanal &mdash; Esporte e Conservação">
       <span class="doc-moldura">
         <span class="doc-capa" style="background-image: url('assets/doc-ecos.webp');"></span>
-        <span class="doc-tinta" aria-hidden="true"></span>
       </span>
       <span class="doc-nome"><b>Ecos do Pantanal</b><i>Esporte e conservação &middot; Lei Aldir Blanc</i></span>
     </button>
@@ -1329,7 +1320,6 @@
       aria-label="Abrir Atotô &mdash; Silêncio, o Rei Está na Terra">
       <span class="doc-moldura">
         <span class="doc-capa" style="background-image: url('assets/doc-atoto.webp');"></span>
-        <span class="doc-tinta" aria-hidden="true"></span>
       </span>
       <span class="doc-nome"><b>Atotô</b><i>Silêncio, o Rei Está na Terra</i></span>
     </button>
@@ -1455,25 +1445,21 @@
     <button class="gal-card" type="button" data-proj="produtos" data-nome="Produtos"
       aria-label="Ver as fotos de Produtos">
       <span class="gal-capa" style="background-image: url('assets/gal/produtos/04.webp');"></span>
-      <span class="gal-tinta" aria-hidden="true"></span>
       <span class="gal-rot"><b>Produtos</b><i>Ver mais</i></span>
     </button>
     <button class="gal-card" type="button" data-proj="esporte" data-nome="Esporte"
       aria-label="Ver as fotos de Esporte">
       <span class="gal-capa" style="background-image: url('assets/gal/esporte/03.webp');"></span>
-      <span class="gal-tinta" aria-hidden="true"></span>
       <span class="gal-rot"><b>Esporte</b><i>Ver mais</i></span>
     </button>
     <button class="gal-card" type="button" data-proj="aves" data-nome="Bird Watching"
       aria-label="Ver as fotos de Bird Watching">
       <span class="gal-capa" style="background-image: url('assets/gal/aves/08.webp');"></span>
-      <span class="gal-tinta" aria-hidden="true"></span>
       <span class="gal-rot"><b>Bird Watching</b><i>Ver mais</i></span>
     </button>
     <button class="gal-card" type="button" data-proj="brasa" data-nome="Brasa Bonito &middot; Steakhouse"
       aria-label="Ver as fotos de Brasa Bonito &middot; Steakhouse">
       <span class="gal-capa" style="background-image: url('assets/gal/brasa/07.webp');"></span>
-      <span class="gal-tinta" aria-hidden="true"></span>
       <span class="gal-rot"><b>Brasa Bonito &middot; Steakhouse</b><i>Ver mais</i></span>
     </button>
   </div>
