@@ -1058,9 +1058,9 @@
     font-size: 14px; font-weight: 500; letter-spacing: .02em; text-decoration: none; }
   .doc-m-link:hover { background: oklch(0.12 0.012 60); }
   .doc-m-fechar { position: fixed; z-index: 3; right: clamp(16px, 2.4vw, 34px);
-    top: clamp(16px, 2.4vw, 30px); width: 46px; height: 46px; border-radius: 50%;
+    top: clamp(16px, 2.4vw, 30px);
     border: 1px solid oklch(0.99 0.008 85 / .5); background: oklch(0.3 0.14 28 / .5);
-    color: oklch(0.99 0.008 85); font-size: 19px; line-height: 1; cursor: pointer; }
+    color: oklch(0.99 0.008 85); cursor: pointer; }
   /* ===== GALERIA: quatro projetos ===== */
   #galeria { position: relative; z-index: 60; overflow: hidden;
     background: oklch(0.97 0.008 85);
@@ -1151,10 +1151,9 @@
     background-size: 512px 512px;
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='512' height='512'><filter id='r'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/><feComponentTransfer><feFuncA type='linear' slope='2' intercept='-0.42'/></feComponentTransfer></filter><rect width='512' height='512' filter='url(%23r)'/></svg>"); }
   .gal-m-x { position: fixed; z-index: 4; right: clamp(14px, 2.4vw, 30px);
-    top: clamp(14px, 2.4vw, 26px); width: 46px; height: 46px; border-radius: 50%;
+    top: clamp(14px, 2.4vw, 26px);
     border: 1px solid oklch(0.99 0.008 85 / .45); background: oklch(0 0 0 / .5);
-    color: oklch(0.99 0.008 85); font-size: 19px; line-height: 1; cursor: pointer; }
-  .gal-m-x:hover { background: var(--vermelho); border-color: var(--vermelho); }
+    color: oklch(0.99 0.008 85); cursor: pointer; }
   @media (max-width: 899px) {
     .gal-grade { grid-template-columns: 1fr; }
     .gal-card { height: min(40vh, 320px); }
@@ -1165,15 +1164,27 @@
 
   /* o risco fino no lugar do caractere de multiplicacao: traco de 1.4
      com ponta arredondada, na mesma familia de peso do resto da pagina */
-  .ic-x { width: 46%; height: 46%; fill: none; stroke: currentColor;
-    stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+  /* no lugar do X, uma seta com a palavra: a micro-tipografia caixa-alta
+     espacada e a mesma dos rotulos da pagina, entao o botao deixa de ser
+     um simbolo generico e passa a pertencer ao conjunto */
+  .ic-x { width: 17px; height: 17px; flex: 0 0 auto; fill: none; stroke: currentColor;
+    stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
   .fc-x, .doc-m-fechar, .gal-m-x, .rl-gal-x, .rl-c-x {
     display: flex; align-items: center; justify-content: center;
-    transition: background .25s ease, border-color .25s ease; }
+    transition: background .25s ease, border-color .25s ease, color .25s ease; }
+  .fc-x, .doc-m-fechar, .gal-m-x {
+    gap: 9px; width: auto; height: auto; padding: 9px 17px 9px 13px;
+    border-radius: 999px;
+    font-family: var(--texto); font-size: 11px; font-weight: 500;
+    letter-spacing: .14em; text-transform: uppercase; line-height: 1; }
+  .fc-x:hover, .doc-m-fechar:hover, .gal-m-x:hover {
+    background: var(--vermelho); border-color: var(--vermelho);
+    color: oklch(0.99 0.008 85); }
   /* o anel de foco do navegador vinha ambar e destoava do vermelho */
   .fc-x:focus-visible, .doc-m-fechar:focus-visible, .gal-m-x:focus-visible,
   .rl-c-x:focus-visible {
     outline: 1px solid oklch(0.99 0.008 85 / .85); outline-offset: 3px; }
+  .rl-c-x .ic-x { width: 20px; height: 20px; stroke-width: 1.7; }
 
   /* a foto em tela cheia, acima de qualquer galeria */
   .foto-cheia { position: fixed; inset: 0; z-index: 900;
@@ -1188,12 +1199,12 @@
   .fc-nav, .fc-x { position: absolute; border: 1px solid oklch(0.99 0.008 85 / .35);
     background: oklch(0 0 0 / .45); color: oklch(0.99 0.008 85);
     border-radius: 50%; cursor: pointer; line-height: 1; }
+  .fc-nav { border-radius: 50%; }
   .fc-nav { top: 50%; width: 52px; height: 52px; margin-top: -26px; font-size: 26px; }
   .fc-ant { left: clamp(10px, 2vw, 28px); }
   .fc-prox { right: clamp(10px, 2vw, 28px); }
-  .fc-x { top: clamp(14px, 2.4vw, 30px); right: clamp(14px, 2.4vw, 30px);
-    width: 46px; height: 46px; font-size: 19px; }
-  .fc-nav:hover, .fc-x:hover { background: var(--vermelho); border-color: var(--vermelho); }
+  .fc-x { top: clamp(14px, 2.4vw, 30px); right: clamp(14px, 2.4vw, 30px); }
+  .fc-nav:hover { background: var(--vermelho); border-color: var(--vermelho); }
   .fc-conta { position: absolute; left: 50%; bottom: clamp(12px, 2.4vw, 28px);
     transform: translateX(-50%); font-size: 12px; font-weight: 500; letter-spacing: .12em;
     color: oklch(0.99 0.008 85 / .6); pointer-events: none; }
@@ -1306,8 +1317,8 @@
   <div id="heroPin">
     <canvas id="estudio" aria-hidden="true"></canvas>
     <div id="obsv" aria-hidden="true">
-      <div class="obs-q on" style="background-image: url('assets/obs1.jpg'); -webkit-mask-image: url('assets/obs1-mask.png'); mask-image: url('assets/obs1-mask.png');"></div>
-      <div class="obs-q" style="background-image: url('assets/obs2.jpg'); -webkit-mask-image: url('assets/obs2-mask.png'); mask-image: url('assets/obs2-mask.png');"></div>
+      <div class="obs-q on" style="background-image: url('assets/allan1.webp');"></div>
+      <div class="obs-q" style="background-image: url('assets/allan2.webp');"></div>
     </div>
     <div id="heroStage">
   <div class="h1-copy" style="position: absolute; left: var(--gx); top: 100px; z-index: 5; max-width: min(430px, calc(100vw - 2 * var(--gx)));">
@@ -1358,7 +1369,7 @@
   <button class="fc-nav fc-ant" type="button" aria-label="Foto anterior">&#8249;</button>
   <button class="fc-nav fc-prox" type="button" aria-label="Pr&oacute;xima foto">&#8250;</button>
   <span class="fc-conta" aria-hidden="true"></span>
-  <button class="fc-x" type="button" aria-label="Fechar a foto"><svg class="ic-x" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg></button>
+  <button class="fc-x" type="button" aria-label="Fechar a foto"><svg class="ic-x" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M11 5l-7 7 7 7"/></svg><span>Voltar</span></button>
 </div>
 
 <div id="docModal" class="doc-modal" role="dialog" aria-modal="true" aria-labelledby="docModalT" hidden>
@@ -1401,7 +1412,7 @@
     <img tabindex="0" style="--ar: 0.561" src="assets/atoto/g23.webp" alt="" loading="lazy" decoding="async">
     <img tabindex="0" style="--ar: 0.667" src="assets/atoto/g24.webp" alt="" loading="lazy" decoding="async">
   </div>
-  <button class="doc-m-fechar" type="button" aria-label="Fechar o documentário"><svg class="ic-x" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg></button>
+  <button class="doc-m-fechar" type="button" aria-label="Fechar o documentário"><svg class="ic-x" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M11 5l-7 7 7 7"/></svg><span>Voltar</span></button>
 </div>
 
 
@@ -1471,7 +1482,7 @@
 
 <div id="rlCheio" class="rl-cheio" role="dialog" aria-modal="true" aria-label="Reel em tela cheia" hidden>
   <div class="rl-c-video"><video class="rl-c-tela" controls playsinline preload="metadata"></video></div>
-  <button class="rl-c-x" type="button" aria-label="Voltar para a galeria"><svg class="ic-x" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg></button>
+  <button class="rl-c-x" type="button" aria-label="Voltar para a galeria"><svg class="ic-x" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
 </div>
 
 <!-- ===== GALERIA ===== -->
@@ -1546,7 +1557,7 @@
       <img tabindex="0" style="--ar: 1.777" src="assets/gal/brasa/07.webp" alt="" loading="lazy" decoding="async">
       <img tabindex="0" style="--ar: 1.777" src="assets/gal/brasa/08.webp" alt="" loading="lazy" decoding="async">
     </div>
-  <button class="gal-m-x" type="button" aria-label="Fechar a galeria"><svg class="ic-x" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg></button>
+  <button class="gal-m-x" type="button" aria-label="Fechar a galeria"><svg class="ic-x" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M11 5l-7 7 7 7"/></svg><span>Voltar</span></button>
 </div>
 
 <!-- ===== O QUE FAÇO ===== -->
@@ -1761,9 +1772,10 @@
     FOTOS.forEach(function(u){ new Image().src = u; });   // sem isso a troca pisca
     var ultimaFoto = -1;
     var poses = Array.prototype.slice.call(sec.querySelectorAll('.obs-q'));
-    ['obs1', 'obs2'].forEach(function(n){
-      new Image().src = 'assets/' + n + '.jpg';
-      new Image().src = 'assets/' + n + '-mask.png';
+    // as duas poses ja vem com alfa no proprio arquivo: nao ha mais
+    // mascara separada para carregar
+    ['allan1', 'allan2'].forEach(function(n){
+      new Image().src = 'assets/' + n + '.webp';
     });
 
     (function laco(){
