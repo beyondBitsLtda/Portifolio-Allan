@@ -755,7 +755,16 @@
     /* no celular a cena toca sozinha, sem rolagem dirigindo: os 240vh
        so sobrariam como tela vazia depois que ela termina */
     #abertura { height: 100svh !important; }
-    .obs-q { bottom: -7%; height: 84%; }
+    /* 42vw numa tela de 414px davam 174px: a figura do contato ficava
+       do tamanho de um selo no canto */
+    .cta-fig { width: min(110vw, 620px) !important; right: -22vw !important; }
+    /* contain limitava a figura a largura da tela: 414px de largura
+       davam 296px de altura e ela ficava minuscula no pe da hero. Com
+       a altura mandando, ela enche a tela e o nome cai em cima dela,
+       que e onde a letra vermelha tem contraste. O 66% no eixo X traz
+       o rosto para dentro do quadro: centrado, ele ficava cortado. */
+    .obs-q { bottom: -10%; height: 86%;
+      background-size: auto 86%; background-position: 66% bottom; }
     .h1-bloco { margin-top: -6vh; }
     .pnt-acervo { padding: 10vh 16px 5vh; }
     .acv-canvas { width: min(64vh, 88vw); height: min(64vh, 88vw); }
@@ -1665,7 +1674,7 @@
     <p class="hand rv" style="margin: 28px 0 0; font-size: 19px; line-height: 1.4; color: oklch(0.97 0.008 85 / 0.92); max-width: 30ch;">Narrativas que conectam cultura, imagem e propósito.</p>
     <div class="canais rv" style="--d:.15s;"><a href="https://www.youtube.com/watch?v=8U4cpeMxG2w" target="_blank" rel="noopener">▶ Ecos do Pantanal — YouTube</a><a href="https://www.instagram.com/birdviewproducoes/" target="_blank" rel="noopener">◉ Instagram — @birdviewproducoes</a><a href="mailto:allan.woch@gmail.com">✉ E-mail</a></div>
   </div>
-  <div style="position: absolute; right: -2vw; bottom: 0; z-index: 1; width: min(42vw, 620px); pointer-events: none; opacity: 0.95;">
+  <div class="cta-fig" style="position: absolute; right: -2vw; bottom: 0; z-index: 1; width: min(42vw, 620px); pointer-events: none; opacity: 0.95;">
     <div class="cta-foto" role="img" aria-label="Allan Kevin"></div>
   </div>
 </section>
