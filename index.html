@@ -577,7 +577,7 @@
   /* o observador: ele e quem estava olhando o estudio ate agora */
   #obsv { position: absolute; inset: 0; z-index: 2; pointer-events: none;
     opacity: 0; will-change: transform, opacity; }
-  .obs-q { position: absolute; left: 0; right: 0; bottom: -34%; height: 124%;
+  .obs-q { position: absolute; left: 0; right: 0; bottom: -46%; height: 150%;
     opacity: 0; will-change: opacity;
     background-repeat: no-repeat; background-position: bottom center; background-size: contain;
     -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
@@ -744,7 +744,9 @@
   .gal-item:hover img, .gal-item:focus-visible img { transform: scale(1.07); }
 
   @media (max-width: 899px) {
-    .obs-q { bottom: -6%; height: 72%; }
+    /* no celular a figura fica mais alta: descendo junto com o desktop
+       ela saia pela borda de baixo e so o alto da cabeca aparecia */
+    .obs-q { bottom: -7%; height: 84%; }
     .h1-bloco { margin-top: -6vh; }
     .pnt-acervo { padding: 10vh 16px 5vh; }
     .acv-canvas { width: min(64vh, 88vw); height: min(64vh, 88vw); }
